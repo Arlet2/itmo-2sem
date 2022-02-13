@@ -1,10 +1,6 @@
 public class Human {
     private Long age; //Значение поля должно быть больше 0
     private java.time.LocalDateTime birthday;
-    Human(final Long age, final java.time.LocalDateTime birthday) throws IncorrectValueException {
-        setAge(age);
-        setBirthday(birthday);
-    }
 
     public void setAge(final Long age) throws IncorrectValueException {
         if(age <= 0)

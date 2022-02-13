@@ -1,10 +1,6 @@
 public class Coordinates {
     private float x; //Значение поля должно быть больше -407
     private Integer y; //Поле не может быть null
-    Coordinates(final float x, final Integer y) throws IncorrectValueException, NullValueException {
-        setX(x);
-        setY(y);
-    }
 
     public void setX(final float x) throws IncorrectValueException {
         if(x <= -407)
