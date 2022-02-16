@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -79,6 +81,9 @@ public class City {
             throw new EmptyValueException("имя");
         this.name = name;
     }
+    public String getName() {
+        return name;
+    }
 
     public Coordinates getCoordinates() {
         return coordinates;
@@ -90,10 +95,18 @@ public class City {
         this.creationDate = creationDate;
     }
 
+    public ZonedDateTime getCreationDate() {
+        return creationDate;
+    }
+
     public void setArea(final long area) throws IncorrectValueException {
         if(area <= 0)
             throw new IncorrectValueException("значение площади должно быть больше 0");
         this.area = area;
+    }
+
+    public long getArea() {
+        return area;
     }
 
     public void setPopulation(final int population) throws IncorrectValueException {
@@ -102,28 +115,44 @@ public class City {
         this.population = population;
     }
 
+    public int getPopulation() {
+        return population;
+    }
+
     public void setMetersAboveSeaLevel(final Long metersAboveSeaLevel) {
         this.metersAboveSeaLevel = metersAboveSeaLevel;
+    }
+
+    public Long getMetersAboveSeaLevel() {
+        return metersAboveSeaLevel;
     }
 
     public void setEstablishmentDate(final java.time.LocalDate establishmentDate) {
         this.establishmentDate = establishmentDate;
     }
 
+    public LocalDate getEstablishmentDate() {
+        return establishmentDate;
+    }
+
     public void setClimate(final Climate climate) {
         this.climate = climate;
     }
 
-    public Climate getClimate() {
-        return climate;
+    public String getClimate() {
+        if(climate == null)
+            return "";
+        return climate.toString();
     }
 
     public void setGovernment(final Government government) {
         this.government = government;
     }
 
-    public Government getGovernment() {
-        return government;
+    public String getGovernment() {
+        if(government == null)
+            return "";
+        return government.toString();
     }
 
     public Human getGovernor() {
@@ -137,18 +166,17 @@ public class City {
 
     @Override
     public String toString() {
-        String s = "city:\n";
-        s+="id: "+id+"\n";
-        s+="name: "+name+"\n";
-        s+="coordinates: "+coordinates+"\n";
-        s+="creationDate: "+creationDate+"\n";
-        s+="area: "+area+"\n";
-        s+="population: "+population+"\n";
-        s+="metersAboveSeaLevel: "+metersAboveSeaLevel+"\n";
-        s+="establishmentDate: "+establishmentDate+"\n";
-        s+="climate: "+climate+"\n";
-        s+="government: "+government+"\n";
-        s+="governor: "+governor+"\n";
-        return s;
+        return "city:\n" +
+                "id: " + id + "\n" +
+                "name: " + name + "\n" +
+                "coordinates:\n" + coordinates + "\n" +
+                "creationDate: " + creationDate + "\n" +
+                "area: " + area + "\n" +
+                "population: " + population + "\n" +
+                "metersAboveSeaLevel: " + metersAboveSeaLevel + "\n" +
+                "establishmentDate: " + establishmentDate + "\n" +
+                "climate: " + climate + "\n" +
+                "government: " + government + "\n" +
+                "governor:\n" + governor + "\n";
     }
 }

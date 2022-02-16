@@ -21,6 +21,6 @@ public class Human {
 
     @Override
     public String toString() {
-        return "age: "+age+" birthday: "+birthday;
+        return "\tage: "+age+"\n\tbirthday: "+birthday;
     }
 }
