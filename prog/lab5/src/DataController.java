@@ -13,7 +13,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DataController {
-    HashMap<Long, City> map;
+    private final int MIN_BUFFER_FOR_CITY = 440;
+    private HashMap<Long, City> map;
     DataController() {
         map = new HashMap<>();
     }
@@ -249,7 +250,7 @@ public class DataController {
         try (FileOutputStream fileOutputStream = new FileOutputStream(path);
              BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream)){
             StringBuilder s = new StringBuilder();
-            s.ensureCapacity(440*map.size());
+            s.ensureCapacity(MIN_BUFFER_FOR_CITY*map.size());
             s.append("<xml>\n");
             for(City i: map.values())
                 s.append(getCityXmlString(i));
@@ -265,7 +266,7 @@ public class DataController {
     }
     private String getCityXmlString(final City city) {
         StringBuilder xmlString = new StringBuilder();
-        xmlString.ensureCapacity(440);
+        xmlString.ensureCapacity(MIN_BUFFER_FOR_CITY);
         xmlString.append("<city>\n");
         xmlString.append("<id>").append(city.getId()).append("</id>\n");
         xmlString.append("<name>").append(city.getName()).append("</name>\n");
