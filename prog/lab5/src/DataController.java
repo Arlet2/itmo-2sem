@@ -6,6 +6,8 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,7 +20,7 @@ public class DataController {
     public void putCityToMap(final City city) {
         map.put(city.getId(), city);
     }
-    /*
+
     public void readFromFile (final String path) {
         StringBuilder xmlString = new StringBuilder();
         try (Scanner scanner = new Scanner(Paths.get(path))){
@@ -27,22 +29,222 @@ public class DataController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Pattern pattern = Pattern.compile("<city>[\\n\\d\\w\\s<>/.\\-:+\\[\\]]*?</city>");
-        Matcher matcher = pattern.matcher(xmlString);
+        Matcher matcher = Pattern.compile("(?<=<city>)[\\S\\s]*?(?=</city>)", Pattern.CASE_INSENSITIVE).matcher(xmlString);
         ArrayList<String> list = new ArrayList<>();
         while (matcher.find())
             list.add(xmlString.substring(matcher.start(), matcher.end()));
         City city;
         for(String i: list) {
-            city = parseCity(i);
-            if(city != null)
+            try {
+                city = parseCity(i);
                 putCityToMap(city);
+            } catch (SoManyArgumentsException | EmptyValueException e) {
+                System.out.println("Ошибка аргументов в этом городе: "+e.getMessage()+"\nГород был пропущен");
+            } catch (IncorrectValueException e) {
+                System.out.println("Некорректное значение: "+e.getMessage()+"\nГород был пропущен");
+            } catch (NullValueException e) {
+                e.printStackTrace();
+            } catch (NotUniqueIDException e) {
+                System.out.println("Значение ID не уникально. Город был пропущен");
+            }
         }
     }
-    private City parseCity(final String xmlString) {
-        return null;
+    private City parseCity(final String xmlString) throws SoManyArgumentsException, EmptyValueException, IncorrectValueException, NullValueException, NotUniqueIDException {
+        String pattern, extraPattern, tempStr;
+        City city = new City();
+
+        // id
+        pattern = "(?<=<id>)[\\S\\s]*?(?=</id>)";
+        if(countMatches(xmlString, pattern) > 1)
+            throw new SoManyArgumentsException("слишком много аргументов id");
+        else if(countMatches(xmlString, pattern) == 0)
+            throw new EmptyValueException("отсутствует аргумент id");
+        try {
+            tempStr = getMatch(xmlString, pattern);
+            if(City.checkUniqueID(Long.parseLong(tempStr), map))
+                city.setId(Long.parseLong(tempStr));
+            else
+                throw new NotUniqueIDException();
+        } catch (NumberFormatException e) {
+            throw new IncorrectValueException("id - целое число");
+        }
+
+        // name
+        pattern = "(?<=<name>)[\\S\\s]*?(?=</name>)";
+        if(countMatches(xmlString, pattern) > 1)
+            throw new SoManyArgumentsException("слишком много аргументов name");
+        else if(countMatches(xmlString, pattern) == 0)
+            throw new EmptyValueException("отсутствует аргумент name");
+        city.setName(getMatch(xmlString, pattern));
+
+        // coordinates
+        pattern = "(?<=<coordinates>)[\\S\\s]*?(?=</coordinates>)";
+        if(countMatches(xmlString, pattern) > 1)
+            throw new SoManyArgumentsException("слишком много аргументов coordinates");
+        else if(countMatches(xmlString, pattern) == 0)
+            throw new EmptyValueException("отсутствует аргумент coordinates");
+        // x
+        extraPattern = "(?<=<x>)[\\S\\s]*?(?=</x>)";
+        if(countMatches(getMatch(xmlString, pattern), extraPattern) > 1)
+            throw new SoManyArgumentsException("слишком много аргументов x");
+        else if(countMatches(getMatch(xmlString, pattern), extraPattern) == 0)
+            throw new EmptyValueException("отсутствует аргумент x");
+        try {
+            city.getCoordinates().setX(Float.parseFloat(getMatch(getMatch(xmlString, pattern), extraPattern)));
+        } catch (NumberFormatException e) {
+            throw new IncorrectValueException("x - число c плавающей точкой");
+        }
+
+        // y
+        extraPattern = "(?<=<y>)[\\S\\s]*?(?=</y>)";
+        if(countMatches(getMatch(xmlString, pattern), extraPattern) > 1)
+            throw new SoManyArgumentsException("слишком много аргументов y");
+        else if(countMatches(getMatch(xmlString, pattern), extraPattern) == 0)
+            throw new EmptyValueException("отсутствует аргумент y");
+        try {
+            city.getCoordinates().setY(Integer.parseInt(getMatch(getMatch(xmlString, pattern), extraPattern)));
+        } catch (NumberFormatException e) {
+            throw new IncorrectValueException("y - целое число");
+        }
+
+        // creationDate
+        pattern = "(?<=<creation_date>)[\\S\\s]*?(?=</creation_date>)";
+        if(countMatches(xmlString, pattern) > 1)
+            throw new SoManyArgumentsException("слишком много аргументов creation_date");
+        else if(countMatches(xmlString, pattern) == 0)
+            throw new EmptyValueException("отсутствует аргумент creation_date");
+        try {
+            city.setCreationDate(ZonedDateTime.parse(getMatch(xmlString, pattern)));
+        } catch(DateTimeParseException e) {
+            throw new IncorrectValueException("некорректный формат даты");
+        }
+
+        // area
+        pattern = "(?<=<area>)[\\S\\s]*?(?=</area>)";
+        if(countMatches(xmlString, pattern) > 1)
+            throw new SoManyArgumentsException("слишком много аргументов area");
+        else if(countMatches(xmlString, pattern) == 0)
+            throw new EmptyValueException("отсутствует аргумент area");
+        try {
+            city.setArea(Long.parseLong(getMatch(xmlString, pattern)));
+        } catch (NumberFormatException e) {
+            throw new IncorrectValueException("area - целое число");
+        }
+
+        // population
+        pattern = "(?<=<population>)[\\S\\s]*?(?=</population>)";
+        if(countMatches(xmlString, pattern) > 1)
+            throw new SoManyArgumentsException("слишком много аргументов population");
+        else if(countMatches(xmlString, pattern) == 0)
+            throw new EmptyValueException("отсутствует аргумент population");
+        try {
+            city.setPopulation(Integer.parseInt(getMatch(xmlString, pattern)));
+        } catch (NumberFormatException e) {
+            throw new IncorrectValueException("population - целое число");
+        }
+
+        // meters_above_sea_level
+        pattern = "(?<=<meters_above_sea_level>)[\\S\\s]*?(?=</meters_above_sea_level>)";
+        if(countMatches(xmlString, pattern) > 1)
+            throw new SoManyArgumentsException("слишком много аргументов meters_above_sea_level");
+        else if(countMatches(xmlString, pattern) == 0)
+            throw new EmptyValueException("отсутствует аргумент meters_above_sea_level");
+        try {
+            city.setMetersAboveSeaLevel(Long.parseLong(getMatch(xmlString, pattern)));
+        } catch (NumberFormatException e) {
+            throw new IncorrectValueException("meters_above_sea_level - целое число");
+        }
+
+        // establishment_date
+        pattern = "(?<=<establishment_date>)[\\S\\s]*?(?=</establishment_date>)";
+        if(countMatches(xmlString, pattern) > 1)
+            throw new SoManyArgumentsException("слишком много аргументов establishment_date");
+        else if(countMatches(xmlString, pattern) == 0)
+            throw new EmptyValueException("отсутствует аргумент establishment_date");
+        try {
+            city.setEstablishmentDate(LocalDate.parse(getMatch(xmlString, pattern)));
+        } catch(DateTimeParseException e) {
+            throw new IncorrectValueException("некорректный формат даты");
+        }
+
+        // climate
+        pattern = "(?<=<climate>)[\\S\\s]*?(?=</climate>)";
+        if(countMatches(xmlString, pattern) > 1)
+            throw new SoManyArgumentsException("слишком много аргументов climate");
+        tempStr = getMatch(xmlString, pattern);
+        if(!tempStr.equals("")) {
+            for (Climate i : Climate.values()) {
+                if (i.toString().equals(tempStr)) {
+                    city.setClimate(i);
+                    break;
+                }
+            }
+            if (city.getClimate().equals(""))
+                System.out.println("Значение аргумента climate некорректно. Поле было пропущено.");
+        }
+
+        // government
+        pattern = "(?<=<government>)[\\S\\s]*?(?=</government>)";
+        if(countMatches(xmlString, pattern) > 1)
+            throw new SoManyArgumentsException("слишком много аргументов government");
+        tempStr = getMatch(xmlString, pattern);
+        if(!tempStr.equals("")) {
+            for (Government i : Government.values()) {
+                if (i.toString().equals(tempStr)) {
+                    city.setGovernment(i);
+                    break;
+                }
+            }
+            if (city.getGovernment().equals(""))
+                System.out.println("Значение аргумента government некорректно. Поле было пропущено.");
+        }
+
+        // governor
+        pattern = "(?<=<governor>)[\\S\\s]*?(?=</governor>)";
+        if(countMatches(xmlString, pattern) > 1)
+            throw new SoManyArgumentsException("слишком много аргументов governor");
+        else if(countMatches(xmlString, pattern) == 0)
+            throw new EmptyValueException("отсутствует аргумент governor");
+        // age
+        extraPattern = "(?<=<age>)[\\S\\s]*?(?=</age>)";
+        if(countMatches(getMatch(xmlString, pattern), extraPattern) > 1)
+            throw new SoManyArgumentsException("слишком много аргументов age");
+        else if(countMatches(getMatch(xmlString, pattern), extraPattern) == 0)
+            throw new EmptyValueException("отсутствует аргумент age");
+        try {
+            city.getGovernor().setAge(Long.parseLong(getMatch(getMatch(xmlString, pattern), extraPattern)));
+        } catch (NumberFormatException e) {
+            throw new IncorrectValueException("age - целое число");
+        }
+
+        // birthday
+        extraPattern = "(?<=<birthday>)[\\S\\s]*?(?=</birthday>)";
+        if(countMatches(xmlString, pattern) > 1)
+            throw new SoManyArgumentsException("слишком много аргументов birthday");
+        else if(countMatches(xmlString, pattern) == 0)
+            throw new EmptyValueException("отсутствует аргумент birthday");
+        try {
+            city.getGovernor().setBirthday(LocalDateTime.parse(getMatch(getMatch(xmlString, pattern), extraPattern)));
+        } catch(DateTimeParseException e) {
+            throw new IncorrectValueException("некорректный формат даты");
+        }
+
+        return city;
     }
-    */
+
+    private int countMatches (final String xmlString, final String pattern) {
+        Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(xmlString);
+        int counter = 0;
+        while(matcher.find()) counter++;
+        return counter;
+    }
+
+    public String getMatch (final String xmlString, final String pattern) {
+        Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(xmlString);
+        matcher.find();
+        return xmlString.substring(matcher.start(), matcher.end());
+
+    }
     public void writeFile (final String path) {
         try (FileOutputStream fileOutputStream = new FileOutputStream(path);
              BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream)){

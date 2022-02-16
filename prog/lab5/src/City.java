@@ -1,7 +1,6 @@
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 
 public class City {
@@ -74,7 +73,7 @@ public class City {
         return id;
     }
 
-    public void setName(final String name) throws NullValueException, IncorrectValueException, EmptyValueException {
+    public void setName(final String name) throws NullValueException, EmptyValueException {
         if(name == null)
             throw new NullValueException();
         if(name.equals(""))
