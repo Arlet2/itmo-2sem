@@ -1,30 +1,84 @@
 import java.io.BufferedOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DataController {
     HashMap<Long, City> map;
     DataController() {
         map = new HashMap<>();
     }
+    public void putCityToMap(final City city) {
+        map.put(city.getId(), city);
+    }
     /*
-    public void readFromFile(String path) {
-        System.out.println(path);
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(Paths.get(path));
+    public void readFromFile (final String path) {
+        StringBuilder xmlString = new StringBuilder();
+        try (Scanner scanner = new Scanner(Paths.get(path))){
+            while(scanner.hasNextLine())
+                xmlString.append(scanner.nextLine()).append("\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        while(scanner.hasNextLine())
-            System.out.println(scanner.nextLine());
-        //BufferedOutputStream bufferedOutputStream = new BufferedOutputStream()
+        Pattern pattern = Pattern.compile("<city>[\\n\\d\\w\\s<>/.\\-:+\\[\\]]*?</city>");
+        Matcher matcher = pattern.matcher(xmlString);
+        ArrayList<String> list = new ArrayList<>();
+        while (matcher.find())
+            list.add(xmlString.substring(matcher.start(), matcher.end()));
+        City city;
+        for(String i: list) {
+            city = parseCity(i);
+            if(city != null)
+                putCityToMap(city);
+        }
+    }
+    private City parseCity(final String xmlString) {
+        return null;
     }
     */
+    public void writeFile (final String path) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(path);
+             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream)){
+            StringBuilder s = new StringBuilder();
+            s.ensureCapacity(440*map.size());
+            s.append("<xml>\n");
+            for(City i: map.values())
+                s.append(getCityXmlString(i));
+            s.append("</xml>");
+            bufferedOutputStream.write(s.toString().getBytes(),0,s.toString().getBytes().length);
+            System.out.println("Данные были записаны в файл по пути "+path);
+        } catch (FileNotFoundException e) {
+            System.out.println("Данный файл не найден");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    private String getCityXmlString(final City city) {
+        StringBuilder xmlString = new StringBuilder();
+        xmlString.ensureCapacity(440);
+        xmlString.append("<city>\n");
+        xmlString.append("<id>").append(city.getId()).append("</id>\n");
+        xmlString.append("<name>").append(city.getName()).append("</name>\n");
+        xmlString.append("<coordinates>\n<x>").append(city.getCoordinates().getX()).append("</x>\n<y>").append(city.getCoordinates().getY()).append("</y>\n</coordinates>\n");
+        xmlString.append("<creation_date>").append(city.getCreationDate()).append("</creation_date>\n");
+        xmlString.append("<area>").append(city.getArea()).append("</area>\n");
+        xmlString.append("<population>").append(city.getPopulation()).append("</population>\n");
+        xmlString.append("<meters_above_sea_level>").append(city.getMetersAboveSeaLevel()).append("</meters_above_sea_level>\n");
+        xmlString.append("<establishment_date>").append(city.getEstablishmentDate()).append("</establishment_date>\n");
+        xmlString.append("<climate>").append(city.getClimate()).append("</climate>\n");
+        xmlString.append("<government>").append(city.getGovernment()).append("</government>\n");
+        xmlString.append("<governor>\n<age>").append(city.getGovernor().getAge()).append("</age>\n<birthday>").append(city.getGovernor().getBirthday()).append("</birthday>\n</governor>\n");
+        xmlString.append("</city>\n");
+        return xmlString.toString();
+    }
     public Collection<City> sortMap() {
         ArrayList<City> arrayList = new ArrayList<>(map.values());
         arrayList.sort((o1, o2) -> {
@@ -112,7 +166,7 @@ public class DataController {
                         break;
                     }
                 }
-                if (city.getClimate() == null)
+                if (city.getClimate().equals(""))
                     System.out.println("Значение поля некорректно. Оно было пропущено.");
             }
 
@@ -124,14 +178,15 @@ public class DataController {
             input = scanner.nextLine().toUpperCase();
             if (input.equals("")) {
                 System.out.println("Поле было пропущено.");
-            } else {
+            }
+            else {
                 for (Government i : Government.values()) {
                     if (i.toString().equals(input)) {
                         city.setGovernment(i);
                         break;
                     }
                 }
-                if (city.getClimate() == null)
+                if (city.getGovernment().equals(""))
                     System.out.println("Значение поля некорректно. Оно было пропущено.");
             }
 
@@ -152,7 +207,7 @@ public class DataController {
             e.printStackTrace();
         } catch (IncorrectValueException e) {
             System.out.println("Некорректное значение: " + e.getMessage());
-            if(isRepeatCreateCityByUser())
+            if(isRepeatCreateCityByUser(scanner))
                 return createCityByUser();
             else {
                 System.out.println("Отмена создания города...");
@@ -160,24 +215,21 @@ public class DataController {
             }
         } catch (EmptyValueException e) {
             System.out.println("Поле "+e.getMessage()+" не может быть пустым");
-            if(isRepeatCreateCityByUser())
+            if(isRepeatCreateCityByUser(scanner))
                 return createCityByUser();
             else {
                 System.out.println("Отмена создания города...");
                 return null;
             }
         }
-        finally {
-            scanner.close();
-        }
         return city;
     }
-    private boolean isRepeatCreateCityByUser() {
+    private boolean isRepeatCreateCityByUser(Scanner scanner) {
         System.out.println("Хотите повторить ввод (y/n)? ");
-        String input = new Scanner(System.in).nextLine().toLowerCase();
+        String input = scanner.nextLine().toLowerCase();
         return input.equals("y");
     }
-    private LocalDate dateCreatorByUser(Scanner scanner, String dateName) throws IncorrectValueException, EmptyValueException {
+    private LocalDate dateCreatorByUser(final Scanner scanner, final String dateName) throws IncorrectValueException, EmptyValueException {
         int day, month, year;
         String input;
         System.out.print("Введите день "+dateName+"(число): ");
@@ -215,15 +267,14 @@ public class DataController {
             throw new IncorrectValueException("год - число положительное");
         if(!isNormalDate(day,month,year))
             throw new IncorrectValueException("невозможная дата");
-        scanner.close();
         return LocalDate.of(year, month, day);
     }
-    private boolean isNormalDate(int day, int month, int year) {
+    private boolean isNormalDate(final int day, final int month, final int year) {
         if(month == 2 && day == 29 && year % 4 == 0 && year % 400 == 0)
             return true;
         return ((month != 4 && month != 6 && month != 9 && month != 11) || day <= 30) && (month != 2 || day <= 29);
     }
-    private LocalTime localTimeCreateByUser(Scanner scanner, String timeName) throws IncorrectValueException, EmptyValueException {
+    private LocalTime localTimeCreateByUser(final Scanner scanner,final String timeName) throws IncorrectValueException, EmptyValueException {
         int minute, hour;
         String input;
         System.out.print("Введите час "+timeName+"(число): ");
@@ -256,7 +307,6 @@ public class DataController {
         }
         if(minute < 0 || minute >= 60)
             throw new IncorrectValueException("минута - число от 0 до 59");
-        scanner.close();
         return LocalTime.of(hour, minute);
     }
 }
