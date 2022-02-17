@@ -2,10 +2,12 @@ package data_control;
 
 import data_classes.City;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class DataController {
     public final String WORKING_PATH;
+    private LocalDateTime modificationTime;
     private final HashMap<Long, City> map;
     private final FileController fileController;
     private final ConsoleController consoleController;
@@ -15,6 +17,13 @@ public class DataController {
         fileController = new FileController(this);
         consoleController = new ConsoleController(this);
         readFile(WORKING_PATH);
+    }
+    public void updateModificationTime() {
+        modificationTime = LocalDateTime.now();
+    }
+
+    public LocalDateTime getModificationTime() {
+        return modificationTime;
     }
 
     public void readFile(final String path) {

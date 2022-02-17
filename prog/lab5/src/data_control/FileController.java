@@ -25,7 +25,7 @@ public class FileController {
     FileController(DataController dataController) {
         this.dataController = dataController;
     }
-    protected void readFromFile (final String path) {
+    private String readXml(final String path) {
         StringBuilder xmlString = new StringBuilder();
         try (Scanner scanner = new Scanner(Paths.get(path))){
             while(scanner.hasNextLine())
@@ -33,6 +33,10 @@ public class FileController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return xmlString.toString();
+    }
+    protected void readFromFile (final String path) {
+        String xmlString = readXml(path);
         Matcher matcher = Pattern.compile("(?<=<city>)[\\S\\s]*?(?=</city>)", Pattern.CASE_INSENSITIVE).matcher(xmlString);
         ArrayList<String> list = new ArrayList<>();
         while (matcher.find())
