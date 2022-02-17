@@ -5,20 +5,24 @@ import data_classes.City;
 import java.util.*;
 
 public class DataController {
+    public final String WORKING_PATH;
     private final HashMap<Long, City> map;
     private final FileController fileController;
     private final ConsoleController consoleController;
-    public DataController() {
+    public DataController(final String path) {
+        WORKING_PATH = path;
         map = new HashMap<>();
         fileController = new FileController(this);
         consoleController = new ConsoleController(this);
+        readFile(WORKING_PATH);
     }
+
     public void readFile(final String path) {
-        System.out.println("Считывания из файла по пути "+path+".");
+        System.out.println("Считывания из файла по пути "+path+"...");
         fileController.readFromFile(path);
     }
     public void writeFile(final String path) {
-        System.out.println("Запись в файл по пути "+path+".");
+        System.out.println("Запись в файл по пути "+path+"...");
         fileController.writeFile(path);
     }
     public City createCityByUser() {
