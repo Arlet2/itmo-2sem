@@ -43,13 +43,13 @@ public class FileController {
                 city = parseCity(i);
                 dataController.putCityToMap(city);
             } catch (SoManyArgumentsException | EmptyValueException e) {
-                System.out.println("Ошибка аргументов в этом городе: "+e.getMessage()+"\nГород был пропущен");
+                System.out.println("Ошибка считывания в файле: ошибка аргументов в этом городе: "+e.getMessage()+"\nГород был пропущен");
             } catch (IncorrectValueException e) {
-                System.out.println("Некорректное значение: "+e.getMessage()+"\nГород был пропущен");
+                System.out.println("Ошибка считывания в файле: некорректное значение: "+e.getMessage()+"\nГород был пропущен");
             } catch (NullValueException e) {
                 e.printStackTrace();
             } catch (NotUniqueIDException e) {
-                System.out.println("Значение ID не уникально. Город был пропущен");
+                System.out.println("Ошибка считывания в файле: значение ID не уникально. Город был пропущен");
             }
         }
     }
@@ -63,7 +63,6 @@ public class FileController {
                 s.append(getCityXmlString(i));
             s.append("</xml>");
             bufferedOutputStream.write(s.toString().getBytes(),0,s.toString().getBytes().length);
-            System.out.println("Данные были записаны в файл по пути "+path);
         } catch (FileNotFoundException e) {
             System.out.println("Данный файл не найден");
         } catch (IOException e) {
