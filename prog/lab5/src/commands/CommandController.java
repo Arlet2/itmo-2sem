@@ -17,7 +17,10 @@ public class CommandController {
         this.dataController = dataController;
         history = new ArrayList<>();
         allCommands = new ArrayList<>();
+        commandInit();
+    }
 
+    private void commandInit() {
         allCommands.add(new HelpCommand());
         allCommands.add(new InfoCommand());
         allCommands.add(new ShowCommand());
@@ -34,7 +37,6 @@ public class CommandController {
         allCommands.add(new FilterGreaterThanClimateCommand());
         allCommands.add(new PrintAscendingCommand());
         allCommands.add(new PrintFieldAscendingGovernment());
-
     }
 
     public void listenConsole() {
