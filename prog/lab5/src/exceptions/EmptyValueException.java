@@ -1,5 +1,7 @@
+package exceptions;
+
 public class EmptyValueException extends Exception {
-    EmptyValueException(String msg) {
+    public EmptyValueException(String msg) {
         super(msg);
     }
 }

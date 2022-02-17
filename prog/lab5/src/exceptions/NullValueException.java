@@ -1,5 +1,7 @@
+package exceptions;
+
 public class NullValueException extends Exception {
-    NullValueException() {
+    public NullValueException() {
         super();
     }
 }

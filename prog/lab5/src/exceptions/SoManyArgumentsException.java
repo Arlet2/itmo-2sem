@@ -1,5 +1,7 @@
+package exceptions;
+
 public class SoManyArgumentsException extends Exception {
-    SoManyArgumentsException(String msg) {
+    public SoManyArgumentsException(String msg) {
         super(msg);
     }
 }

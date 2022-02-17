@@ -1,3 +1,9 @@
+package data_classes;
+
+import exceptions.EmptyValueException;
+import exceptions.IncorrectValueException;
+import exceptions.NullValueException;
+
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -17,6 +23,9 @@ public class City {
     private Government government; //Поле может быть null
     private final Human governor = new Human(); //Поле не может быть null
 
+    public City() {
+
+    }
     // подаётся уже уникальный ID!
     /**
      * Set id value in object

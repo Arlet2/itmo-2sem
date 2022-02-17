@@ -1,5 +1,7 @@
+package exceptions;
+
 public class IncorrectValueException extends Exception {
-    IncorrectValueException(String msg) {
+    public IncorrectValueException(String msg) {
         super(msg);
     }
 }

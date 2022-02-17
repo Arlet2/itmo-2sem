@@ -1,5 +1,7 @@
+package exceptions;
+
 public class NotUniqueIDException extends Exception {
-    NotUniqueIDException() {
+    public NotUniqueIDException() {
         super();
     }
 }

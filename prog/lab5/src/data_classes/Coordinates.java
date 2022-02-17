@@ -1,3 +1,8 @@
+package data_classes;
+
+import exceptions.IncorrectValueException;
+import exceptions.NullValueException;
+
 public class Coordinates {
     private float x; //Значение поля должно быть больше -407
     private Integer y; //Поле не может быть null
