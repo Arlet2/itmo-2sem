@@ -17,7 +17,7 @@ public class ConsoleController {
     ConsoleController(final DataController dataController) {
         this.dataController = dataController;
     }
-    public City createCityByUser() {
+    protected City createCityByUser() {
         Scanner scanner = new Scanner(System.in);
         City city = new City();
         String input;

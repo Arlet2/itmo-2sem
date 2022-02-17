@@ -25,7 +25,7 @@ public class FileController {
     FileController(DataController dataController) {
         this.dataController = dataController;
     }
-    public void readFromFile (final String path) {
+    protected void readFromFile (final String path) {
         StringBuilder xmlString = new StringBuilder();
         try (Scanner scanner = new Scanner(Paths.get(path))){
             while(scanner.hasNextLine())
@@ -53,7 +53,7 @@ public class FileController {
             }
         }
     }
-    public void writeFile (final String path) {
+    protected void writeFile (final String path) {
         try (FileOutputStream fileOutputStream = new FileOutputStream(path);
              BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream)){
             StringBuilder s = new StringBuilder();

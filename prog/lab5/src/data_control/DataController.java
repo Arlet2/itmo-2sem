@@ -13,6 +13,17 @@ public class DataController {
         fileController = new FileController(this);
         consoleController = new ConsoleController(this);
     }
+    public void readFile(final String path) {
+        System.out.println("Считывания из файла по пути "+path+".");
+        fileController.readFromFile(path);
+    }
+    public void writeFile(final String path) {
+        System.out.println("Запись в файл по пути "+path+".");
+        fileController.writeFile(path);
+    }
+    public City createCityByUser() {
+        return consoleController.createCityByUser();
+    }
     public void putCityToMap(final City city) {
         map.put(city.getId(), city);
     }

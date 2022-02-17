@@ -167,15 +167,9 @@ public class City {
         return governor;
     }
 
-    /**
-     * @deprecated
-     * @return all data of this city
-     */
-
     @Override
     public String toString() {
-        return "city:\n" +
-                "id: " + id + "\n" +
+        return  "id: " + id + "\n" +
                 "name: " + name + "\n" +
                 "coordinates:\n" + coordinates + "\n" +
                 "creationDate: " + creationDate + "\n" +
@@ -183,8 +177,8 @@ public class City {
                 "population: " + population + "\n" +
                 "metersAboveSeaLevel: " + metersAboveSeaLevel + "\n" +
                 "establishmentDate: " + establishmentDate + "\n" +
-                "climate: " + climate + "\n" +
-                "government: " + government + "\n" +
+                "climate: " +(climate!=null?climate:"") + "\n" +
+                "government: " + (government!=null?government:"") + "\n" +
                 "governor:\n" + governor + "\n";
     }
 }
