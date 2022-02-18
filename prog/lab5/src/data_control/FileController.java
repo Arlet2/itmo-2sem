@@ -31,7 +31,7 @@ public class FileController {
             while(scanner.hasNextLine())
                 xmlString.append(scanner.nextLine()).append("\n");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Ошибка прочтения: файл не найден.");
         }
         return xmlString.toString();
     }
