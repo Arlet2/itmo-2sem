@@ -205,7 +205,7 @@ public class City {
 
     /**
      * Get climate in string (upper case)
-     * @return <b>""</b> if climate is null else return <b>climate.toString()</b>
+     * @return <b>empty string</b> if climate is null else return <b>climate.toString()</b>
      */
     public String getClimateString() {
         if(climate == null)
@@ -230,7 +230,7 @@ public class City {
 
     /**
      * Get government in string (upper case)
-     * @return <b>""</b> if government is null else return <b>government.toString() </b>
+     * @return <b>empty string</b> if government is null else return <b>government.toString() </b>
      */
     public String getGovernmentString() {
         if(government == null)
