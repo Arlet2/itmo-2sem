@@ -86,8 +86,8 @@ public class FileController {
         xmlString.append("<population>").append(city.getPopulation()).append("</population>\n");
         xmlString.append("<meters_above_sea_level>").append(city.getMetersAboveSeaLevel()).append("</meters_above_sea_level>\n");
         xmlString.append("<establishment_date>").append(city.getEstablishmentDate()).append("</establishment_date>\n");
-        xmlString.append("<climate>").append(city.getClimate()).append("</climate>\n");
-        xmlString.append("<government>").append(city.getGovernment()).append("</government>\n");
+        xmlString.append("<climate>").append(city.getClimateString()).append("</climate>\n");
+        xmlString.append("<government>").append(city.getGovernmentString()).append("</government>\n");
         xmlString.append("<governor>\n<age>").append(city.getGovernor().getAge()).append("</age>\n<birthday>").append(city.getGovernor().getBirthday()).append("</birthday>\n</governor>\n");
         xmlString.append("</city>\n");
         return xmlString.toString();
@@ -236,7 +236,7 @@ public class FileController {
                     break;
                 }
             }
-            if (city.getClimate().equals(""))
+            if (city.getClimateString().equals(""))
                 System.out.println("Значение аргумента climate некорректно. Поле было пропущено.");
         }
 
@@ -252,7 +252,7 @@ public class FileController {
                     break;
                 }
             }
-            if (city.getGovernment().equals(""))
+            if (city.getGovernmentString().equals(""))
                 System.out.println("Значение аргумента government некорректно. Поле было пропущено.");
         }
 
