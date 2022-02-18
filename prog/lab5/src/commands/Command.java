@@ -1,6 +1,7 @@
 package commands;
 
 import data_classes.City;
+import data_classes.Coordinates;
 import exceptions.IncorrectArgumentException;
 import exceptions.MissingArgumentException;
 
@@ -27,6 +28,30 @@ public abstract class Command implements Executable{
         if(id <= 0)
             throw new IncorrectArgumentException("id - число больше 0");
         return id;
+    }
+    protected void deleteNullValues (final City oldCity, final City newCity) {
+        if (newCity.getName() == null)
+            newCity.setName(oldCity.getName());
+        if (newCity.getCoordinates().getX() == Coordinates.X_INIT_VALUE)
+            newCity.getCoordinates().setX(oldCity.getCoordinates().getX());
+        if (newCity.getCoordinates().getY()  == null)
+            newCity.getCoordinates().setY(oldCity.getCoordinates().getY());
+        if (newCity.getEstablishmentDate()  == null)
+            newCity.setEstablishmentDate(oldCity.getEstablishmentDate());
+        if (newCity.getArea() == 0)
+            newCity.setArea(oldCity.getArea());
+        if (newCity.getPopulation() == 0)
+            newCity.setPopulation(oldCity.getPopulation());
+        if (newCity.getMetersAboveSeaLevel()  == null)
+            newCity.setMetersAboveSeaLevel(oldCity.getMetersAboveSeaLevel());
+        if (newCity.getClimate() == null)
+            newCity.setClimate(oldCity.getClimate());
+        if (newCity.getGovernment() == null)
+            newCity.setGovernment(oldCity.getGovernment());
+        if (newCity.getGovernor().getAge() == null)
+            newCity.getGovernor().setAge(oldCity.getGovernor().getAge());
+        if (newCity.getGovernor().getBirthday() == null)
+            newCity.getGovernor().setBirthday(oldCity.getGovernor().getBirthday());
     }
     public String getName() {
         return name;
