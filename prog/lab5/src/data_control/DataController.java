@@ -34,8 +34,8 @@ public class DataController {
         System.out.println("Запись в файл по пути "+path+"...");
         fileController.writeFile(path);
     }
-    public City createCityByUser() {
-        return consoleController.createCityByUser();
+    public City createCityByUser(boolean isFieldsCanBeSkipped) {
+        return consoleController.createCityByUser(isFieldsCanBeSkipped);
     }
     public void putCityToMap(final City city) {
         map.put(city.getId(), city);
@@ -43,7 +43,7 @@ public class DataController {
     public HashMap<Long, City> getMap() {
         return map;
     }
-    public Collection<City> sortMap() {
+    public Collection<City> getSortMap() {
         ArrayList<City> arrayList = new ArrayList<>(map.values());
         arrayList.sort((o1, o2) -> {
             if(o1.getId() > o2.getId())

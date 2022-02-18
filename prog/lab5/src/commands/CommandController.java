@@ -55,9 +55,9 @@ public class CommandController {
             try {
                 invoke(command, input);
             } catch (MissingArgumentException e) {
-                System.out.println("Отсутствует аргумент "+ e.getMessage() + " для команды "+command.getName());
+                System.out.println("Отсутствует аргумент "+ e.getMessage());
             } catch (IncorrectArgumentException e) {
-                System.out.println("Некорректный аргумент "+ e.getMessage() + " для команды "+ command.getName());
+                System.out.println("Некорректный аргумент: "+ e.getMessage());
             }
         }
     }
