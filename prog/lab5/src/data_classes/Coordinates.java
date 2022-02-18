@@ -8,7 +8,15 @@ public class Coordinates {
      * Flag value for checking initialization
      */
     public final static float X_INIT_VALUE = -407f;
+    /**
+     * x coordinate of city that need to be greater than -407.0
+     * <p>If not init x is @see X_INIT_VALUE</p>
+     */
     private float x = X_INIT_VALUE; //Значение поля должно быть больше -407
+    /**
+     * y coordinate of city
+     * <p>Can't be null</p>
+     */
     private Integer y; //Поле не может быть null
 
     /**

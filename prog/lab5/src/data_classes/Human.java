@@ -3,7 +3,13 @@ package data_classes;
 import exceptions.IncorrectValueException;
 
 public class Human {
+    /**
+     * age of human (need to be greater than zero)
+     */
     private Long age; //Значение поля должно быть больше 0
+    /**
+     * birthday of human
+     */
     private java.time.LocalDateTime birthday;
 
     /**

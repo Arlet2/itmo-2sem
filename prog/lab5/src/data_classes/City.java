@@ -10,17 +10,56 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class City {
-
+    /**
+     * unique id of this city
+     * <p>Can't be null, value is unique and greater than zero</p>
+     * <p>Generate automatically</p>
+     */
     private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    /**
+     * name of this city
+     * <p>Can't be null and empty</p>
+     */
     private String name; //Поле не может быть null, Строка не может быть пустой
+    /**
+     * coordinates of this city
+     * <p>Can't be null</p>
+     * <p>Create with constructor of city</p>
+     */
     private final Coordinates coordinates = new Coordinates(); //Поле не может быть null
+    /**
+     * date of creation city object
+     * <p>Can't be null</p>
+     * <p>Generate automatically</p>
+     */
     private java.time.ZonedDateTime creationDate = java.time.ZonedDateTime.now(); //Поле не может быть null, Значение этого поля должно генерироваться автоматически
+    /**
+     * area of city
+     * <p>Value is greater than zero</p>
+     */
     private long area; //Значение поля должно быть больше 0
+    /**
+     * population of city
+     * <p>Value is greater than zero</p>
+     */
     private int population; //Значение поля должно быть больше 0
     private Long metersAboveSeaLevel;
     private java.time.LocalDate establishmentDate;
+    /**
+     * climate of city
+     * <p>Can't be null</p>
+     */
     private Climate climate; //Поле может быть null
+    /**
+     * government of city
+     * <p>Can't be null</p>
+     */
     private Government government; //Поле может быть null
+    /**
+     * governor of city
+     * <p>Can't be null</p>
+     * <p>Create in constructor of city</p>
+     */
     private final Human governor = new Human(); //Поле не может быть null
 
     public City() {

@@ -6,6 +6,9 @@ public enum Government {
     OLIGARCHY (2),
     PLUTOCRACY (3),
     REPUBLIC (4);
+    /**
+     * that uses for sorting enum
+     */
     private final int value;
     Government (final int value) {
         this.value = value;

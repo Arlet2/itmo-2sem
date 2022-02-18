@@ -4,6 +4,9 @@ public enum Climate {
     RAIN_FOREST (0),
     HUMIDSUBTROPICAL (1),
     SUBARCTIC (2);
+    /**
+     * that uses for enum sorting
+     */
     private final int value;
     Climate (final int value) {
         this.value = value;
