@@ -17,7 +17,7 @@ public class ConsoleController {
     ConsoleController(final DataController dataController) {
         this.dataController = dataController;
     }
-    protected City createCityByUser() {
+    protected City createCityByUser(boolean isFieldCanBeSkipped) {
         Scanner scanner = new Scanner(System.in);
         City city = new City();
         String input;
@@ -26,57 +26,78 @@ public class ConsoleController {
             city.generateID(dataController.getMap());
 
             System.out.print("Введите имя города: ");
-            city.setName(scanner.nextLine());
-
+            try {
+                city.setName(scanner.nextLine());
+            } catch (EmptyValueException e) {
+                if(!isFieldCanBeSkipped)
+                    throw new EmptyValueException(e.getMessage());
+                else
+                    System.out.println("Поле было пропущено.");
+            }
             System.out.println("Введение координат города...");
             System.out.print("Введите координату x(>-407): ");
             input = scanner.nextLine();
-            if(input.equals(""))
+            if(input.equals("") && !isFieldCanBeSkipped)
                 throw new EmptyValueException("координата x");
             try {
                 city.getCoordinates().setX(Float.parseFloat(input));
             } catch (NumberFormatException e) {
-                throw new IncorrectValueException("координата x - число с плавающей точкой");
+                if(!isFieldCanBeSkipped)
+                    throw new IncorrectValueException("координата x - число с плавающей точкой");
+                else
+                    System.out.println("Поле было пропущено.");
             }
             System.out.print("Введите координату y: ");
             input = scanner.nextLine();
-            if(input.equals(""))
+            if(input.equals("") && !isFieldCanBeSkipped)
                 throw new EmptyValueException("координата y");
             try {
                 city.getCoordinates().setY(Integer.parseInt(input));
             } catch (NumberFormatException e) {
-                throw new IncorrectValueException("координата y - целое число");
+                if(!isFieldCanBeSkipped)
+                    throw new IncorrectValueException("координата y - целое число");
+                else
+                    System.out.println("Поле было пропущено.");
             }
 
             System.out.print("Введите значение площади всего города: ");
             input = scanner.nextLine();
-            if(input.equals(""))
+            if(input.equals("") && !isFieldCanBeSkipped)
                 throw new EmptyValueException("площадь города");
             try {
                 city.setArea(Long.parseLong(input));
             } catch (NumberFormatException e) {
-                throw new IncorrectValueException("площадь города - целое число");
+                if(!isFieldCanBeSkipped)
+                    throw new IncorrectValueException("площадь города - целое число");
+                else
+                    System.out.println("Поле было пропущено.");
             }
             System.out.print("Введите количество жителей города: ");
             input = scanner.nextLine();
-            if(input.equals(""))
+            if(input.equals("") && !isFieldCanBeSkipped)
                 throw new EmptyValueException("население");
             try {
                 city.setPopulation(Integer.parseInt(input));
             } catch (NumberFormatException e) {
-                throw new IncorrectValueException("количество жителей - целое число");
+                if(!isFieldCanBeSkipped)
+                    throw new IncorrectValueException("количество жителей - целое число");
+                else
+                    System.out.println("Поле было пропущено.");
             }
             System.out.print("Введите высоту над уровнем моря: ");
             input = scanner.nextLine();
-            if(input.equals(""))
+            if(input.equals("") && !isFieldCanBeSkipped)
                 throw new EmptyValueException("высота над уровнем моря");
             try {
                 city.setMetersAboveSeaLevel(Long.parseLong(input));
             } catch (NumberFormatException e) {
-                throw new IncorrectValueException("высота над уровнем моря - целое число");
+                if(!isFieldCanBeSkipped)
+                    throw new IncorrectValueException("высота над уровнем моря - целое число");
+                else
+                    System.out.println("Поле было пропущено.");
             }
             System.out.println("Введение даты основания города...");
-            city.setEstablishmentDate(dateCreatorByUser(scanner, "основания города"));
+            city.setEstablishmentDate(dateCreatorByUser(scanner, "основания города",isFieldCanBeSkipped));
 
             System.out.print("Введите климат города (");
             System.out.print(Climate.values()[0]);
@@ -84,7 +105,7 @@ public class ConsoleController {
                 System.out.print(", " + Climate.values()[i]);
             System.out.print("): ");
             input = scanner.nextLine().toUpperCase();
-            if (input.equals("")) {
+            if (input.equals("") && !isFieldCanBeSkipped) {
                 System.out.println("Поле было пропущено.");
             } else {
                 for (Climate i : Climate.values()) {
@@ -93,7 +114,7 @@ public class ConsoleController {
                         break;
                     }
                 }
-                if (city.getClimate().equals(""))
+                if (city.getClimateString().equals(""))
                     System.out.println("Значение поля некорректно. Оно было пропущено.");
             }
 
@@ -103,9 +124,8 @@ public class ConsoleController {
                 System.out.print(", " + Government.values()[i]);
             System.out.print("): ");
             input = scanner.nextLine().toUpperCase();
-            if (input.equals("")) {
+            if (input.equals("") && !isFieldCanBeSkipped)
                 System.out.println("Поле было пропущено.");
-            }
             else {
                 for (Government i : Government.values()) {
                     if (i.toString().equals(input)) {
@@ -113,29 +133,34 @@ public class ConsoleController {
                         break;
                     }
                 }
-                if (city.getGovernment().equals(""))
+                if (city.getGovernmentString().equals(""))
                     System.out.println("Значение поля некорректно. Оно было пропущено.");
             }
 
             System.out.println("Введение данных о правителе...");
             System.out.print("Введите возраст правителя: ");
             input = scanner.nextLine();
-            if(input.equals(""))
+            if(input.equals("") && !isFieldCanBeSkipped)
                 throw new EmptyValueException("возраст правителя");
             try {
                 city.getGovernor().setAge(Long.parseLong(input));
             } catch (NumberFormatException e) {
-                throw new IncorrectValueException("возраст - целое число");
+                if(!isFieldCanBeSkipped)
+                    throw new IncorrectValueException("возраст - целое число");
+                else
+                    System.out.println("Поле было пропущено.");
             }
             System.out.println("Введение даты рождения правителя...");
-            city.getGovernor().setBirthday(LocalDateTime.of(dateCreatorByUser(scanner, "рождения правителя"),
-                    localTimeCreateByUser(scanner, "рождения правителя")));
+            LocalDate localDate = dateCreatorByUser(scanner, "рождения правителя",isFieldCanBeSkipped);
+            LocalTime localTime = localTimeCreateByUser(scanner, "рождения правителя",isFieldCanBeSkipped);
+            if(localDate != null && localTime != null)
+                city.getGovernor().setBirthday(LocalDateTime.of(localDate, localTime));
         } catch (NullValueException e) {
             e.printStackTrace();
         } catch (IncorrectValueException e) {
             System.out.println("Некорректное значение: " + e.getMessage());
             if(isRepeatCreateCityByUser(scanner))
-                return createCityByUser();
+                return createCityByUser(isFieldCanBeSkipped);
             else {
                 System.out.println("Отмена создания города...");
                 return null;
@@ -143,7 +168,7 @@ public class ConsoleController {
         } catch (EmptyValueException e) {
             System.out.println("Поле "+e.getMessage()+" не может быть пустым");
             if(isRepeatCreateCityByUser(scanner))
-                return createCityByUser();
+                return createCityByUser(isFieldCanBeSkipped);
             else {
                 System.out.println("Отмена создания города...");
                 return null;
@@ -156,44 +181,100 @@ public class ConsoleController {
         String input = scanner.nextLine().toLowerCase();
         return input.equals("y");
     }
-    private LocalDate dateCreatorByUser(final Scanner scanner, final String dateName) throws IncorrectValueException, EmptyValueException {
+    private LocalDate dateCreatorByUser(final Scanner scanner, final String dateName, boolean isFieldsCanBeSkipped) throws IncorrectValueException, EmptyValueException {
         int day, month, year;
         String input;
         System.out.print("Введите день "+dateName+"(число): ");
         input = scanner.nextLine();
-        if(input.equals(""))
-            throw new EmptyValueException("день "+dateName);
+        if(input.equals("")) {
+            if(!isFieldsCanBeSkipped)
+                throw new EmptyValueException("день " + dateName);
+            else {
+                System.out.println("Все поля даты были пропущены.");
+                return null;
+            }
+        }
         try {
             day = Integer.parseInt(input);
         } catch(NumberFormatException e) {
-            throw new IncorrectValueException("день - целое число");
+            if(!isFieldsCanBeSkipped)
+                throw new IncorrectValueException("день - целое число");
+            else {
+                System.out.println("Все поля даты были пропущены.");
+                return null;
+            }
         }
-        if(day > 31 || day < 1)
-            throw new IncorrectValueException("день - число от 1 до 31");
+        if(day > 31 || day < 1) {
+            if(!isFieldsCanBeSkipped)
+                throw new IncorrectValueException("день - число от 1 до 31");
+            else {
+                System.out.println("Все поля даты были пропущены.");
+                return null;
+            }
+        }
         System.out.print("Введите месяц "+dateName+"(число): ");
         input = scanner.nextLine();
-        if(input.equals(""))
-            throw new EmptyValueException("месяц "+dateName);
+        if(input.equals("")) {
+            if(!isFieldsCanBeSkipped)
+                throw new EmptyValueException("месяц " + dateName);
+            else {
+                System.out.println("Все поля даты были пропущены.");
+                return null;
+            }
+        }
         try {
             month = Integer.parseInt(input);
         } catch(NumberFormatException e) {
-            throw new IncorrectValueException("месяц - целое число");
+            if(!isFieldsCanBeSkipped)
+                throw new IncorrectValueException("месяц - целое число");
+            else {
+                System.out.println("Все поля даты были пропущены.");
+                return null;
+            }
         }
-        if(month > 12 || month < 1)
-            throw new IncorrectValueException("месяц - число от 1 до 12");
+        if(month > 12 || month < 1) {
+            if(!isFieldsCanBeSkipped)
+                throw new IncorrectValueException("месяц - число от 1 до 12");
+            else {
+                System.out.println("Все поля даты были пропущены.");
+                return null;
+            }
+        }
         System.out.print("Введите год "+dateName+"(число): ");
         input = scanner.nextLine();
         if(input.equals(""))
-            throw new EmptyValueException("год "+dateName);
+            if(!isFieldsCanBeSkipped)
+                throw new EmptyValueException("год "+dateName);
+            else {
+                System.out.println("Все поля даты были пропущены.");
+                return null;
+            }
         try {
             year = Integer.parseInt(input);
         } catch(NumberFormatException e) {
-            throw new IncorrectValueException("год - целое число");
+            if(!isFieldsCanBeSkipped)
+                throw new IncorrectValueException("год - целое число");
+            else {
+                System.out.println("Все поля даты были пропущены.");
+                return null;
+            }
         }
-        if(year <= 0)
-            throw new IncorrectValueException("год - число положительное");
-        if(!isNormalDate(day,month,year))
-            throw new IncorrectValueException("невозможная дата");
+        if(year <= 0) {
+            if(!isFieldsCanBeSkipped)
+                throw new IncorrectValueException("год - число положительное");
+            else {
+                System.out.println("Все поля даты были пропущены.");
+                return null;
+            }
+        }
+        if(!isNormalDate(day,month,year)) {
+            if(!isFieldsCanBeSkipped)
+                throw new IncorrectValueException("невозможная дата");
+            else {
+                System.out.println("Все поля даты были пропущены.");
+                return null;
+            }
+        }
         return LocalDate.of(year, month, day);
     }
     private boolean isNormalDate(final int day, final int month, final int year) {
@@ -201,39 +282,65 @@ public class ConsoleController {
             return true;
         return ((month != 4 && month != 6 && month != 9 && month != 11) || day <= 30) && (month != 2 || day <= 29);
     }
-    private LocalTime localTimeCreateByUser(final Scanner scanner, final String timeName) throws IncorrectValueException, EmptyValueException {
+    private LocalTime localTimeCreateByUser(final Scanner scanner, final String timeName, boolean isFieldsCanBeSkipped) throws IncorrectValueException, EmptyValueException {
         int minute, hour;
         String input;
         System.out.print("Введите час "+timeName+"(число): ");
         input = scanner.nextLine();
         if(input.equals("")) {
-            scanner.close();
-            throw new EmptyValueException("час " + timeName);
+            if(!isFieldsCanBeSkipped)
+                throw new EmptyValueException("час " + timeName);
+            else {
+                System.out.println("Все поля времени были пропущены.");
+                return null;
+            }
         }
         try {
             hour = Integer.parseInt(input);
         } catch(NumberFormatException e) {
-            scanner.close();
-            throw new IncorrectValueException("час - целое число");
+            if(!isFieldsCanBeSkipped)
+                throw new IncorrectValueException("час - целое число");
+            else {
+                System.out.println("Все поля времени были пропущены.");
+                return null;
+            }
         }
         if(hour < 0 || hour > 23) {
-            scanner.close();
-            throw new IncorrectValueException("час - число от 0 до 23");
+            if(!isFieldsCanBeSkipped)
+                throw new IncorrectValueException("час - число от 0 до 23");
+            else {
+                System.out.println("Все поля времени были пропущены.");
+                return null;
+            }
         }
         System.out.print("Введите минуту "+timeName+"(число): ");
         input = scanner.nextLine();
         if(input.equals("")) {
-            scanner.close();
-            throw new EmptyValueException("минута " + timeName);
+            if(!isFieldsCanBeSkipped)
+                throw new EmptyValueException("минута " + timeName);
+            else {
+                System.out.println("Все поля времени были пропущены.");
+                return null;
+            }
         }
         try {
             minute = Integer.parseInt(input);
         } catch(NumberFormatException e) {
-            scanner.close();
-            throw new IncorrectValueException("минута - целое число");
+            if(!isFieldsCanBeSkipped)
+                throw new IncorrectValueException("минута - целое число");
+            else {
+                System.out.println("Все поля времени были пропущены.");
+                return null;
+            }
         }
-        if(minute < 0 || minute >= 60)
-            throw new IncorrectValueException("минута - число от 0 до 59");
+        if(minute < 0 || minute >= 60) {
+            if(!isFieldsCanBeSkipped)
+                throw new IncorrectValueException("минута - число от 0 до 59");
+            else {
+                System.out.println("Все поля времени были пропущены.");
+                return null;
+            }
+        }
         return LocalTime.of(hour, minute);
     }
 }
