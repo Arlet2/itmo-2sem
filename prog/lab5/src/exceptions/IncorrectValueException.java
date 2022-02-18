@@ -1,6 +1,6 @@
 package exceptions;
 
-public class IncorrectValueException extends Exception {
+public class IncorrectValueException extends RuntimeException {
     public IncorrectValueException(String msg) {
         super(msg);
     }
