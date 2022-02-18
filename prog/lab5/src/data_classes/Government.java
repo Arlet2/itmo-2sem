@@ -6,11 +6,18 @@ public enum Government {
     OLIGARCHY (2),
     PLUTOCRACY (3),
     REPUBLIC (4);
-    private int value;
+    /**
+     * value for sort enum
+     */
+    private final int value;
     Government (int value) {
         this.value = value;
     }
 
+    /**
+     * Get value for sort enum
+     * @return integer for sorting
+     */
     public int getValue() {
         return value;
     }
