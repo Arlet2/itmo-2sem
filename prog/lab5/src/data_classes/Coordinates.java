@@ -4,7 +4,7 @@ import exceptions.IncorrectValueException;
 import exceptions.NullValueException;
 
 public class Coordinates {
-    private float x; //Значение поля должно быть больше -407
+    private float x = -407f; //Значение поля должно быть больше -407
     private Integer y; //Поле не может быть null
 
     public void setX(final float x) throws IncorrectValueException {

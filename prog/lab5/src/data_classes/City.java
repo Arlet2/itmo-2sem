@@ -147,22 +147,27 @@ public class City {
         this.climate = climate;
     }
 
-    public String getClimate() {
+    public String getClimateString() {
         if(climate == null)
             return "";
         return climate.toString();
+    }
+    public Climate getClimate() {
+        return climate;
     }
 
     public void setGovernment(final Government government) {
         this.government = government;
     }
 
-    public String getGovernment() {
+    public String getGovernmentString() {
         if(government == null)
             return "";
         return government.toString();
     }
-
+    public Government getGovernment() {
+        return government;
+    }
     public Human getGovernor() {
         return governor;
     }
