@@ -5,7 +5,7 @@ public enum Climate {
     HUMIDSUBTROPICAL (1),
     SUBARCTIC (2);
     private final int value;
-    Climate (int value) {
+    Climate (final int value) {
         this.value = value;
     }
 

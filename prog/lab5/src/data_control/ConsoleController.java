@@ -12,12 +12,29 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Scanner;
 
+/**
+ * Control all console data entering by user
+ */
 public class ConsoleController {
+    /**
+     * that program use for data management
+     */
     private final DataController dataController;
+
+    /**
+     *
+     * @param dataController that use for program management
+     */
     ConsoleController(final DataController dataController) {
         this.dataController = dataController;
     }
-    protected City createCityByUser(boolean isFieldCanBeSkipped) {
+
+    /**
+     * Get city from console input by user
+     * @param isFieldCanBeSkipped boolean that can skip all fields
+     * @return city from creation by user's console entering
+     */
+    protected City createCityByUser(final boolean isFieldCanBeSkipped) {
         Scanner scanner = new Scanner(System.in);
         City city = new City();
         String input;
@@ -176,11 +193,27 @@ public class ConsoleController {
         }
         return city;
     }
-    private boolean isRepeatCreateCityByUser(Scanner scanner) {
+
+    /**
+     * When city input is false program ask user for repeating entering
+     * @param scanner that uses for input by user
+     * @return <b>true</b> if user want to repeat city input else <b>false</b>
+     */
+    private boolean isRepeatCreateCityByUser(final Scanner scanner) {
         System.out.println("Хотите повторить ввод (y/n)? ");
         String input = scanner.nextLine().toLowerCase();
         return input.equals("y");
     }
+
+    /**
+     * Create date from user input
+     * @param scanner that uses for entering city by user
+     * @param dateName Name of event. Example: день *рождения*, день *основания* (в родительном падеже)
+     * @param isFieldsCanBeSkipped if <b>true</b> this field of city can be skipped
+     * @return LocalDate of this event
+     * @throws IncorrectValueException if date doesn't exist
+     * @throws EmptyValueException if day, month, year is empty
+     */
     private LocalDate dateCreatorByUser(final Scanner scanner, final String dateName, boolean isFieldsCanBeSkipped) throws IncorrectValueException, EmptyValueException {
         int day, month, year;
         String input;
@@ -277,11 +310,29 @@ public class ConsoleController {
         }
         return LocalDate.of(year, month, day);
     }
+
+    /**
+     * Date validation
+     * @param day integer day of month
+     * @param month integer month
+     * @param year integer year (greater than 0)
+     * @return <b>true</b> if date can exist else <b>false</b> else
+     */
     private boolean isNormalDate(final int day, final int month, final int year) {
         if(month == 2 && day == 29 && year % 4 == 0 && year % 400 == 0)
             return true;
-        return ((month != 4 && month != 6 && month != 9 && month != 11) || day <= 30) && (month != 2 || day <= 29);
+        return ((month != 4 && month != 6 && month != 9 && month != 11) || day <= 30) && (month != 2 || day <= 29) && year > 0;
     }
+
+    /**
+     *
+     * @param scanner that uses for data entering by user
+     * @param timeName Name of event. Example: час *рождения* минута *основания* (в дательном падеже)
+     * @param isFieldsCanBeSkipped if <b>true</b> this field can be skipped
+     * @return LocalTime object
+     * @throws IncorrectValueException if hour/minute is incorrect
+     * @throws EmptyValueException if hour/minute is empty
+     */
     private LocalTime localTimeCreateByUser(final Scanner scanner, final String timeName, boolean isFieldsCanBeSkipped) throws IncorrectValueException, EmptyValueException {
         int minute, hour;
         String input;

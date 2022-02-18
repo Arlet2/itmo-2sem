@@ -7,7 +7,7 @@ public enum Government {
     PLUTOCRACY (3),
     REPUBLIC (4);
     private final int value;
-    Government (int value) {
+    Government (final int value) {
         this.value = value;
     }
 

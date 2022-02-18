@@ -19,12 +19,31 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Uses for file writing/reading
+ */
 public class FileController {
+    /**
+     * Value of buffer for file writing (minimum symbols of city's data in xml)
+     */
     private final int MIN_BUFFER_FOR_CITY = 440;
+    /**
+     * that uses by program
+     */
     private final DataController dataController;
+
+    /**
+     * @param dataController that uses by program
+     */
     FileController(DataController dataController) {
         this.dataController = dataController;
     }
+
+    /**
+     * Read file and return xml in string
+     * @param path of xml file that program will read
+     * @return string of xml data
+     */
     private String readXml(final String path) {
         StringBuilder xmlString = new StringBuilder();
         try (Scanner scanner = new Scanner(Paths.get(path))){
@@ -35,6 +54,11 @@ public class FileController {
         }
         return xmlString.toString();
     }
+
+    /**
+     * Read file and add cities to collection
+     * @param path of file that program will read
+     */
     protected void readFromFile (final String path) {
         String xmlString = readXml(path);
         Matcher matcher = Pattern.compile("(?<=<city>)[\\S\\s]*?(?=</city>)", Pattern.CASE_INSENSITIVE).matcher(xmlString);
@@ -57,6 +81,11 @@ public class FileController {
             }
         }
     }
+
+    /**
+     * Write data in xml to file
+     * @param path of file that program will write
+     */
     protected void writeFile (final String path) {
         try (FileOutputStream fileOutputStream = new FileOutputStream(path);
              BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream)){
@@ -74,6 +103,12 @@ public class FileController {
         }
 
     }
+
+    /**
+     * Convert city's data to xml string
+     * @param city that need to be converted
+     * @return xml string of city's data
+     */
     private String getCityXmlString(final City city) {
         StringBuilder xmlString = new StringBuilder();
         xmlString.ensureCapacity(MIN_BUFFER_FOR_CITY);
