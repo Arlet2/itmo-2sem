@@ -1,7 +1,6 @@
 package commands;
 
 import data_classes.City;
-import data_classes.Coordinates;
 import exceptions.IncorrectArgumentException;
 import exceptions.MissingArgumentException;
 
@@ -26,51 +25,52 @@ public class ReplaceIfGreaterCommand extends Command {
             System.out.println("Значение элемента с id " + id + " было обновлено.");
         }
     }
-    // TODO: говнокод
-    private void replaceCity (final City oldCity, final City newCity) {
-        if (oldCity.getName().compareTo(newCity.getName()) > 0)
-            newCity.setName(oldCity.getName());
-        else
+
+    private void replaceCity (final City oldCity, City newCity) {
+        if (oldCity.getName().compareTo(newCity.getName()) < 0) {
+            oldCity.setName(newCity.getName());
             isMapModified = true;
-        if (oldCity.getCoordinates().getX() > newCity.getCoordinates().getX())
-            newCity.getCoordinates().setX(oldCity.getCoordinates().getX());
-        else
+        }
+        if (oldCity.getCoordinates().getX() < newCity.getCoordinates().getX()) {
+            oldCity.getCoordinates().setX(newCity.getCoordinates().getX());
             isMapModified = true;
-        if (oldCity.getCoordinates().getY() > newCity.getCoordinates().getY())
-            newCity.getCoordinates().setY(oldCity.getCoordinates().getY());
-        else
+        }
+        if (oldCity.getCoordinates().getY() < newCity.getCoordinates().getY()) {
+            oldCity.getCoordinates().setY(newCity.getCoordinates().getY());
             isMapModified = true;
-        if (oldCity.getEstablishmentDate().isAfter(newCity.getEstablishmentDate()))
-            newCity.setEstablishmentDate(oldCity.getEstablishmentDate());
-        else
+        }
+        if (oldCity.getEstablishmentDate().isBefore(newCity.getEstablishmentDate())) {
+            oldCity.setEstablishmentDate(newCity.getEstablishmentDate());
             isMapModified = true;
-        if (oldCity.getArea() > newCity.getArea())
-            newCity.setArea(oldCity.getArea());
-        else
+        }
+        if (oldCity.getArea() < newCity.getArea()) {
+            oldCity.setArea(oldCity.getArea());
             isMapModified = true;
-        if (oldCity.getPopulation() > newCity.getPopulation())
-            newCity.setPopulation(oldCity.getPopulation());
-        else
+        }
+        if (oldCity.getPopulation() < newCity.getPopulation()) {
+            oldCity.setPopulation(newCity.getPopulation());
             isMapModified = true;
-        if (oldCity.getMetersAboveSeaLevel() > newCity.getMetersAboveSeaLevel())
-            newCity.setMetersAboveSeaLevel(oldCity.getMetersAboveSeaLevel());
-        else
+        }
+        if (oldCity.getMetersAboveSeaLevel() < newCity.getMetersAboveSeaLevel()) {
+            oldCity.setMetersAboveSeaLevel(newCity.getMetersAboveSeaLevel());
             isMapModified = true;
-        if (oldCity.getClimate().getValue() > newCity.getClimate().getValue())
-            newCity.setClimate(oldCity.getClimate());
-        else
+        }
+        if (oldCity.getClimate().getValue() < newCity.getClimate().getValue()) {
+            oldCity.setClimate(newCity.getClimate());
             isMapModified = true;
-        if (oldCity.getGovernment().getValue() > newCity.getGovernment().getValue())
-            newCity.setGovernment(oldCity.getGovernment());
-        else
+        }
+        if (oldCity.getGovernment().getValue() > newCity.getGovernment().getValue()) {
+            oldCity.setGovernment(newCity.getGovernment());
             isMapModified = true;
-        if (oldCity.getGovernor().getAge() > newCity.getGovernor().getAge())
-            newCity.getGovernor().setAge(oldCity.getGovernor().getAge());
-        else
+        }
+        if (oldCity.getGovernor().getAge() > newCity.getGovernor().getAge()) {
+            oldCity.getGovernor().setAge(newCity.getGovernor().getAge());
             isMapModified = true;
-        if (oldCity.getGovernor().getBirthday().isAfter(newCity.getGovernor().getBirthday()))
-            newCity.getGovernor().setBirthday(oldCity.getGovernor().getBirthday());
-        else
+        }
+        if (oldCity.getGovernor().getBirthday().isBefore(newCity.getGovernor().getBirthday())) {
+            oldCity.getGovernor().setBirthday(newCity.getGovernor().getBirthday());
             isMapModified = true;
+        }
+        newCity = oldCity;
     }
 }

@@ -13,7 +13,7 @@ public class CommandController {
     private final DataController dataController;
     private final ArrayList<Command> history;
     private final ArrayList<Command> allCommands;
-    public CommandController(final DataController dataController) {
+    public CommandController (final DataController dataController) {
         this.dataController = dataController;
         history = new ArrayList<>();
         allCommands = new ArrayList<>();
