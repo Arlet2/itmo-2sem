@@ -47,7 +47,7 @@ public class CommandController {
             System.out.print("$ ");
             input = scanner.nextLine().split(" ");
             try {
-                command = searchCommand(input[0]);
+                command = searchCommand(input[0].toLowerCase());
             } catch(UnknownCommandException e) {
                 System.out.println("Неизвестная команда. Используйте команду help для отображения списка команд.");
                 continue;
