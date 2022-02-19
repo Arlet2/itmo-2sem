@@ -7,6 +7,12 @@ public class InfoCommand extends Command {
         super("info", "", "выводит информацию о коллекции");
     }
 
+    /**
+     * Print information about collection:
+     * <p>What is used as key, modification time, size, key set</p>
+     * @param commandController that uses for program
+     * @param args for command from console input (args[0] is program name)
+     */
     @Override
     public void execute(CommandController commandController, String[] args) {
         System.out.println("Информация о коллекции:");

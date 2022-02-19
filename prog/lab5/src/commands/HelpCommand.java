@@ -5,6 +5,11 @@ public class HelpCommand extends Command {
         super("help", "","вызывает описание всех команд");
     }
 
+    /**
+     * print name, signature, description for all command
+     * @param commandController that uses for program
+     * @param args for command from console input (args[0] is program name)
+     */
     @Override
     public void execute(CommandController commandController, String[] args) {
         for(Command i: commandController.getAllCommands())

@@ -8,13 +8,26 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
-public class ExecuteScriptCommand extends Command{
+public class ExecuteScriptCommand extends Command {
+    /**
+     * count of usage execute_script
+     */
     private int recursionCounter = 0;
+    /**
+     * stop value for recursion
+     */
     public final static int RECURSION_INTERRUPT = 10;
     ExecuteScriptCommand() {
         super("execute_script", "file_name","исполняет скрипт из указанного файла");
     }
 
+    /**
+     * execute script from file
+     * @param commandController that uses for program
+     * @param args file name
+     * @throws MissingArgumentException if file_name is missing
+     * @throws IncorrectArgumentException if file_name if empty/file doesn't exist
+     */
     @Override
     public void execute(CommandController commandController, String[] args) throws MissingArgumentException, IncorrectArgumentException {
         if(args.length < 2)

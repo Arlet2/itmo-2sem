@@ -10,6 +10,13 @@ public class FilterGreaterThanClimateCommand extends Command{
         super("filter_greater_than_climate","climate","выводит элементы, у которых значение поля climate больше заданного");
     }
 
+    /**
+     * print elements that have got climate that greater than climate from args
+     * @param commandController that uses for program
+     * @param args climate
+     * @throws MissingArgumentException if climate is missing or empty
+     * @throws IncorrectArgumentException if climate is incorrect
+     */
     @Override
     public void execute(CommandController commandController, String[] args) throws MissingArgumentException, IncorrectArgumentException {
         if(args.length < 2)

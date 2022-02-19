@@ -9,6 +9,14 @@ public class InsertCommand extends Command{
         super("insert", "id {element}", "добавляет элемент с определенным id");
     }
 
+    /**
+     * insert element with id in args
+     * <p>Change modification time if command completes</p>
+     * @param commandController that uses for program
+     * @param args id
+     * @throws IncorrectArgumentException if id is incorrect
+     * @throws MissingArgumentException if id is missing
+     */
     @Override
     public void execute(CommandController commandController, String[] args) throws IncorrectArgumentException, MissingArgumentException {
         Long id = idValidator(commandController, args);

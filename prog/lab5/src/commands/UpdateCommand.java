@@ -10,6 +10,13 @@ public class UpdateCommand extends Command{
         super("update","id {element}", "обновляет значение элемента коллекции с определенным id");
     }
 
+    /**
+     * update element with id from args by new from console input
+     * @param commandController that uses for program
+     * @param args id
+     * @throws IncorrectArgumentException if id is incorrect
+     * @throws MissingArgumentException if id is missing
+     */
     @Override
     public void execute(CommandController commandController, String[] args) throws IncorrectArgumentException, MissingArgumentException {
         Long id = idValidator(commandController, args);

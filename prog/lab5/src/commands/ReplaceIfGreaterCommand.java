@@ -10,6 +10,14 @@ public class ReplaceIfGreaterCommand extends Command {
         super("replace_if_greater","id {element}","заменяет значение по id, если новое значение больше старого");
     }
 
+    /**
+     * replace all fields in element with id from args that be lower than new fields
+     * <p>Modification time can be changed</p>
+     * @param commandController that uses for program
+     * @param args id
+     * @throws MissingArgumentException if id is missing
+     * @throws IncorrectArgumentException if id is incorrect
+     */
     @Override
     public void execute (CommandController commandController, String[] args) throws MissingArgumentException, IncorrectArgumentException {
         long id = idValidator(commandController, args);
@@ -26,6 +34,12 @@ public class ReplaceIfGreaterCommand extends Command {
         }
     }
 
+    /**
+     * Change newCity's fields
+     * <p>newCity's fields will change after this method</p>
+     * @param oldCity from collection
+     * @param newCity from console entering
+     */
     private void replaceCity (final City oldCity, City newCity) {
         if (oldCity.getName().compareTo(newCity.getName()) < 0) {
             oldCity.setName(newCity.getName());

@@ -7,6 +7,11 @@ public class PrintAscendingCommand extends Command{
         super("print_ascending","","выводит элементы коллекции в порядке возрастания");
     }
 
+    /**
+     * print sorted collection
+     * @param commandController that uses for program
+     * @param args for command from console input (args[0] is program name)
+     */
     @Override
     public void execute(CommandController commandController, String[] args) {
         int counter=1;

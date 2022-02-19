@@ -5,15 +5,37 @@ import data_classes.Coordinates;
 import exceptions.IncorrectArgumentException;
 import exceptions.MissingArgumentException;
 
-public abstract class Command implements Executable{
+/**
+ * abstract class for all commands
+ * <p>Use executable interface</p>
+ */
+public abstract class Command implements Executable {
+    /**
+     * name of this command for usage
+     */
     private final String name;
+    /**
+     * description of this command (uses for help command)
+     */
     private final String description;
+    /**
+     * signature of this command (uses for help command)
+     */
     private final String signature;
     Command (final String name,final String signature, final String description) {
         this.name = name;
         this.signature = signature;
         this.description = description;
     }
+
+    /**
+     * Validate id as argument in command
+     * @param commandController that uses in program
+     * @param args of command that enter
+     * @return id from args
+     * @throws IncorrectArgumentException if id is incorrect in args
+     * @throws MissingArgumentException if id is missing in args
+     */
     protected long idValidator(CommandController commandController, String[] args) throws IncorrectArgumentException, MissingArgumentException {
         if(args.length < 2)
             throw new MissingArgumentException("id");
@@ -29,6 +51,13 @@ public abstract class Command implements Executable{
             throw new IncorrectArgumentException("id - число больше 0");
         return id;
     }
+
+    /**
+     * Delete null values in newCity.
+     * <p>newCity will be <b>changed</b> after this method</p>
+     * @param oldCity where we take data
+     * @param newCity where we put data
+     */
     protected void deleteNullValues (final City oldCity, final City newCity) {
         if (newCity.getName() == null)
             newCity.setName(oldCity.getName());
@@ -53,6 +82,7 @@ public abstract class Command implements Executable{
         if (newCity.getGovernor().getBirthday() == null)
             newCity.getGovernor().setBirthday(oldCity.getGovernor().getBirthday());
     }
+
     public String getName() {
         return name;
     }
