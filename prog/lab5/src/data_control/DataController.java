@@ -63,6 +63,7 @@ public class DataController {
     public void readFile(final String path) {
         System.out.println("Считывания из файла по пути "+path+"...");
         fileController.readFromFile(path);
+        System.out.println("Чтение завершено успешно.");
     }
 
     /**
