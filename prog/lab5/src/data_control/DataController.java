@@ -58,7 +58,7 @@ public class DataController {
 
     /**
      * Shell of FileController method
-     * @see FileController:readFromFile()
+     * see FileController:readFromFile()
      */
     public void readFile(final String path) {
         System.out.println("Считывания из файла по пути "+path+"...");
@@ -67,7 +67,7 @@ public class DataController {
 
     /**
      * Shell of FileController method
-     * @see FileController:writeFile()
+     * see FileController:writeFile()
      */
     public void writeFile(final String path) {
         System.out.println("Запись в файл по пути "+path+"...");
@@ -76,7 +76,7 @@ public class DataController {
 
     /**
      * Shell of ConsoleController method
-     * @see ConsoleController:createCityByUser()
+     * see ConsoleController:createCityByUser()
      */
     public City createCityByUser(final boolean isFieldsCanBeSkipped) {
         return consoleController.createCityByUser(isFieldsCanBeSkipped);
