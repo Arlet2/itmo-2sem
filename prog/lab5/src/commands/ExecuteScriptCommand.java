@@ -59,6 +59,7 @@ public class ExecuteScriptCommand extends Command {
                 if (recursionCounter == RECURSION_INTERRUPT) {
                     System.out.println("Прерывание рекурсии...");
                     System.out.println("Всего рекурсивных вызовов "+ recursionCounter);
+                    recursionCounter = 0;
                     return;
                 }
                 commandController.invoke(commandController.searchCommand(input[0].toLowerCase()), input);
