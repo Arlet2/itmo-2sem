@@ -50,6 +50,11 @@ public class Human {
      */
     @Override
     public String toString() {
-        return "\tage: "+age+"\n\tbirthday: "+birthday;
+        return "\tage: "+age+"\n\tbirthday: "+
+                (birthday.getDayOfMonth()<10?"0":"")+birthday.getDayOfMonth()+"-"+
+                (birthday.getMonthValue()<10?"0":"")+birthday.getMonthValue()+"-"+
+                birthday.getYear()+ " "+
+                (birthday.getHour()<10?"0":"")+birthday.getHour()+":"+
+                (birthday.getMinute()<10?"0":"")+birthday.getMinute();
     }
 }

@@ -290,7 +290,15 @@ public class City {
     public Human getGovernor() {
         return governor;
     }
-
+    private String creationDateToString() {
+        return (creationDate.getDayOfMonth()<10?"0":"")+creationDate.getDayOfMonth()+"-"+
+                (creationDate.getMonthValue()<10?"0":"")+creationDate.getMonthValue()+
+                "-"+creationDate.getYear()+" "+
+                (creationDate.getHour()<10?"0":"")+creationDate.getHour()+":"+
+                (creationDate.getMinute()<10?"0":"")+creationDate.getMinute()+":"+
+                (creationDate.getSecond()<10?"0":"")+creationDate.getSecond()+"."+
+                creationDate.getNano()+" Zone: "+creationDate.getOffset().toString()+" "+creationDate.getZone().toString();
+    }
     /**
      * Get all data of city in string
      * @return string with all fields of city
@@ -300,13 +308,13 @@ public class City {
         return  "id: " + id + "\n" +
                 "name: " + name + "\n" +
                 "coordinates:\n" + coordinates + "\n" +
-                "creationDate: " + creationDate + "\n" +
+                "creationDate: " + creationDateToString() + "\n" +
                 "area: " + area + "\n" +
                 "population: " + population + "\n" +
                 "metersAboveSeaLevel: " + metersAboveSeaLevel + "\n" +
                 "establishmentDate: " + establishmentDate + "\n" +
-                "climate: " +(climate!=null?climate:"") + "\n" +
-                "government: " + (government!=null?government:"") + "\n" +
+                "climate: " +(climate!=null?climate:"-") + "\n" +
+                "government: " + (government!=null?government:"-") + "\n" +
                 "governor:\n" + governor + "\n";
     }
 }
