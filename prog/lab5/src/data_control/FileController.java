@@ -9,6 +9,7 @@ import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -51,6 +52,8 @@ public class FileController {
                 xmlString.append(scanner.nextLine()).append("\n");
         } catch (IOException e) {
             System.out.println("Ошибка прочтения: файл не найден.");
+        } catch (InvalidPathException e) {
+            System.out.println("Ошибка прочтения: некорректный путь");
         }
         return xmlString.toString();
     }

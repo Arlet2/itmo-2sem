@@ -8,7 +8,8 @@ public class Main {
         try {
             argsValidator(args);
         } catch (MissingArgumentException | IncorrectArgumentException e) {
-            System.out.println("Ошибка инициализации коллекции: "+e.getMessage());
+            System.out.println("Ошибка инициализации коллекции: "+e.getMessage()+"\nПрограмма не может быть запущена");
+            return;
         }
         CommandController cc = new CommandController(new DataController(args[0]));
         cc.listenConsole();
