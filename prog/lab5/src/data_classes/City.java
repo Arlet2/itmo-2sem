@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class City {
+public class City implements Comparable<City> {
     /**
      * unique id of this city
      * <p>Can't be null, value is unique and greater than zero</p>
@@ -316,5 +316,10 @@ public class City {
                 "climate: " +(climate!=null?climate:"-") + "\n" +
                 "government: " + (government!=null?government:"-") + "\n" +
                 "governor:\n" + governor + "\n";
+    }
+
+    @Override
+    public int compareTo(City o) {
+        return (id < o.id?-1:(id.equals(o.id))?0:1);
     }
 }

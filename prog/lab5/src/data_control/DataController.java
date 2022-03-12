@@ -104,13 +104,7 @@ public class DataController {
      */
     public Collection<City> getSortMap() {
         ArrayList<City> arrayList = new ArrayList<>(map.values());
-        arrayList.sort((o1, o2) -> {
-            if(o1.getId() > o2.getId())
-                return 1;
-            else if(o1.getId() < o2.getId())
-                return -1;
-            return 0;
-        });
+        arrayList.sort(City::compareTo);
         return arrayList;
     }
 
