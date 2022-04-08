@@ -5,15 +5,23 @@
 /prog/lab5/lab5.iml
 /prog/lab5/out
 
-/prog/lab6/.idea
-/prog/lab6/lab5.iml
-/prog/lab6/out
+/prog/lab6/lab6-client/.idea
+/prog/lab6/lab6-clinet/lab6.iml
+/prog/lab6/lab6-client/out
+/prog/lab6/lab6-server/.idea
+/prog/lab6/lab6-server/lab6.iml
+/prog/lab6/lab6-server/out
 
 # for debug
 prog/lab5/debug
-prog/lab6/debug
+prog/lab6/lab6-client/debug
+prog/lab6/lab6-server/debug
+
 
 # not ready
-prog/lab6/javadoc
-prog/lab6/data
-prog/lab6/lab6.jar
+prog/lab6/lab6-server/javadoc
+prog/lab6/lab6-server/data
+prog/lab6/lab6-server/lab6-server.jar
+prog/lab6/lab6-client/javadoc
+prog/lab6/lab6-client/data
+prog/lab6/lab6-client/lab6-client.jar
