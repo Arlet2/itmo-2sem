@@ -19,8 +19,11 @@ public class HistoryCommand extends Command{
             return "История команд пуста.";
         }
         StringBuilder data = new StringBuilder();
-        for (int i=0;i<commandController.getHistory().size();i++)
+        for (int i=0;i<commandController.getHistory().size();i++) {
+            if (i % 5 == 0 && i != 0)
+                data.append("\n");
             data.append(i + 1).append(") ").append(commandController.getHistory().get(i).getName()).append(" ");
+        }
         return data.toString()+'\n';
     }
 }

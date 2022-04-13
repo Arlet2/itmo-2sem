@@ -21,9 +21,9 @@ public class InfoCommand extends Command {
         data.append("Время модификации коллекции: ").append(getDate(commandController.getDataController().getModificationTime())).append("\n");
         data.append("Размер коллекции: ").append(commandController.getDataController().getMap().size()).append("\n");
         data.append("Ключи коллекции:").append(" ");
-        for (Long i: commandController.getDataController().getMap().keySet()) {
-            data.append(i+" ");
-        }
+        commandController.getDataController().getMap().keySet().forEach(id -> {
+            data.append(id).append(" ");
+        });
         data.append("\n");
         return data.toString();
     }

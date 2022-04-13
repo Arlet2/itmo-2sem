@@ -1,7 +1,7 @@
 package commands;
 
 public class SaveCommand extends Command{
-    SaveCommand() {
+    public SaveCommand() {
         super("save","","сохраняет коллекцию в файл", null, null, true);
     }
 
@@ -13,7 +13,7 @@ public class SaveCommand extends Command{
     @Override
     public String execute(CommandController commandController, String[] args) {
         commandController.getDataController().writeFile(commandController.getDataController().WORKING_PATH);
-        System.out.println("Коллекция успешно сохранена.\n");
+        System.out.println("Коллекция успешно сохранена.");
         return null;
     }
 }

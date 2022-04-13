@@ -4,17 +4,26 @@ import connection_control.ConnectionController;
 import connection_control.Request;
 import data_control.DataController;
 import exceptions.IncorrectArgumentException;
+import exceptions.MissingArgumentException;
 import exceptions.UnknownCommandException;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 /*
-TODO: проверить терминальность методов потоков в командах
-TODO: проверка enum'ом в виде аргументов
-TODO: execute_script
-TODO: проверить ВСЕ КОМАНДЫ
-TODO: проверить на ошибки соединения
+TODO: проверить терминальность методов потоков в командах +
+TODO: проверка enum'ом в виде аргументов +
+TODO: execute_script +
+TODO: проверить ВСЕ КОМАНДЫ +
+TODO: проверить на ошибки соединения +
+TODO: плохой реконнект (чекнуть) ???
+TODO: Logger +
 TODO: javadoc
+TODO: automic +
  */
 /**
  * controls execution of all commands
@@ -28,7 +37,7 @@ public class CommandController {
      * that controls data for program
      */
     private final DataController dataController;
-    private final ConnectionController connectionController = new ConnectionController();
+    private ConnectionController connectionController;
     /**
      * history of all commands that was used
      */
@@ -38,30 +47,54 @@ public class CommandController {
      */
     private final ArrayList<Command> allCommands;
     private final ArrayList<CommandInfo> allCommandsInfo;
-    public CommandController (final DataController dataController) {
-        this.dataController = dataController;
+    private Logger logger;
+    public CommandController (String path) throws IOException {
+        createLogger();
+        this.dataController = new DataController(path, this);
         history = new ArrayList<>();
         allCommands = new ArrayList<>();
         allCommandsInfo = new ArrayList<>();
+        try {
+            connectionController = new ConnectionController(this);
+        } catch (MissingArgumentException e) {
+            logger.log(Level.WARNING,"Ошибка файла конфигурации: "+e.getMessage());
+            return;
+        } catch (FileNotFoundException e) {
+            logger.log(Level.WARNING, "Не был найден файл конфигурации config.excalibbur. Добавьте его, указав порт следующим образом:\n" +
+                    "port: 1234");
+            return;
+        }
         commandInit();
+    }
+    public void startWork() {
         try {
             connectionController.start();
         } catch (IOException e) {
-            System.out.println("Не удалось развернуть сервер. Попробуйте развернуть его на другом порте.");
-            e.printStackTrace();
+            logger.log(Level.WARNING,"Не удалось развернуть сервер. Попробуйте развернуть его на другом порте.");
             return;
         }
+        createLogger();
         startWorkWithClient();
+    }
+    private void createLogger() {
+        try (FileInputStream ins = new FileInputStream("logger.config")){
+            LogManager.getLogManager().readConfiguration(ins);
+        } catch (FileNotFoundException e) {
+            System.out.println("Файл конфигурации логгера не найден.");
+        } catch (IOException e) {
+            System.out.println("Не удалось открыть файл конфигурации логгера.");
+        }
+        logger = Logger.getLogger(CommandController.class.getName());
     }
 
     private void startWorkWithClient() {
-        System.out.println("Ожидание подключение клиента...");
+        logger.log(Level.INFO,"Ожидание подключение клиента...");
         history.clear();
         try {
             connectionController.connect();
             connectionController.sendObject(allCommandsInfo);
         } catch (IOException e) {
-            System.out.println("Ошибка попытки соединения с клиентом.");
+            logger.log(Level.WARNING,"Ошибка попытки соединения с клиентом.");
         }
         listenRequests();
     }
@@ -98,17 +131,17 @@ public class CommandController {
         Command command;
         while(connectionController.isConnected()) {
             try {
-                request = processRequest();
+                request = receiveRequest();
                 if (!request.getRequestCode().equals(Request.RequestCode.COMMAND)) {
-                    System.out.println("Получен некорректный запрос от клиента.");
+                    logger.log(Level.WARNING,"Получен некорректный запрос от клиента.");
                     continue;
                 }
                 input = request.getMsg().split(" ");
             } catch (IOException e) {
-                System.out.println("Ошибка получения запроса");
+                logger.log(Level.WARNING,"Ошибка получения запроса");
                 break;
             } catch (ClassNotFoundException e) {
-                System.out.println("Получен некорректный запрос от клиента.");
+                logger.log(Level.WARNING, "Получен некорректный запрос от клиента.");
                 continue;
             }
             try {
@@ -116,13 +149,13 @@ public class CommandController {
                     command = searchCommand(input[0].toLowerCase());
                     invoke(command, input);
                 } catch (IncorrectArgumentException e) {
-                    System.out.println("Некорректный аргумент: " + e.getMessage());
+                    logger.log(Level.WARNING, "Некорректный аргумент: " + e.getMessage());
                     sendError("получен некорректный аргумент команды - "+e.getMessage());
                 } catch (UnknownCommandException e) {
-                    System.out.println("Получена команда, неизвестная серверу.");
+                    logger.log(Level.WARNING, "Получена команда, неизвестная серверу.");
                     sendError("получена неизвестная серверу команда");
                 } catch (ClassNotFoundException e) {
-                    System.out.println("Получены неопознанные данные от клиента");
+                    logger.log(Level.WARNING, "Получены неопознанные данные от клиента");
                     sendError("получены неопознанные данные от клиента");
                 }
             } catch (IOException e) {
@@ -130,7 +163,7 @@ public class CommandController {
             }
         }
         if (connectionController.isConnected())
-            System.out.println("Ошибка подключения с клиентом. Сброс соединения...");
+            logger.log(Level.WARNING, "Ошибка подключения с клиентом. Сброс соединения...");
         startWorkWithClient();
     }
     public void sendOK() throws IOException {
@@ -142,7 +175,7 @@ public class CommandController {
     public void sendError(String msg) throws IOException {
         connectionController.sendObject(new Request(Request.RequestCode.ERROR,msg+"\n"));
     }
-    private Request processRequest() throws IOException, ClassNotFoundException {
+    public Request receiveRequest() throws IOException, ClassNotFoundException {
         return (Request)connectionController.receiveObject();
     }
     /**
@@ -152,13 +185,13 @@ public class CommandController {
      * @throws IncorrectArgumentException if requiring args is incorrect
      */
     protected void invoke(final Command command,final String[] args) throws IncorrectArgumentException, IOException, ClassNotFoundException {
-        System.out.println("Получена команда "+command.getName());
+        logger.log(Level.INFO, "Получена команда "+command.getName());
+        addToHistory(command);
         String reply = command.execute(this, args);
         if (reply != null) {
-            System.out.println("Отправлен ответ.");
+            logger.log(Level.INFO, "Отправлен ответ клиенту.");
             sendReply(reply);
         }
-        addToHistory(command);
     }
 
     /**
@@ -198,5 +231,9 @@ public class CommandController {
 
     public ArrayList<Command> getAllCommands() {
         return allCommands;
+    }
+
+    public Logger getLogger() {
+        return logger;
     }
 }

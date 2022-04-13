@@ -2,10 +2,14 @@ package commands;
 
 import connection_control.ConnectionController;
 import connection_control.Request;
+import data_classes.Climate;
+import data_classes.Government;
 import data_control.ConsoleController;
+import data_control.FileController;
 import exceptions.IncorrectArgumentException;
 import exceptions.MissingArgumentException;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
@@ -16,20 +20,33 @@ import java.util.Scanner;
  */
 public class CommandController {
     private final ConsoleController consoleController = new ConsoleController(this);
-    private final ConnectionController connectionController = new ConnectionController(this);
+    private ConnectionController connectionController;
+    private final FileController fileController = new FileController(this);
     private ArrayList<CommandInfo> allCommandsInfo;
+    private final Scanner scanner;
     public CommandController () {
-        Scanner scanner = new Scanner(System.in);
-        connect(scanner);
+        this.scanner = new Scanner(System.in);
+        try {
+            connectionController = new ConnectionController(this);
+        } catch (MissingArgumentException e) {
+            System.out.println("Ошибка в файле конфигурации: "+e.getMessage());
+            return;
+        } catch (FileNotFoundException e) {
+            System.out.println("Не найден файл конфигурации. Создайте файл конфигурации config.excalibbur\n" +
+                    "И добавьте в него строки \"address: localhost\" (допускается обычный ip, сервера) и \"port: 1234\" (порт сервера)");
+            return;
+        }
+        connect();
     }
 
-    private void connect (Scanner scanner) {
+    private void connect () {
         try {
             connectionController.reopenChannel();
         } catch (IOException e) {
             System.out.println("Ошибка открытия сетевого канала.");
             return;
         }
+        System.out.println("Попытка подключения к "+connectionController.getAddress()+":"+connectionController.getPort()+"...");
         while(!connectionController.tryToConnect()) {
             System.out.println("Ошибка подключения к серверу. Попробовать снова? (y/n)");
             if (!scanner.nextLine().toLowerCase().equals("y")) {
@@ -52,10 +69,10 @@ public class CommandController {
             return;
         }
         System.out.println("Успешное соединение с сервером.");
-        listenConsole(scanner);
+        listenConsole();
     }
 
-    public void listenConsole(Scanner scanner) {
+    private void listenConsole() {
         String input = "";
         String[] args;
         CommandInfo command;
@@ -77,7 +94,7 @@ public class CommandController {
                     break;
                 }
                 try {
-                    if (invoke(command))
+                    if (invoke(command, args))
                         processRequest(connectionController.receiveRequest());
                 } catch (IOException e) {
                     System.out.println("Ошибка получения запроса от сервера");
@@ -89,11 +106,11 @@ public class CommandController {
         }
         System.out.println("Соединение с сервером было разорвано.\nХотите попробовать переподключиться? (y/n)");
         if (scanner.nextLine().equals("y"))
-            connect(scanner);
+            connect();
         else
             exit();
     }
-    public boolean invoke(CommandInfo command) throws IOException, ClassNotFoundException {
+    public boolean invoke(CommandInfo command, String[] args) throws IOException, ClassNotFoundException {
         if (command.getSendInfo() == null)
             return true;
         Request request;
@@ -119,6 +136,28 @@ public class CommandController {
             case EXIT:
                 exit();
                 break;
+            case COMMANDS:
+                try {
+                    Request validRequest = connectionController.receiveRequest();
+                    if (!validRequest.getRequestCode().equals(Request.RequestCode.OK)) {
+                        processRequest(validRequest);
+                        break;
+                    }
+                    ArrayList<CommandInfo> commandsInfo = fileController.readScriptFile(args[1]);
+                    ArrayList<String> strCommand = fileController.getStrCommand();
+                    for (int i=0; i<commandsInfo.size();i++) {
+                        connectionController.sendObject(connectionController.getChannel(),
+                                new Request(Request.RequestCode.COMMAND, strCommand.get(i)));
+                        invoke(commandsInfo.get(i),strCommand.get(i).split(" "));
+                        processRequest(connectionController.receiveRequest());
+                    }
+                } catch (FileNotFoundException e) {
+                    System.out.println("Файл скрипта не найден.");
+                }
+                finally {
+                    connectionController.sendObject(connectionController.getChannel(), new Request(Request.RequestCode.OK,""));
+                }
+                break;
         }
         return true;
     }
@@ -139,14 +178,16 @@ public class CommandController {
             case ERROR:
                 System.out.print("Ошибка запроса: "+request.getMsg());
                 break;
+            case OK:
+                break;
             default:
                 System.out.println(request.getRequestCode()+": "+request.getMsg());
         }
     }
-    private boolean isValidCommand (String[] args) {
+    public boolean isValidCommand (String[] args) {
         CommandInfo command = parseCommand(args[0]);
         if (command == null) {
-            System.out.println("Неизвестная команда, используйте help для вывода списка команд.");
+            System.out.println("Неизвестная команда "+args[0]+", используйте help для вывода списка команд.");
             return false;
         }
         try {
@@ -176,6 +217,34 @@ public class CommandController {
                             throw new IncorrectArgumentException("аргумент - число с плавающей точкой.");
                         }
                         break;
+                    case CLIMATE:
+                        if (args[i+1].equals(" "))
+                            break;
+                        Climate tempClimate = null;
+                        for (Climate climate: Climate.values()) {
+                            if (args[i+1].toUpperCase().equals(climate.name())) {
+                                tempClimate = climate;
+                                break;
+                            }
+                        }
+                        if (tempClimate == null) {
+                            throw new IncorrectArgumentException("получено некорректное значение climate");
+                        }
+                        break;
+                    case GOVERNMENT:
+                        if (args[i+1].equals(" "))
+                            break;
+                        Government tempGovernment = null;
+                        for (Government government: Government.values()) {
+                            if (args[i+1].toUpperCase().equals(government.name())) {
+                                tempGovernment = government;
+                                break;
+                            }
+                        }
+                        if (tempGovernment == null) {
+                            throw new IncorrectArgumentException("получено некорректное значение government");
+                        }
+                        break;
                     case STRING:
                         break;
                 }
@@ -189,7 +258,7 @@ public class CommandController {
         }
         return false;
     }
-    private CommandInfo parseCommand (String name) {
+    public CommandInfo parseCommand (String name) {
         for (CommandInfo command: allCommandsInfo) {
             if (command.getName().equals(name.toLowerCase())) {
                 return command;
@@ -200,9 +269,5 @@ public class CommandController {
 
     public ConnectionController getConnectionController() {
         return connectionController;
-    }
-
-    public ArrayList<CommandInfo> getAllCommandsInfo() {
-        return allCommandsInfo;
     }
 }

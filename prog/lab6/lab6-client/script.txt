@@ -1,0 +1,6 @@
+info
+show
+execute_script script.txt
+show
+info
+history

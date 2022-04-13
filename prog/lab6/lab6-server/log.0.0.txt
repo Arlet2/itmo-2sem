@@ -1,0 +1,50 @@
+апр. 13, 2022 3:24:11 AM data_control.DataController readFile
+INFO: Считывания из файла по пути data\test.xml...
+апр. 13, 2022 3:24:11 AM data_control.DataController readFile
+INFO: Чтение завершено успешно.
+апр. 13, 2022 3:24:11 AM connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+апр. 13, 2022 3:24:11 AM commands.CommandController startWorkWithClient
+INFO: Ожидание подключение клиента...
+апр. 13, 2022 3:24:26 AM connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+апр. 13, 2022 3:24:32 AM commands.CommandController invoke
+INFO: Получена команда help
+апр. 13, 2022 3:24:32 AM commands.CommandController invoke
+INFO: Отправлен ответ.
+апр. 13, 2022 3:24:34 AM commands.CommandController invoke
+INFO: Получена команда show
+апр. 13, 2022 3:24:34 AM commands.CommandController invoke
+INFO: Отправлен ответ.
+апр. 13, 2022 3:27:30 AM data_control.DataController readFile
+INFO: Считывания из файла по пути data\test.xml...
+апр. 13, 2022 3:27:30 AM data_control.DataController readFile
+INFO: Чтение завершено успешно.
+апр. 13, 2022 3:27:30 AM connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+апр. 13, 2022 3:27:30 AM commands.CommandController startWorkWithClient
+INFO: Ожидание подключение клиента...
+апр. 13, 2022 3:28:01 AM data_control.DataController readFile
+INFO: Считывания из файла по пути data\test.xml...
+апр. 13, 2022 3:28:02 AM data_control.DataController readFile
+INFO: Чтение завершено успешно.
+апр. 13, 2022 3:28:02 AM connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+апр. 13, 2022 3:28:02 AM commands.CommandController startWorkWithClient
+INFO: Ожидание подключение клиента...
+апр. 13, 2022 3:28:08 AM connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+апр. 13, 2022 3:28:13 AM commands.CommandController invoke
+INFO: Получена команда show
+апр. 13, 2022 3:28:13 AM commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+апр. 13, 2022 3:28:21 AM commands.CommandController invoke
+INFO: Получена команда insert
+апр. 13, 2022 3:28:27 AM commands.CommandController listenRequests
+WARNING: Некорректный аргумент: город не был создан
+апр. 13, 2022 3:28:39 AM commands.CommandController listenRequests
+WARNING: Ошибка получения запроса
+апр. 13, 2022 3:28:39 AM commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+апр. 13, 2022 3:28:39 AM commands.CommandController startWorkWithClient
+INFO: Ожидание подключение клиента...

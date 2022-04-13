@@ -17,6 +17,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,16 +46,12 @@ public class FileController {
      * @param path of xml file that program will read
      * @return string of xml data
      */
-    private String readXml(final String path) {
+    private String readXml(final String path) throws IOException{
         StringBuilder xmlString = new StringBuilder();
-        try (Scanner scanner = new Scanner(Paths.get(path))){
-            while(scanner.hasNextLine())
-                xmlString.append(scanner.nextLine()).append("\n");
-        } catch (IOException e) {
-            System.out.println("Ошибка прочтения: файл не найден.");
-        } catch (InvalidPathException e) {
-            System.out.println("Ошибка прочтения: некорректный путь");
-        }
+        Scanner scanner = new Scanner(Paths.get(path));
+        while(scanner.hasNextLine())
+            xmlString.append(scanner.nextLine()).append("\n");
+        scanner.close();
         return xmlString.toString();
     }
 
@@ -62,7 +59,7 @@ public class FileController {
      * Read file and add cities to collection
      * @param path of file that program will read
      */
-    protected void readFromFile (final String path) {
+    protected void readFromFile (final String path) throws IOException {
         String xmlString = readXml(path);
         Matcher matcher = Pattern.compile("(?<=<city>)[\\S\\s]*?(?=</city>)", Pattern.CASE_INSENSITIVE).matcher(xmlString);
         ArrayList<String> list = new ArrayList<>();
@@ -74,13 +71,15 @@ public class FileController {
                 city = parseCity(i);
                 dataController.putCityToMap(city);
             } catch (SoManyArgumentsException | EmptyValueException e) {
-                System.out.println("Ошибка считывания в файле: ошибка аргументов в этом городе: "+e.getMessage()+"\nГород был пропущен");
+                dataController.getCommandController().getLogger().log(Level.WARNING, "Ошибка считывания в файле: ошибка аргументов в этом городе: "+
+                        e.getMessage()+"\nГород был пропущен");
             } catch (IncorrectValueException e) {
-                System.out.println("Ошибка считывания в файле: некорректное значение: "+e.getMessage()+"\nГород был пропущен");
+                dataController.getCommandController().getLogger().log(Level.WARNING, "Ошибка считывания в файле: некорректное значение: "+
+                        e.getMessage()+"\nГород был пропущен");
             } catch (NullValueException e) {
                 e.printStackTrace();
             } catch (NotUniqueIDException e) {
-                System.out.println("Ошибка считывания в файле: значение ID не уникально. Город был пропущен");
+                dataController.getCommandController().getLogger().log(Level.WARNING, "Ошибка считывания в файле: значение ID не уникально. Город был пропущен");
             }
         }
     }
@@ -100,9 +99,9 @@ public class FileController {
             s.append("</xml>");
             bufferedOutputStream.write(s.toString().getBytes(),0,s.toString().getBytes().length);
         } catch (FileNotFoundException e) {
-            System.out.println("Данный файл не найден");
+            dataController.getCommandController().getLogger().log(Level.WARNING, "Данный файл не найден");
         } catch (IOException e) {
-            e.printStackTrace();
+            dataController.getCommandController().getLogger().log(Level.WARNING, "Не получилось открыть файл");
         }
 
     }
@@ -275,7 +274,7 @@ public class FileController {
                 }
             }
             if (city.getClimateString().equals(""))
-                System.out.println("Значение аргумента climate некорректно. Поле было пропущено.");
+                dataController.getCommandController().getLogger().log(Level.INFO, "Значение аргумента climate некорректно. Поле было пропущено.");
         }
 
         // government
@@ -291,7 +290,7 @@ public class FileController {
                 }
             }
             if (city.getGovernmentString().equals(""))
-                System.out.println("Значение аргумента government некорректно. Поле было пропущено.");
+                dataController.getCommandController().getLogger().log(Level.INFO, "Значение аргумента government некорректно. Поле было пропущено.");
         }
 
         // governor

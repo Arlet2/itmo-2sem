@@ -1,9 +1,12 @@
 package data_control;
 
+import commands.CommandController;
 import data_classes.City;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * Control all data manipulations in files and console
@@ -25,11 +28,12 @@ public class DataController {
      * that controls reading/writing of files
      */
     private final FileController fileController;
-
+    private final CommandController commandController;
     /**
      * @param path of file where collection is
      */
-    public DataController(final String path) {
+    public DataController(final String path, CommandController commandController) throws IOException {
+        this.commandController = commandController;
         WORKING_PATH = path;
         map = new HashMap<>();
         fileController = new FileController(this);
@@ -55,10 +59,10 @@ public class DataController {
      * Shell of FileController method
      * see FileController:readFromFile()
      */
-    public void readFile(final String path) {
-        System.out.println("Считывания из файла по пути "+path+"...");
+    public void readFile(final String path) throws IOException {
+        commandController.getLogger().log(Level.INFO, "Считывания из файла по пути "+path+"...");
         fileController.readFromFile(path);
-        System.out.println("Чтение завершено успешно.");
+        commandController.getLogger().log(Level.INFO, "Чтение завершено успешно.");
     }
 
     /**
@@ -66,7 +70,7 @@ public class DataController {
      * see FileController:writeFile()
      */
     public void writeFile(final String path) {
-        System.out.println("Запись в файл по пути "+path+"...");
+        commandController.getLogger().log(Level.INFO, "Запись в файл по пути "+path+"...");
         fileController.writeFile(path);
     }
 
@@ -85,14 +89,8 @@ public class DataController {
         return map;
     }
 
-    /**
-     * Sort collection and return it
-     * @return sorted collection
-     */
-    public Collection<City> getSortMap() {
-        ArrayList<City> arrayList = new ArrayList<>(map.values());
-        arrayList.sort(City::compareTo);
-        return arrayList;
-    }
 
+    public CommandController getCommandController() {
+        return commandController;
+    }
 }

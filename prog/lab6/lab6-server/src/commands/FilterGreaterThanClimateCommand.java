@@ -24,8 +24,10 @@ public class FilterGreaterThanClimateCommand extends Command{
     public String execute(CommandController commandController, String[] args) throws IncorrectArgumentException, IOException {
         Climate climate = null;
         for (Climate i: Climate.values()) {
-            if (i.toString().equals(args[1].toUpperCase()))
+            if (i.toString().equals(args[1].toUpperCase())) {
                 climate = i;
+                break;
+            }
         }
         boolean isExist = false;
         for (City i: commandController.getDataController().getMap().values()) {

@@ -15,10 +15,10 @@ public class HelpCommand extends Command {
     @Override
     public String execute(CommandController commandController, String[] args) throws IOException {
         StringBuilder data = new StringBuilder();
-        for(Command i: commandController.getAllCommands()) {
-            if (!isServerCommand())
-                data.append(String.format("%-50s - %-1s %n", i.getName() + " " + i.getSignature(), i.getDescription()));
-        }
+        commandController.getAllCommands().forEach(command -> {
+            if (!command.isServerCommand())
+                data.append(String.format("%-50s - %-1s %n", command.getName() + " " + command.getSignature(), command.getDescription()));
+        });
         return data.toString();
     }
 }

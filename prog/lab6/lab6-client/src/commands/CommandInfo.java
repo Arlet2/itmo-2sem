@@ -55,6 +55,7 @@ public class CommandInfo implements Serializable {
     public enum SendInfo {
         CITY,
         CITY_UPDATE,
+        COMMANDS,
         EXIT
     }
 }

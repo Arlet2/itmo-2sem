@@ -1,5 +1,6 @@
 package commands;
 
+import connection_control.Request;
 import exceptions.IncorrectArgumentException;
 import exceptions.UnknownCommandException;
 
@@ -17,7 +18,7 @@ public class ExecuteScriptCommand extends Command {
      */
     public final static int RECURSION_INTERRUPT = 10;
     ExecuteScriptCommand() {
-        super("execute_script", "file_name","исполняет скрипт из указанного файла", null,
+        super("execute_script", "file_name","исполняет скрипт из указанного файла", CommandInfo.SendInfo.COMMANDS,
                 new CommandInfo.ArgumentInfo[]{CommandInfo.ArgumentInfo.STRING}, false);
     }
 
@@ -28,42 +29,32 @@ public class ExecuteScriptCommand extends Command {
      * @throws IncorrectArgumentException if file_name if empty/file doesn't exist
      */
     @Override
-    public String execute(CommandController commandController, String[] args) throws IncorrectArgumentException, IOException {
-        String commandString = readFile(args[1]);
-        invokeCommands(commandController, commandString);
-        return "not ready.";
-    }
-    private String readFile (final String path) throws IncorrectArgumentException {
-        StringBuilder commandString = new StringBuilder();
-        try (Scanner scanner = new Scanner(Paths.get(path))){
-            while(scanner.hasNextLine())
-                commandString.append(scanner.nextLine()).append("\n");
-        } catch (IOException e) {
-            throw new IncorrectArgumentException("данный файл не найден");
+    public String execute(CommandController commandController, String[] args) throws IncorrectArgumentException, IOException, ClassNotFoundException {
+        commandController.sendOK();
+        Request request = commandController.receiveRequest();
+        Command command = null;
+        String[] cArgs;
+        while (!request.getRequestCode().equals(Request.RequestCode.OK)) {
+            cArgs = request.getMsg().split(" ");
+            try {
+                command = commandController.searchCommand(cArgs[0]);
+            } catch (UnknownCommandException e) {
+
+            }
+            if (command != null) {
+                if (command.getName().equals("execute_script"))
+                    recursionCounter++;
+                if (recursionCounter >= RECURSION_INTERRUPT) {
+                    commandController.sendError("Глубина рекурсии слишком большая (рекурсия может быть глубиной до "+RECURSION_INTERRUPT+".\nВыход из рекурсии..");
+                }
+                commandController.invoke(command, cArgs);
+            }
+            request = commandController.receiveRequest();
         }
-        return commandString.toString();
+        recursionCounter=0;
+        commandController.sendOK();
+        return null;
     }
 
-    private void invokeCommands (CommandController commandController, final String commandString) throws IncorrectArgumentException, IOException {
-        String[] commands = commandString.split("\n");
-        String[] input;
-        for (String i: commands) {
-            input = i.split(" ");
-            try {
-                if (input[0].toLowerCase().equals(getName()))
-                    recursionCounter++;
-                if (recursionCounter == RECURSION_INTERRUPT) {
-                    System.out.println("Прерывание рекурсии...");
-                    System.out.println("Всего рекурсивных вызовов "+ recursionCounter);
-                    recursionCounter = 0;
-                    return;
-                }
-                commandController.invoke(commandController.searchCommand(input[0].toLowerCase()), input);
-            } catch (UnknownCommandException e) {
-                System.out.println("Неизвестная команда "+input[0]);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+
 }
