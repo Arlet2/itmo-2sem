@@ -1,9 +1,16 @@
-# 5lab-prog
-
 # ide files
 /prog/lab5/.idea
 /prog/lab5/lab5.iml
 /prog/lab5/out
 
+/prog/lab6/lab6-client/.idea
+/prog/lab6/lab6-clinet/lab6.iml
+/prog/lab6/lab6-client/out
+/prog/lab6/lab6-server/.idea
+/prog/lab6/lab6-server/lab6.iml
+/prog/lab6/lab6-server/out
+
 # for debug
 prog/lab5/debug
+prog/lab6/lab6-client/debug
+prog/lab6/lab6-server/debug
