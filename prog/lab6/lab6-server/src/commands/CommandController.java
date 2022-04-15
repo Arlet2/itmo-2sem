@@ -14,17 +14,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
-/*
-TODO: проверить терминальность методов потоков в командах +
-TODO: проверка enum'ом в виде аргументов +
-TODO: execute_script +
-TODO: проверить ВСЕ КОМАНДЫ +
-TODO: проверить на ошибки соединения +
-TODO: плохой реконнект (чекнуть) ???
-TODO: Logger +
-TODO: javadoc
-TODO: automic +
- */
+
 /**
  * controls execution of all commands
  */
@@ -37,6 +27,9 @@ public class CommandController {
      * that controls data for program
      */
     private final DataController dataController;
+    /**
+     * that controls connection with user
+     */
     private ConnectionController connectionController;
     /**
      * history of all commands that was used
@@ -46,8 +39,20 @@ public class CommandController {
      * collection of all commands that user can use
      */
     private final ArrayList<Command> allCommands;
+    /**
+     * collection of data about all commands that will send to user
+     */
     private final ArrayList<CommandInfo> allCommandsInfo;
+    /**
+     * instance for log server's info
+     */
     private Logger logger;
+
+    /**
+     * Create program working class
+     * @param path of file with collection
+     * @throws IOException if program can't open file with collection
+     */
     public CommandController (String path) throws IOException {
         createLogger();
         this.dataController = new DataController(path, this);
@@ -66,16 +71,24 @@ public class CommandController {
         }
         commandInit();
     }
+
+    /**
+     * Start work of program: turn on connection controller, create logger and receive connection
+     */
     public void startWork() {
+        createLogger();
         try {
             connectionController.start();
         } catch (IOException e) {
             logger.log(Level.WARNING,"Не удалось развернуть сервер. Попробуйте развернуть его на другом порте.");
             return;
         }
-        createLogger();
         startWorkWithClient();
     }
+
+    /**
+     * Create logger with config from file logger.config
+     */
     private void createLogger() {
         try (FileInputStream ins = new FileInputStream("logger.config")){
             LogManager.getLogManager().readConfiguration(ins);
@@ -87,6 +100,9 @@ public class CommandController {
         logger = Logger.getLogger(CommandController.class.getName());
     }
 
+    /**
+     * Wait creating connection from user
+     */
     private void startWorkWithClient() {
         logger.log(Level.INFO,"Ожидание подключение клиента...");
         history.clear();
@@ -125,6 +141,9 @@ public class CommandController {
         });
     }
 
+    /**
+     * Use when connection with user exists. Listen request from user and execute command from one.
+     */
     public void listenRequests() {
         String[] input;
         Request request;
@@ -166,15 +185,39 @@ public class CommandController {
             logger.log(Level.WARNING, "Ошибка подключения с клиентом. Сброс соединения...");
         startWorkWithClient();
     }
+
+    /**
+     * Send OK request to user
+     * @throws IOException if server couldn't send this request
+     */
     public void sendOK() throws IOException {
         connectionController.sendObject(new Request(Request.RequestCode.OK,""));
     }
+
+    /**
+     * Send REPLY request to user
+     * @param msg that user can see as result of command execution
+     * @throws IOException if server couldn't send this request
+     */
     public void sendReply(String msg) throws IOException {
         connectionController.sendObject(new Request(Request.RequestCode.REPLY, msg));
     }
+
+    /**
+     * Send ERROR request
+     * @param msg that user can see as explanation of error
+     * @throws IOException if server couldn't send this request
+     */
     public void sendError(String msg) throws IOException {
         connectionController.sendObject(new Request(Request.RequestCode.ERROR,msg+"\n"));
     }
+
+    /**
+     * Receive request from user
+     * @return request
+     * @throws IOException if server couldn't receive this request
+     * @throws ClassNotFoundException if server received not expected class
+     */
     public Request receiveRequest() throws IOException, ClassNotFoundException {
         return (Request)connectionController.receiveObject();
     }
@@ -204,6 +247,7 @@ public class CommandController {
         }
         history.add(command);
     }
+
     protected ArrayList<Command> getHistory() {
         return history;
     }

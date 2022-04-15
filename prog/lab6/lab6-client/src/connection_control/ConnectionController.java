@@ -13,13 +13,37 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Control connection with server
+ */
 public class ConnectionController {
+    /**
+     * Current program controller
+     */
     private final CommandController commandController;
+    /**
+     * Current channel with server
+     */
     private SocketChannel channel;
+    /**
+     * Selector for all channels
+     */
     private Selector selector;
+    /**
+     * Port that client will connect
+     */
     private int port;
+    /**
+     * Server address
+     */
     private String address;
 
+    /**
+     * Create connection controller for connect to server
+     * @param controller current program controller
+     * @throws MissingArgumentException if config file haven't got address and port
+     * @throws FileNotFoundException if config file not found
+     */
     public ConnectionController(CommandController controller) throws MissingArgumentException, FileNotFoundException {
         this.commandController = controller;
         readConfig();
@@ -31,6 +55,12 @@ public class ConnectionController {
         }
     }
 
+    /**
+     * Read config file with "config.excalibbur".
+     * File need to have "port: *digits*" and "address: *IP address/domain*"
+     * @throws FileNotFoundException if file not found
+     * @throws MissingArgumentException if port or address not found in file
+     */
     private void readConfig() throws FileNotFoundException, MissingArgumentException {
         Scanner scanner = new Scanner(new FileInputStream("config.excalibbur"));
         StringBuilder s = new StringBuilder();
@@ -51,12 +81,22 @@ public class ConnectionController {
                     "\"address: localhost\", \"address: 192.65.3.5\"");
     }
 
+    /**
+     * Close current channel and open new
+     * @throws IOException if new channel can't open or old can't close
+     */
     public void reopenChannel() throws IOException {
         if (channel != null)
             channel.close();
         channel = openNewChannel();
     }
 
+    /**
+     * Wait on channels for new data
+     * @return object with data
+     * @throws IOException if object couldn't receive
+     * @throws ClassNotFoundException if object couldn't deserialize
+     */
     public Object processConnection() throws IOException, ClassNotFoundException {
         selector.select();
         for (SelectionKey key : selector.selectedKeys()) {
@@ -67,10 +107,22 @@ public class ConnectionController {
         return null;
     }
 
+    /**
+     * Convert receiving object to Request
+     * @return Request from server
+     * @throws IOException if Request couldn't receive
+     * @throws ClassNotFoundException if object couldn't deserialize
+     */
     public Request receiveRequest() throws IOException, ClassNotFoundException {
         return (Request) processConnection();
     }
 
+    /**
+     * Send object to server
+     * @param channel where server is
+     * @param object that need to send
+     * @throws IOException if object couldn't send
+     */
     public void sendObject(SocketChannel channel, Object object) throws IOException {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         ObjectOutputStream objOut = new ObjectOutputStream(byteOut);
@@ -80,6 +132,13 @@ public class ConnectionController {
         byteOut.reset();
     }
 
+    /**
+     * Receive data object from server
+     * @param channel from where object sent
+     * @return Object that was sent
+     * @throws IOException if object couldn't receive
+     * @throws ClassNotFoundException if object couldn't deserialize
+     */
     private Object receiveObject(SocketChannel channel) throws IOException, ClassNotFoundException {
         ByteBuffer buff = ByteBuffer.allocate(1024 * 1024);
         channel.read(buff);
@@ -87,6 +146,11 @@ public class ConnectionController {
         return objIn.readObject();
     }
 
+    /**
+     * Create new nonblocking channel and register it to selector
+     * @return new channel
+     * @throws IOException if channel couldn't open
+     */
     private SocketChannel openNewChannel() throws IOException {
         SocketChannel channel = SocketChannel.open();
         channel.configureBlocking(false);
@@ -94,6 +158,10 @@ public class ConnectionController {
         return channel;
     }
 
+    /**
+     * Try to create connection with server
+     * @return <b>true</b> if connection is created else <b>false</b>
+     */
     public boolean tryToConnect() {
         try {
             if (channel.connect(new InetSocketAddress(address, port)))
@@ -104,6 +172,10 @@ public class ConnectionController {
         }
     }
 
+    /**
+     * Close connection with server
+     * @throws IOException if closing connection is failed
+     */
     public void disconnect() throws IOException {
         if (channel != null)
             channel.close();

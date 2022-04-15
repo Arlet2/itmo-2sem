@@ -18,7 +18,6 @@ public class ReplaceIfGreaterCommand extends Command {
      * <p>Modification time can be changed</p>
      * @param commandController that uses for program
      * @param args id
-     * @throws MissingArgumentException if id is missing
      * @throws IncorrectArgumentException if id is incorrect
      */
     @Override

@@ -1,10 +1,5 @@
 package commands;
 
-import data_classes.City;
-
-import java.util.Comparator;
-import java.util.function.Consumer;
-
 public class PrintFieldAscendingGovernment extends Command{
     PrintFieldAscendingGovernment() {
         super("print_field_ascending_government","","выводит значения поля government всех элементов в порядке возрастания", null, null, false);

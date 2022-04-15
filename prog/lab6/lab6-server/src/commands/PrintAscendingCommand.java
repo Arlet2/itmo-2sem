@@ -1,9 +1,6 @@
 package commands;
 
-import data_classes.City;
-
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 
 public class PrintAscendingCommand extends Command{
     PrintAscendingCommand() {

@@ -9,7 +9,6 @@ import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -130,12 +129,24 @@ public class FileController {
         return xmlString.toString();
     }
 
+    /**
+     * Get next matching from string with pattern
+     * @param xmlString that have data
+     * @param pattern that is used for searching in string
+     * @return string with used pattern
+     */
     private String getMatch (final String xmlString, final String pattern) {
         Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(xmlString);
         matcher.find();
         return xmlString.substring(matcher.start(), matcher.end());
     }
 
+    /**
+     * Count matches
+     * @param xmlString where can be existed matches
+     * @param pattern that is used for searching
+     * @return count of matches
+     */
     private int countMatches (final String xmlString, final String pattern) {
         Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(xmlString);
         int counter = 0;
@@ -143,6 +154,16 @@ public class FileController {
         return counter;
     }
 
+    /**
+     * Parse city from xml
+     * @param xmlString that keep city's data
+     * @return city object
+     * @throws SoManyArgumentsException if so many tags with same names
+     * @throws EmptyValueException if required tag is empty
+     * @throws IncorrectValueException if value in tag is incorrect
+     * @throws NullValueException if required tag is empty
+     * @throws NotUniqueIDException if id is not unique for this collection
+     */
     private City parseCity(final String xmlString) throws SoManyArgumentsException, EmptyValueException, IncorrectValueException, NullValueException, NotUniqueIDException {
         String pattern, extraPattern, tempStr;
         City city = new City();

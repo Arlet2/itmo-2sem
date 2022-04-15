@@ -19,11 +19,31 @@ import java.util.Scanner;
  * controls execution of all commands
  */
 public class CommandController {
+    /**
+     * controls user's interaction with console
+     */
     private final ConsoleController consoleController = new ConsoleController(this);
+    /**
+     * controls connection with server
+     */
     private ConnectionController connectionController;
+    /**
+     * controls reading from file
+     */
     private final FileController fileController = new FileController(this);
+    /**
+     * All info about commands that can send to server and execute
+     */
     private ArrayList<CommandInfo> allCommandsInfo;
+    /**
+     * current scanner for listening user's command
+     */
     private final Scanner scanner;
+
+    /**
+     * Create scanner and read configuration for connection
+     * After that start connection with user
+     */
     public CommandController () {
         this.scanner = new Scanner(System.in);
         try {
@@ -39,6 +59,9 @@ public class CommandController {
         connect();
     }
 
+    /**
+     * connect to server
+     */
     private void connect () {
         try {
             connectionController.reopenChannel();
@@ -72,6 +95,9 @@ public class CommandController {
         listenConsole();
     }
 
+    /**
+     * Listen console for new command that sends it to server if it's correct
+     */
     private void listenConsole() {
         String input = "";
         String[] args;
@@ -110,6 +136,15 @@ public class CommandController {
         else
             exit();
     }
+
+    /**
+     * Send extra info to server (if it needs)
+     * @param command that need to execute
+     * @param args of this command
+     * @return <b>true</b> if invoke is successfully done; <b>false</b> if execution has got troubles
+     * @throws IOException if request couldn't receive or send
+     * @throws ClassNotFoundException if request couldn't deserialize
+     */
     public boolean invoke(CommandInfo command, String[] args) throws IOException, ClassNotFoundException {
         if (command.getSendInfo() == null)
             return true;
@@ -161,6 +196,10 @@ public class CommandController {
         }
         return true;
     }
+
+    /**
+     * End program execution
+     */
     private void exit() {
         System.out.println("Завершение выполнения программы...");
         try {
@@ -170,6 +209,11 @@ public class CommandController {
         }
         System.exit(0);
     }
+
+    /**
+     * Print information using request code
+     * @param request from server
+     */
     public void processRequest (Request request) {
         switch (request.getRequestCode()) {
             case REPLY:
@@ -181,9 +225,15 @@ public class CommandController {
             case OK:
                 break;
             default:
-                System.out.println(request.getRequestCode()+": "+request.getMsg());
+                System.out.println("Получен неожиданный ответ от сервера: "+request.getRequestCode()+": "+request.getMsg());
         }
     }
+
+    /**
+     * Check command's args before sending to server
+     * @param args of command
+     * @return <b>true</b> if args is correct else <b>false</b>
+     */
     public boolean isValidCommand (String[] args) {
         CommandInfo command = parseCommand(args[0]);
         if (command == null) {
@@ -258,6 +308,12 @@ public class CommandController {
         }
         return false;
     }
+
+    /**
+     * Search and return CommandInfo by name
+     * @param name of command
+     * @return CommandInfo
+     */
     public CommandInfo parseCommand (String name) {
         for (CommandInfo command: allCommandsInfo) {
             if (command.getName().equals(name.toLowerCase())) {

@@ -17,7 +17,6 @@ public class UpdateCommand extends Command{
      * @param commandController that uses for program
      * @param args id
      * @throws IncorrectArgumentException if id is incorrect
-     * @throws MissingArgumentException if id is missing
      */
     @Override
     public String execute(CommandController commandController, String[] args) throws IncorrectArgumentException, IOException, ClassNotFoundException {

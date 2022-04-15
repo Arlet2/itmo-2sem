@@ -4,7 +4,6 @@ import data_classes.City;
 import exceptions.IncorrectArgumentException;
 import exceptions.MissingArgumentException;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RemoveLowerKeyCommand extends Command{
     RemoveLowerKeyCommand() {
@@ -17,7 +16,6 @@ public class RemoveLowerKeyCommand extends Command{
      * <p>Modification time can be changed</p>
      * @param commandController that uses for program
      * @param args id
-     * @throws MissingArgumentException if id is missing
      * @throws IncorrectArgumentException if id is incorrect
      */
     @Override

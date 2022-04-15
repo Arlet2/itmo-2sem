@@ -27,6 +27,12 @@ public class InfoCommand extends Command {
         data.append("\n");
         return data.toString();
     }
+
+    /**
+     * Convert modification date to String
+     * @param localDateTime of last modification
+     * @return string with modification date
+     */
     private String getDate(LocalDateTime localDateTime) {
         if(localDateTime == null)
             return "Коллекция не изменялась.";

@@ -28,6 +28,9 @@ public class DataController {
      * that controls reading/writing of files
      */
     private final FileController fileController;
+    /**
+     * that controls program's execution
+     */
     private final CommandController commandController;
     /**
      * @param path of file where collection is

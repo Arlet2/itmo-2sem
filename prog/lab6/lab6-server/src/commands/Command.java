@@ -22,9 +22,28 @@ public abstract class Command implements Executable {
      * signature of this command (uses for help command)
      */
     private final String signature;
+    /**
+     * Information that client need to send to server when command is executing
+     */
     private final CommandInfo.SendInfo sendInfo;
+    /**
+     * Arguments that client need to check before he sends ones to server
+     */
     private final CommandInfo.ArgumentInfo[] argInfo;
+    /**
+     * true if it's command that can use only from server console without client
+     */
     private final boolean isServerCommand;
+
+    /**
+     * Create new command that can execute on server
+     * @param name of this command
+     * @param signature that show arguments of this command (for help)
+     * @param description of this command (for help)
+     * @param sendInfo of this command (for client)
+     * @param argInfo of this command (for client)
+     * @param isServerCommand if true client can't use it
+     */
     Command(final String name, final String signature, final String description, CommandInfo.SendInfo sendInfo, CommandInfo.ArgumentInfo[] argInfo, boolean isServerCommand) {
         this.name = name;
         this.signature = signature;
@@ -36,13 +55,12 @@ public abstract class Command implements Executable {
 
     /**
      * Validate id as argument in command
-     * @param commandController that uses in program
      * @param args of command that enter
      * @return id from args
      * @throws IncorrectArgumentException if id is incorrect in args
      * @throws MissingArgumentException if id is missing in args
      */
-    protected long idValidator(CommandController commandController, String[] args) throws IncorrectArgumentException, MissingArgumentException {
+    protected long idValidator(String[] args) throws IncorrectArgumentException, MissingArgumentException {
         if(args.length < 2)
             throw new MissingArgumentException("id");
         if(args[1].isEmpty())

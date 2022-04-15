@@ -2,9 +2,24 @@ package connection_control;
 
 import java.io.Serializable;
 
+/**
+ * Object that server always send/receive to/from client
+ */
 public class Request implements Serializable {
+    /**
+     * code of this request
+     */
     private final RequestCode requestCode;
+    /**
+     * Message of this request (can be null)
+     */
     private final String msg;
+
+    /**
+     * Create data object for sending
+     * @param requestCode of this request
+     * @param msg of this request
+     */
     public Request (final RequestCode requestCode, final String msg) {
         this.requestCode = requestCode;
         this.msg = msg;
@@ -18,6 +33,14 @@ public class Request implements Serializable {
         return requestCode;
     }
 
+    /**
+     * Some codes for init request
+     * REPLY - result of command that prints on client's screen
+     * COMMAND - command with arguments that need to execute on server
+     * ERROR - explanation of error with arguments or execution
+     * NEXT_REQUEST_CITY - next object for receiving is City
+     * OK - all arguments that need to check on server is ok OR server is ready to continue processing of command
+     */
     public enum RequestCode {
         REPLY,
         COMMAND,

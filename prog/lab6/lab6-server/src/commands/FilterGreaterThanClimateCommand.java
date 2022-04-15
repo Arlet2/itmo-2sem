@@ -3,7 +3,6 @@ package commands;
 import data_classes.City;
 import data_classes.Climate;
 import exceptions.IncorrectArgumentException;
-import exceptions.MissingArgumentException;
 
 import java.io.IOException;
 
@@ -17,7 +16,6 @@ public class FilterGreaterThanClimateCommand extends Command{
      * print elements that have got climate that greater than climate from args
      * @param commandController that uses for program
      * @param args climate
-     * @throws MissingArgumentException if climate is missing or empty
      * @throws IncorrectArgumentException if climate is incorrect
      */
     @Override

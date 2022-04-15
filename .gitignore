@@ -14,12 +14,3 @@
 prog/lab5/debug
 prog/lab6/lab6-client/debug
 prog/lab6/lab6-server/debug
-
-
-# not ready
-prog/lab6/lab6-server/javadoc
-prog/lab6/lab6-server/data
-prog/lab6/lab6-server/lab6-server.jar
-prog/lab6/lab6-client/javadoc
-prog/lab6/lab6-client/data
-prog/lab6/lab6-client/lab6-client.jar
