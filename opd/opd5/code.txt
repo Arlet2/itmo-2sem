@@ -1,0 +1,28 @@
+ORG	0x12D
+DATA:	WORD 0x5D8	; указатель на данные
+POINTER:	WORD ?	; указатель на текущие два символа
+ORG 	0x12F
+START:	LD DATA
+	ST POINTER
+PROCESS:	LD (POINTER)+
+	PUSH
+	SWAB
+	OUT 0x6
+	SXTB
+	BZS STOP	; проверка на null
+S1:	IN 0x7	; считывания подтверждения приёма
+	AND #0x40 	; бит 6 SR == 0? (готовность)
+	BEQ S1	; нет - спин-луп
+	POP
+	OUT 0x6
+	SXTB
+	BZS STOP	; проверка на null
+S2:	IN 0x7	; считывания подтверждения приёма
+	AND #0x40 	; бит 6 SR == 0? (готовность)
+	BEQ S2	; нет - спин-луп
+	JUMP PROCESS	; продолжение работы
+STOP:	HLT
+ORG	0x5D8
+	WORD 0xCEEC	; Ом
+	WORD 0xF1EA ; ск
+	WORD 0x00FF ; null + мусор
