@@ -23,18 +23,22 @@ public class CommandController {
      * controls user's interaction with console
      */
     private final ConsoleController consoleController = new ConsoleController(this);
+
     /**
      * controls connection with server
      */
     private ConnectionController connectionController;
+
     /**
      * controls reading from file
      */
     private final FileController fileController = new FileController(this);
+
     /**
      * All info about commands that can send to server and execute
      */
     private ArrayList<CommandInfo> allCommandsInfo;
+
     /**
      * current scanner for listening user's command
      */
@@ -44,16 +48,17 @@ public class CommandController {
      * Create scanner and read configuration for connection
      * After that start connection with user
      */
-    public CommandController () {
+    public CommandController() {
         this.scanner = new Scanner(System.in);
         try {
             connectionController = new ConnectionController(this);
         } catch (MissingArgumentException e) {
-            System.out.println("Ошибка в файле конфигурации: "+e.getMessage());
+            System.out.println("Ошибка в файле конфигурации: " + e.getMessage());
             return;
         } catch (FileNotFoundException e) {
             System.out.println("Не найден файл конфигурации. Создайте файл конфигурации config.excalibbur\n" +
-                    "И добавьте в него строки \"address: localhost\" (допускается обычный ip, сервера) и \"port: 1234\" (порт сервера)");
+                    "И добавьте в него строки \"address: localhost\" (допускается обычный ip, сервера)" +
+                    " и \"port: 1234\" (порт сервера)");
             return;
         }
         connect();
@@ -62,21 +67,22 @@ public class CommandController {
     /**
      * connect to server
      */
-    private void connect () {
+    private void connect() {
         try {
-            connectionController.reopenChannel();
+            connectionController.openChannel();
         } catch (IOException e) {
             System.out.println("Ошибка открытия сетевого канала.");
             return;
         }
-        System.out.println("Попытка подключения к "+connectionController.getAddress()+":"+connectionController.getPort()+"...");
-        while(!connectionController.tryToConnect()) {
+        System.out.println("Попытка подключения к " + connectionController.getAddress() +
+                ":" + connectionController.getPort() + "...");
+        while (!connectionController.tryToConnect()) {
             System.out.println("Ошибка подключения к серверу. Попробовать снова? (y/n)");
             if (!scanner.nextLine().toLowerCase().equals("y")) {
                 exit();
             }
             try {
-                connectionController.reopenChannel();
+                connectionController.openChannel();
             } catch (IOException e) {
                 System.out.println("Ошибка открытия сетевого канала.");
                 return;
@@ -114,7 +120,8 @@ public class CommandController {
             if (isValidCommand(args)) { // проверить арги и имя команды
                 command = parseCommand(args[0]);
                 try {
-                    connectionController.sendObject(connectionController.getChannel(), new Request(Request.RequestCode.COMMAND, input));
+                    connectionController.sendObject(connectionController.getChannel(),
+                            new Request(Request.RequestCode.COMMAND, input));
                 } catch (IOException e) {
                     System.out.println("Не удалось отправить команду на сервер.");
                     break;
@@ -139,34 +146,37 @@ public class CommandController {
 
     /**
      * Send extra info to server (if it needs)
+     *
      * @param command that need to execute
-     * @param args of this command
+     * @param args    of this command
      * @return <b>true</b> if invoke is successfully done; <b>false</b> if execution has got troubles
-     * @throws IOException if request couldn't receive or send
+     * @throws IOException            if request couldn't receive or send
      * @throws ClassNotFoundException if request couldn't deserialize
      */
     public boolean invoke(CommandInfo command, String[] args) throws IOException, ClassNotFoundException {
         if (command.getSendInfo() == null)
             return true;
         Request request;
-        switch(command.getSendInfo()) {
+        switch (command.getSendInfo()) {
             // могут слать null!!!
             case CITY:
                 request = connectionController.receiveRequest();
-                if(!request.getRequestCode().equals(Request.RequestCode.OK)) {
+                if (!request.getRequestCode().equals(Request.RequestCode.OK)) {
                     processRequest(request);
                     return false;
                 }
                 System.out.println("Данные id корректны. Продолжение ввода...");
-                connectionController.sendObject(connectionController.getChannel(), consoleController.createCityByUser(false));
+                connectionController.sendObject(connectionController.getChannel(),
+                        consoleController.createCityByUser(false));
                 break;
             case CITY_UPDATE:
                 request = connectionController.receiveRequest();
-                if(!request.getRequestCode().equals(Request.RequestCode.OK)) {
+                if (!request.getRequestCode().equals(Request.RequestCode.OK)) {
                     processRequest(request);
                     return false;
                 }
-                connectionController.sendObject(connectionController.getChannel(), consoleController.createCityByUser(true));
+                connectionController.sendObject(connectionController.getChannel(),
+                        consoleController.createCityByUser(true));
                 break;
             case EXIT:
                 exit();
@@ -180,17 +190,17 @@ public class CommandController {
                     }
                     ArrayList<CommandInfo> commandsInfo = fileController.readScriptFile(args[1]);
                     ArrayList<String> strCommand = fileController.getStrCommand();
-                    for (int i=0; i<commandsInfo.size();i++) {
+                    for (int i = 0; i < commandsInfo.size(); i++) {
                         connectionController.sendObject(connectionController.getChannel(),
                                 new Request(Request.RequestCode.COMMAND, strCommand.get(i)));
-                        invoke(commandsInfo.get(i),strCommand.get(i).split(" "));
+                        invoke(commandsInfo.get(i), strCommand.get(i).split(" "));
                         processRequest(connectionController.receiveRequest());
                     }
                 } catch (FileNotFoundException e) {
                     System.out.println("Файл скрипта не найден.");
-                }
-                finally {
-                    connectionController.sendObject(connectionController.getChannel(), new Request(Request.RequestCode.OK,""));
+                } finally {
+                    connectionController.sendObject(connectionController.getChannel(),
+                            new Request(Request.RequestCode.OK, ""));
                 }
                 break;
         }
@@ -212,67 +222,71 @@ public class CommandController {
 
     /**
      * Print information using request code
+     *
      * @param request from server
      */
-    public void processRequest (Request request) {
+    public void processRequest(Request request) {
         switch (request.getRequestCode()) {
             case REPLY:
                 System.out.print(request.getMsg());
                 break;
             case ERROR:
-                System.out.print("Ошибка запроса: "+request.getMsg());
+                System.out.print("Ошибка запроса: " + request.getMsg());
                 break;
             case OK:
                 break;
             default:
-                System.out.println("Получен неожиданный ответ от сервера: "+request.getRequestCode()+": "+request.getMsg());
+                System.out.println("Получен неожиданный ответ от сервера: "
+                        + request.getRequestCode() + ": " + request.getMsg());
         }
     }
 
     /**
      * Check command's args before sending to server
+     *
      * @param args of command
      * @return <b>true</b> if args is correct else <b>false</b>
      */
-    public boolean isValidCommand (String[] args) {
+    public boolean isValidCommand(String[] args) {
         CommandInfo command = parseCommand(args[0]);
         if (command == null) {
-            System.out.println("Неизвестная команда "+args[0]+", используйте help для вывода списка команд.");
+            System.out.println("Неизвестная команда " + args[0] + ", используйте help для вывода списка команд.");
             return false;
         }
         try {
             if (command.getArgInfo() == null) return true;
-            if (command.getArgInfo().length > args.length-1)
-                throw new MissingArgumentException("недостаточное количество аргументов. Используйте help для справки.");
-            else if (command.getArgInfo().length < args.length-1)
+            if (command.getArgInfo().length > args.length - 1)
+                throw new MissingArgumentException("недостаточное количество аргументов. " +
+                        "Используйте help для справки.");
+            else if (command.getArgInfo().length < args.length - 1)
                 throw new MissingArgumentException("слишком много аргументов. Используйте help для справки.");
-            for (int i=0;i<command.getArgInfo().length;i++) {
+            for (int i = 0; i < command.getArgInfo().length; i++) {
                 if (command.getArgInfo()[i] == null)
                     continue;
                 switch (command.getArgInfo()[i]) {
                     case ID:
-                        CommandInfo.idValidator(args[i+1]);
+                        CommandInfo.idValidator(args[i + 1]);
                         break;
                     case INT:
                         try {
-                            Integer.parseInt(args[i+1]);
+                            Integer.parseInt(args[i + 1]);
                         } catch (NumberFormatException e) {
                             throw new IncorrectArgumentException("аргумент - целое число.");
                         }
                         break;
                     case FLOAT:
                         try {
-                            Float.parseFloat(args[i+1]);
+                            Float.parseFloat(args[i + 1]);
                         } catch (NumberFormatException e) {
                             throw new IncorrectArgumentException("аргумент - число с плавающей точкой.");
                         }
                         break;
                     case CLIMATE:
-                        if (args[i+1].equals(" "))
+                        if (args[i + 1].equals(" "))
                             break;
                         Climate tempClimate = null;
-                        for (Climate climate: Climate.values()) {
-                            if (args[i+1].toUpperCase().equals(climate.name())) {
+                        for (Climate climate : Climate.values()) {
+                            if (args[i + 1].toUpperCase().equals(climate.name())) {
                                 tempClimate = climate;
                                 break;
                             }
@@ -282,11 +296,11 @@ public class CommandController {
                         }
                         break;
                     case GOVERNMENT:
-                        if (args[i+1].equals(" "))
+                        if (args[i + 1].equals(" "))
                             break;
                         Government tempGovernment = null;
-                        for (Government government: Government.values()) {
-                            if (args[i+1].toUpperCase().equals(government.name())) {
+                        for (Government government : Government.values()) {
+                            if (args[i + 1].toUpperCase().equals(government.name())) {
                                 tempGovernment = government;
                                 break;
                             }
@@ -301,21 +315,22 @@ public class CommandController {
             }
             return true;
         } catch (MissingArgumentException e) {
-            System.out.println("Отсутствуют обязательные аргументы: "+e.getMessage());
+            System.out.println("Отсутствуют обязательные аргументы: " + e.getMessage());
 
         } catch (IncorrectArgumentException e) {
-            System.out.println("Некорректный аргумент: "+e.getMessage());
+            System.out.println("Некорректный аргумент: " + e.getMessage());
         }
         return false;
     }
 
     /**
      * Search and return CommandInfo by name
+     *
      * @param name of command
      * @return CommandInfo
      */
-    public CommandInfo parseCommand (String name) {
-        for (CommandInfo command: allCommandsInfo) {
+    public CommandInfo parseCommand(String name) {
+        for (CommandInfo command : allCommandsInfo) {
             if (command.getName().equals(name.toLowerCase())) {
                 return command;
             }

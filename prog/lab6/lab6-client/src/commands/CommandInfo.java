@@ -15,9 +15,10 @@ public class CommandInfo implements Serializable {
 
     /**
      * Create command information for client from existing commands
-     * @param name of command
+     *
+     * @param name     of command
      * @param sendInfo is data that client need to send to server
-     * @param argInfo is arguments that client need to check before he'll send it to server
+     * @param argInfo  is arguments that client need to check before he'll send it to server
      */
     public CommandInfo(String name, SendInfo sendInfo, ArgumentInfo[] argInfo) {
         this.name = name;
@@ -27,9 +28,10 @@ public class CommandInfo implements Serializable {
 
     /**
      * Validate id as argument in command
+     *
      * @param arg of command that user typed
      * @throws IncorrectArgumentException if id is incorrect in args
-     * @throws MissingArgumentException if id is missing in args
+     * @throws MissingArgumentException   if id is missing in args
      */
     public static void idValidator(String arg) throws IncorrectArgumentException, MissingArgumentException {
         long id;
@@ -38,9 +40,10 @@ public class CommandInfo implements Serializable {
         } catch (NumberFormatException e) {
             throw new IncorrectArgumentException("id - целое число");
         }
-        if(id <= 0)
+        if (id <= 0)
             throw new IncorrectArgumentException("id - число больше 0");
     }
+
     public String getName() {
         return name;
     }
