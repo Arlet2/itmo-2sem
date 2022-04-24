@@ -23,26 +23,32 @@ public class CommandController {
      * max value of commands for keep in history
      */
     protected static final int MAX_COMMANDS_IN_HISTORY = 13;
+
     /**
      * that controls data for program
      */
     private final DataController dataController;
+
     /**
      * that controls connection with user
      */
     private ConnectionController connectionController;
+
     /**
      * history of all commands that was used
      */
     private final ArrayList<Command> history;
+
     /**
      * collection of all commands that user can use
      */
     private final ArrayList<Command> allCommands;
+
     /**
      * collection of data about all commands that will send to user
      */
     private final ArrayList<CommandInfo> allCommandsInfo;
+
     /**
      * instance for log server's info
      */
@@ -50,10 +56,11 @@ public class CommandController {
 
     /**
      * Create program working class
+     *
      * @param path of file with collection
      * @throws IOException if program can't open file with collection
      */
-    public CommandController (String path) throws IOException {
+    public CommandController(String path) throws IOException {
         createLogger();
         this.dataController = new DataController(path, this);
         history = new ArrayList<>();
@@ -62,7 +69,7 @@ public class CommandController {
         try {
             connectionController = new ConnectionController(this);
         } catch (MissingArgumentException e) {
-            logger.log(Level.WARNING,"Ошибка файла конфигурации: "+e.getMessage());
+            logger.log(Level.WARNING, "Ошибка файла конфигурации: " + e.getMessage());
             return;
         } catch (FileNotFoundException e) {
             logger.log(Level.WARNING, "Не был найден файл конфигурации config.excalibbur. Добавьте его, указав порт следующим образом:\n" +
@@ -75,22 +82,22 @@ public class CommandController {
     /**
      * Start work of program: turn on connection controller, create logger and receive connection
      */
-    public void startWork() {
+    public void start() {
         createLogger();
         try {
             connectionController.start();
         } catch (IOException e) {
-            logger.log(Level.WARNING,"Не удалось развернуть сервер. Попробуйте развернуть его на другом порте.");
+            logger.log(Level.WARNING, "Не удалось развернуть сервер. Попробуйте развернуть его на другом порте.");
             return;
         }
-        startWorkWithClient();
+        processClient();
     }
 
     /**
      * Create logger with config from file logger.config
      */
     private void createLogger() {
-        try (FileInputStream ins = new FileInputStream("logger.config")){
+        try (FileInputStream ins = new FileInputStream("logger.config")) {
             LogManager.getLogManager().readConfiguration(ins);
         } catch (FileNotFoundException e) {
             System.out.println("Файл конфигурации логгера не найден.");
@@ -103,14 +110,14 @@ public class CommandController {
     /**
      * Wait creating connection from user
      */
-    private void startWorkWithClient() {
-        logger.log(Level.INFO,"Ожидание подключение клиента...");
+    private void processClient() {
+        logger.log(Level.INFO, "Ожидание подключение клиента...");
         history.clear();
         try {
             connectionController.connect();
             connectionController.sendObject(allCommandsInfo);
         } catch (IOException e) {
-            logger.log(Level.WARNING,"Ошибка попытки соединения с клиентом.");
+            logger.log(Level.WARNING, "Ошибка попытки соединения с клиентом.");
         }
         listenRequests();
     }
@@ -137,7 +144,7 @@ public class CommandController {
         allCommands.add(new PrintFieldAscendingGovernment());
         allCommands.forEach(command -> {
             if (!command.isServerCommand())
-                allCommandsInfo.add(new CommandInfo(command.getName(), command.getSendInfo(),command.getArgInfo()));
+                allCommandsInfo.add(new CommandInfo(command.getName(), command.getSendInfo(), command.getArgInfo()));
         });
     }
 
@@ -148,16 +155,16 @@ public class CommandController {
         String[] input;
         Request request;
         Command command;
-        while(connectionController.isConnected()) {
+        while (connectionController.isConnected()) {
             try {
                 request = receiveRequest();
                 if (!request.getRequestCode().equals(Request.RequestCode.COMMAND)) {
-                    logger.log(Level.WARNING,"Получен некорректный запрос от клиента.");
+                    logger.log(Level.WARNING, "Получен некорректный запрос от клиента.");
                     continue;
                 }
                 input = request.getMsg().split(" ");
             } catch (IOException e) {
-                logger.log(Level.WARNING,"Ошибка получения запроса");
+                logger.log(Level.WARNING, "Ошибка получения запроса");
                 break;
             } catch (ClassNotFoundException e) {
                 logger.log(Level.WARNING, "Получен некорректный запрос от клиента.");
@@ -169,7 +176,7 @@ public class CommandController {
                     invoke(command, input);
                 } catch (IncorrectArgumentException e) {
                     logger.log(Level.WARNING, "Некорректный аргумент: " + e.getMessage());
-                    sendError("получен некорректный аргумент команды - "+e.getMessage());
+                    sendError("получен некорректный аргумент команды - " + e.getMessage());
                 } catch (UnknownCommandException e) {
                     logger.log(Level.WARNING, "Получена команда, неизвестная серверу.");
                     sendError("получена неизвестная серверу команда");
@@ -183,19 +190,21 @@ public class CommandController {
         }
         if (connectionController.isConnected())
             logger.log(Level.WARNING, "Ошибка подключения с клиентом. Сброс соединения...");
-        startWorkWithClient();
+        processClient();
     }
 
     /**
      * Send OK request to user
+     *
      * @throws IOException if server couldn't send this request
      */
     public void sendOK() throws IOException {
-        connectionController.sendObject(new Request(Request.RequestCode.OK,""));
+        connectionController.sendObject(new Request(Request.RequestCode.OK, ""));
     }
 
     /**
      * Send REPLY request to user
+     *
      * @param msg that user can see as result of command execution
      * @throws IOException if server couldn't send this request
      */
@@ -205,30 +214,34 @@ public class CommandController {
 
     /**
      * Send ERROR request
+     *
      * @param msg that user can see as explanation of error
      * @throws IOException if server couldn't send this request
      */
     public void sendError(String msg) throws IOException {
-        connectionController.sendObject(new Request(Request.RequestCode.ERROR,msg+"\n"));
+        connectionController.sendObject(new Request(Request.RequestCode.ERROR, msg + "\n"));
     }
 
     /**
      * Receive request from user
+     *
      * @return request
-     * @throws IOException if server couldn't receive this request
+     * @throws IOException            if server couldn't receive this request
      * @throws ClassNotFoundException if server received not expected class
      */
     public Request receiveRequest() throws IOException, ClassNotFoundException {
-        return (Request)connectionController.receiveObject();
+        return (Request) connectionController.receiveObject();
     }
+
     /**
      * Execute command and add it in history
+     *
      * @param command that need to invoke
-     * @param args for this command
+     * @param args    for this command
      * @throws IncorrectArgumentException if requiring args is incorrect
      */
-    protected void invoke(final Command command,final String[] args) throws IncorrectArgumentException, IOException, ClassNotFoundException {
-        logger.log(Level.INFO, "Получена команда "+command.getName());
+    protected void invoke(final Command command, final String[] args) throws IncorrectArgumentException, IOException, ClassNotFoundException {
+        logger.log(Level.INFO, "Получена команда " + command.getName());
         addToHistory(command);
         String reply = command.execute(this, args);
         if (reply != null) {
@@ -239,10 +252,11 @@ public class CommandController {
 
     /**
      * Add command to history and if history is overflow delete first command
+     *
      * @param command that be added to history
      */
-    private void addToHistory (Command command) {
-        if(history.size() == MAX_COMMANDS_IN_HISTORY) {
+    private void addToHistory(Command command) {
+        if (history.size() == MAX_COMMANDS_IN_HISTORY) {
             history.remove(0);
         }
         history.add(command);
@@ -254,17 +268,19 @@ public class CommandController {
 
     /**
      * Parse string to command
+     *
      * @param name of command
      * @return command
      * @throws UnknownCommandException if name of command doesn't equal with name in command's constructor
      */
-    protected Command searchCommand (final String name) throws UnknownCommandException {
-        for(Command i: allCommands) {
-            if(i.getName().equals(name))
+    protected Command searchCommand(final String name) throws UnknownCommandException {
+        for (Command i : allCommands) {
+            if (i.getName().equals(name))
                 return i;
         }
         throw new UnknownCommandException();
     }
+
     protected DataController getDataController() {
         return dataController;
     }

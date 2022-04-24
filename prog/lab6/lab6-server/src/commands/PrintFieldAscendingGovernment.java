@@ -1,14 +1,16 @@
 package commands;
 
-public class PrintFieldAscendingGovernment extends Command{
+public class PrintFieldAscendingGovernment extends Command {
     PrintFieldAscendingGovernment() {
-        super("print_field_ascending_government","","выводит значения поля government всех элементов в порядке возрастания", null, null, false);
+        super("print_field_ascending_government", "",
+                "выводит значения поля government всех элементов в порядке возрастания", null, null, false);
     }
 
     /**
      * print field government from all cities
+     *
      * @param commandController that uses for program
-     * @param args for command from console input (args[0] is program name)
+     * @param args              for command from console input (args[0] is program name)
      */
     @Override
     public String execute(CommandController commandController, String[] args) {
@@ -21,7 +23,8 @@ public class PrintFieldAscendingGovernment extends Command{
             if (o2.getGovernment() == null)
                 return 1;
             return Integer.compare(o1.getGovernment().ordinal() - o2.getGovernment().ordinal(), 0);
-        }).forEach(city -> data.append("id ").append(city.getId()).append(": ").append(city.getGovernmentString()).append("\n"));
+        }).forEach(city -> data.append("id ").append(city.getId()).append(": ")
+                .append(city.getGovernmentString()).append("\n"));
         return data.toString();
     }
 }

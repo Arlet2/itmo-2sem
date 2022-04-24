@@ -10,6 +10,7 @@ public class Request implements Serializable {
      * code of this request
      */
     private final RequestCode requestCode;
+
     /**
      * Message of this request (can be null)
      */
@@ -17,10 +18,11 @@ public class Request implements Serializable {
 
     /**
      * Create data object for sending
+     *
      * @param requestCode of this request
-     * @param msg of this request
+     * @param msg         of this request
      */
-    public Request (final RequestCode requestCode, final String msg) {
+    public Request(final RequestCode requestCode, final String msg) {
         this.requestCode = requestCode;
         this.msg = msg;
     }

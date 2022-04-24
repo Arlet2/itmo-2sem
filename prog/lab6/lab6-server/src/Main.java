@@ -1,6 +1,5 @@
 import commands.CommandController;
 import commands.SaveCommand;
-import data_control.DataController;
 import exceptions.IncorrectArgumentException;
 import exceptions.MissingArgumentException;
 
@@ -13,7 +12,8 @@ public class Main {
         try {
             argsValidator(args);
         } catch (MissingArgumentException | IncorrectArgumentException e) {
-            System.out.println("Ошибка инициализации коллекции: "+e.getMessage()+"\nПрограмма не может быть запущена");
+            System.out.println("Ошибка инициализации коллекции: " + e.getMessage()
+                    + "\nПрограмма не может быть запущена");
             return;
         }
         final CommandController commandController;
@@ -26,27 +26,28 @@ public class Main {
             System.out.println("Ошибка прочтения: некорректный путь");
             return;
         }
-        new Thread(()->{
+        new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
             String input;
-            while(true) {
+            while (true) {
                 input = scanner.nextLine().toLowerCase();
-                if(input.equals("exit")) {
+                if (input.equals("exit")) {
                     System.out.println("Отключение сервера...");
                     System.exit(0);
-                }
-                else if (input.equals("save"))
+                } else if (input.equals("save"))
                     new SaveCommand().execute(commandController, null);
                 else
                     System.out.println("Незнакомая команда. Попробуйте exit или help.");
             }
         }).start(); // для закрытия сервака
-        commandController.startWork();
+        commandController.start();
     }
-    private static void argsValidator (final String[] args) throws MissingArgumentException, IncorrectArgumentException {
-        if(args.length == 0)
+
+    private static void argsValidator(final String[] args)
+            throws MissingArgumentException, IncorrectArgumentException {
+        if (args.length == 0)
             throw new MissingArgumentException("отсутствует имя файла");
-        if(args.length > 1)
+        if (args.length > 1)
             throw new IncorrectArgumentException("слишком много аргументов");
     }
 }

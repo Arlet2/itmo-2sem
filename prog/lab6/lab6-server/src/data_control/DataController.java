@@ -16,22 +16,27 @@ public class DataController {
      * File path where collection is
      */
     public final String WORKING_PATH;
+
     /**
      * Last time when collection was modificated
      */
     private LocalDateTime modificationTime;
+
     /**
      * Program's collection
      */
     private final HashMap<Long, City> map;
+
     /**
      * that controls reading/writing of files
      */
     private final FileController fileController;
+
     /**
      * that controls program's execution
      */
     private final CommandController commandController;
+
     /**
      * @param path of file where collection is
      */
@@ -63,7 +68,7 @@ public class DataController {
      * see FileController:readFromFile()
      */
     public void readFile(final String path) throws IOException {
-        commandController.getLogger().log(Level.INFO, "Считывания из файла по пути "+path+"...");
+        commandController.getLogger().log(Level.INFO, "Считывания из файла по пути " + path + "...");
         fileController.readFromFile(path);
         commandController.getLogger().log(Level.INFO, "Чтение завершено успешно.");
     }
@@ -73,12 +78,13 @@ public class DataController {
      * see FileController:writeFile()
      */
     public void writeFile(final String path) {
-        commandController.getLogger().log(Level.INFO, "Запись в файл по пути "+path+"...");
+        commandController.getLogger().log(Level.INFO, "Запись в файл по пути " + path + "...");
         fileController.writeFile(path);
     }
 
     /**
      * Put city to collection (key is id)
+     *
      * @param city that we put in collection
      */
     public void putCityToMap(final City city) {
