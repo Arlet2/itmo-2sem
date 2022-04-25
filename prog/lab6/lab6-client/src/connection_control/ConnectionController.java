@@ -1,6 +1,7 @@
 package connection_control;
 
 import commands.CommandController;
+import data_classes.City;
 import exceptions.MissingArgumentException;
 
 import java.io.*;
@@ -128,7 +129,37 @@ public class ConnectionController {
      * @throws ClassNotFoundException if object couldn't deserialize
      */
     public Request receiveRequest() throws IOException, ClassNotFoundException {
-        return (Request) processConnection();
+        Request request = (Request) processConnection();
+        if (request.getRequestCode() != Request.RequestCode.PART_OF_DATE)
+            return request;
+        StringBuilder stringBuilder = new StringBuilder();
+        while (request.getRequestCode() == Request.RequestCode.PART_OF_DATE) {
+            stringBuilder.append(new String(request.getMsgBytes()));
+            request = (Request) processConnection();
+        }
+        return new Request(request.getRequestCode(), stringBuilder.toString());
+    }
+
+    /**
+     * Send request to server
+     *
+     * @param channel that connect with server
+     * @param request that need to send
+     * @throws IOException if request couldn't send
+     */
+    public void sendRequest(SocketChannel channel, Request request) throws IOException {
+        sendObject(channel, request);
+    }
+
+    /**
+     * Send city object to server
+     *
+     * @param channel that connect with server
+     * @param city    that need to send
+     * @throws IOException if City object couldn't send
+     */
+    public void sendCity(SocketChannel channel, City city) throws IOException {
+        sendObject(channel, city);
     }
 
     /**
@@ -138,7 +169,7 @@ public class ConnectionController {
      * @param object  that need to send
      * @throws IOException if object couldn't send
      */
-    public void sendObject(SocketChannel channel, Object object) throws IOException {
+    private void sendObject(SocketChannel channel, Object object) throws IOException {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         ObjectOutputStream objOut = new ObjectOutputStream(byteOut);
         objOut.writeObject(object);
@@ -156,7 +187,7 @@ public class ConnectionController {
      * @throws ClassNotFoundException if object couldn't deserialize
      */
     private Object receiveObject(SocketChannel channel) throws IOException, ClassNotFoundException {
-        ByteBuffer buff = ByteBuffer.allocate(1024 * 1024);
+        ByteBuffer buff = ByteBuffer.allocate(4096);
         channel.read(buff);
         ObjectInputStream objIn = new ObjectInputStream(new ByteArrayInputStream(buff.array()));
         return objIn.readObject();

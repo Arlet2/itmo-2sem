@@ -120,7 +120,7 @@ public class CommandController {
             if (isValidCommand(args)) { // проверить арги и имя команды
                 command = parseCommand(args[0]);
                 try {
-                    connectionController.sendObject(connectionController.getChannel(),
+                    connectionController.sendRequest(connectionController.getChannel(),
                             new Request(Request.RequestCode.COMMAND, input));
                 } catch (IOException e) {
                     System.out.println("Не удалось отправить команду на сервер.");
@@ -166,7 +166,7 @@ public class CommandController {
                     return false;
                 }
                 System.out.println("Данные id корректны. Продолжение ввода...");
-                connectionController.sendObject(connectionController.getChannel(),
+                connectionController.sendCity(connectionController.getChannel(),
                         consoleController.createCityByUser(false));
                 break;
             case CITY_UPDATE:
@@ -175,7 +175,7 @@ public class CommandController {
                     processRequest(request);
                     return false;
                 }
-                connectionController.sendObject(connectionController.getChannel(),
+                connectionController.sendCity(connectionController.getChannel(),
                         consoleController.createCityByUser(true));
                 break;
             case EXIT:
@@ -191,7 +191,7 @@ public class CommandController {
                     ArrayList<CommandInfo> commandsInfo = fileController.readScriptFile(args[1]);
                     ArrayList<String> strCommand = fileController.getStrCommand();
                     for (int i = 0; i < commandsInfo.size(); i++) {
-                        connectionController.sendObject(connectionController.getChannel(),
+                        connectionController.sendRequest(connectionController.getChannel(),
                                 new Request(Request.RequestCode.COMMAND, strCommand.get(i)));
                         invoke(commandsInfo.get(i), strCommand.get(i).split(" "));
                         processRequest(connectionController.receiveRequest());
@@ -199,7 +199,7 @@ public class CommandController {
                 } catch (FileNotFoundException e) {
                     System.out.println("Файл скрипта не найден.");
                 } finally {
-                    connectionController.sendObject(connectionController.getChannel(),
+                    connectionController.sendRequest(connectionController.getChannel(),
                             new Request(Request.RequestCode.OK, ""));
                 }
                 break;

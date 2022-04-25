@@ -22,3 +22,105 @@ INFO: Получена команда exit
 INFO: Запись в файл по пути data\test.xml...
 апр. 15, 2022 4:23:13 AM commands.CommandController startWorkWithClient
 INFO: Ожидание подключение клиента...
+апр 25, 2022 7:43:07 PM data_control.DataController readFile
+INFO: Считывания из файла по пути data\test.xml...
+апр 25, 2022 7:43:07 PM data_control.DataController readFile
+INFO: Чтение завершено успешно.
+апр 25, 2022 7:43:07 PM connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+апр 25, 2022 7:43:07 PM commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+апр 25, 2022 8:19:13 PM data_control.DataController readFile
+INFO: Считывания из файла по пути data\test.xml...
+апр 25, 2022 8:19:13 PM data_control.DataController readFile
+INFO: Чтение завершено успешно.
+апр 25, 2022 8:19:13 PM connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+апр 25, 2022 8:19:13 PM commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+апр 25, 2022 8:19:17 PM connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+апр 25, 2022 8:19:19 PM commands.CommandController invoke
+INFO: Получена команда show
+апр 25, 2022 8:19:19 PM commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+апр 25, 2022 8:19:21 PM commands.CommandController invoke
+INFO: Получена команда show
+апр 25, 2022 8:19:21 PM commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+апр 25, 2022 8:19:24 PM commands.CommandController invoke
+INFO: Получена команда insert
+апр 25, 2022 8:19:24 PM commands.CommandController listenRequests
+WARNING: Некорректный аргумент: элемент с таким id уже существует в коллекции
+апр 25, 2022 8:19:31 PM commands.CommandController invoke
+INFO: Получена команда insert
+апр 25, 2022 8:19:40 PM commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+апр 25, 2022 8:19:48 PM commands.CommandController invoke
+INFO: Получена команда exit
+апр 25, 2022 8:19:48 PM data_control.DataController writeFile
+INFO: Запись в файл по пути data\test.xml...
+апр 25, 2022 8:19:48 PM commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+апр 25, 2022 8:21:29 PM data_control.DataController readFile
+INFO: Считывания из файла по пути data\test.xml...
+апр 25, 2022 8:21:29 PM data_control.DataController readFile
+INFO: Чтение завершено успешно.
+апр 25, 2022 8:21:29 PM connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+апр 25, 2022 8:21:29 PM commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+апр 25, 2022 8:21:33 PM connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+апр 25, 2022 8:21:40 PM commands.CommandController invoke
+INFO: Получена команда show
+апр 25, 2022 8:21:40 PM commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+апр 25, 2022 8:21:50 PM commands.CommandController invoke
+INFO: Получена команда show
+апр 25, 2022 8:21:50 PM commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+апр 25, 2022 8:22:22 PM commands.CommandController invoke
+INFO: Получена команда help
+апр 25, 2022 8:22:22 PM commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+апр 25, 2022 8:22:24 PM commands.CommandController invoke
+INFO: Получена команда help
+апр 25, 2022 8:22:24 PM commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+апр 25, 2022 8:23:36 PM data_control.DataController readFile
+INFO: Считывания из файла по пути data\test.xml...
+апр 25, 2022 8:23:36 PM data_control.DataController readFile
+INFO: Чтение завершено успешно.
+апр 25, 2022 8:23:36 PM connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+апр 25, 2022 8:23:36 PM commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+апр 25, 2022 8:23:40 PM connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+апр 25, 2022 8:23:41 PM commands.CommandController invoke
+INFO: Получена команда show
+апр 25, 2022 8:23:41 PM commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+апр 25, 2022 8:41:21 PM data_control.DataController readFile
+INFO: Считывания из файла по пути data\test.xml...
+апр 25, 2022 8:41:22 PM data_control.DataController readFile
+INFO: Чтение завершено успешно.
+апр 25, 2022 8:41:22 PM connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+апр 25, 2022 8:41:22 PM commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+апр 25, 2022 8:41:28 PM connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+апр 25, 2022 8:41:32 PM commands.CommandController invoke
+INFO: Получена команда show
+апр 25, 2022 8:41:32 PM commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+апр 25, 2022 8:41:41 PM commands.CommandController invoke
+INFO: Получена команда show
+апр 25, 2022 8:41:41 PM commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+апр 25, 2022 8:42:28 PM commands.CommandController invoke
+INFO: Получена команда show
+апр 25, 2022 8:42:28 PM commands.CommandController invoke
+INFO: Отправлен ответ клиенту.

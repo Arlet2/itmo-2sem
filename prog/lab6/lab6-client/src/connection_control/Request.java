@@ -6,14 +6,16 @@ import java.io.Serializable;
  * Object that server always send/receive to/from client
  */
 public class Request implements Serializable {
+
     /**
      * code of this request
      */
     private final RequestCode requestCode;
+
     /**
-     * Message of this request (can be null)
+     * byte array of msg
      */
-    private final String msg;
+    private final byte[] msgBytes;
 
     /**
      * Create data object for sending
@@ -23,15 +25,24 @@ public class Request implements Serializable {
      */
     public Request(final RequestCode requestCode, final String msg) {
         this.requestCode = requestCode;
-        this.msg = msg;
+        msgBytes = msg.getBytes();
+    }
+
+    public Request(final RequestCode requestCode, final byte[] bytes) {
+        this.requestCode = requestCode;
+        msgBytes = bytes;
     }
 
     public String getMsg() {
-        return msg;
+        return new String(msgBytes);
     }
 
     public RequestCode getRequestCode() {
         return requestCode;
+    }
+
+    public byte[] getMsgBytes() {
+        return msgBytes;
     }
 
     /**
@@ -47,6 +58,7 @@ public class Request implements Serializable {
         COMMAND,
         ERROR,
         NEXT_REQUEST_CITY,
-        OK
+        OK,
+        PART_OF_DATE
     }
 }

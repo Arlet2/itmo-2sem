@@ -1,11 +1,14 @@
 package connection_control;
 
 import commands.CommandController;
+import commands.CommandInfo;
 import exceptions.MissingArgumentException;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
@@ -112,12 +115,41 @@ public class ConnectionController {
     }
 
     /**
+     * Send request to client
+     * Data will be divided if data is more than buffer size
+     *
+     * @param request that was sent to client
+     * @throws IOException if sending is failed
+     */
+    public void sendRequest(Request request) throws IOException {
+        if (request.getMsgBytes().length > 2048) {
+            int byteCounter = 0;
+            int parts = request.getMsg().getBytes().length / 2048;
+            for (int partCount = 0; partCount < parts - 1; partCount++) {
+                sendObject(new Request(Request.RequestCode.PART_OF_DATE,
+                        Arrays.copyOfRange(request.getMsg().getBytes(), 2048 * partCount + byteCounter,
+                                (partCount + 1) * 2048)));
+                byteCounter = 1;
+            }
+            if (request.getMsg().getBytes().length % 2048 != 0)
+                sendObject(new Request(Request.RequestCode.PART_OF_DATE, Arrays.copyOfRange(request.getMsg().getBytes(),
+                        parts * 2048 + 1, request.getMsgBytes().length)));
+            sendRequest(new Request(request.getRequestCode(), ""));
+        } else
+            sendObject(request);
+    }
+
+    public void sendCommandList(ArrayList<CommandInfo> list) throws IOException {
+        sendObject(list);
+    }
+
+    /**
      * Send data to client
      *
      * @param object that need to send to client
      * @throws IOException if sending is failed
      */
-    public void sendObject(Object object) throws IOException {
+    private void sendObject(Object object) throws IOException {
         ObjectOutputStream objOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
         objOut.writeObject(object);
         objOut.flush();

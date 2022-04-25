@@ -115,7 +115,7 @@ public class CommandController {
         history.clear();
         try {
             connectionController.connect();
-            connectionController.sendObject(allCommandsInfo);
+            connectionController.sendCommandList(allCommandsInfo);
         } catch (IOException e) {
             logger.log(Level.WARNING, "Ошибка попытки соединения с клиентом.");
         }
@@ -199,7 +199,7 @@ public class CommandController {
      * @throws IOException if server couldn't send this request
      */
     public void sendOK() throws IOException {
-        connectionController.sendObject(new Request(Request.RequestCode.OK, ""));
+        connectionController.sendRequest(new Request(Request.RequestCode.OK, ""));
     }
 
     /**
@@ -209,7 +209,7 @@ public class CommandController {
      * @throws IOException if server couldn't send this request
      */
     public void sendReply(String msg) throws IOException {
-        connectionController.sendObject(new Request(Request.RequestCode.REPLY, msg));
+        connectionController.sendRequest(new Request(Request.RequestCode.REPLY, msg));
     }
 
     /**
@@ -219,7 +219,7 @@ public class CommandController {
      * @throws IOException if server couldn't send this request
      */
     public void sendError(String msg) throws IOException {
-        connectionController.sendObject(new Request(Request.RequestCode.ERROR, msg + "\n"));
+        connectionController.sendRequest(new Request(Request.RequestCode.ERROR, msg + "\n"));
     }
 
     /**
