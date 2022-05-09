@@ -32,30 +32,27 @@ public class ExecuteScriptCommand extends Command {
     @Override
     public String execute(CommandController commandController, String[] args) throws IncorrectArgumentException,
             IOException, ClassNotFoundException {
-        commandController.sendOK();
-        Request request = commandController.receiveRequest();
+        commandController.getConnectionController().getRequestController().sendOK();
+        Request request = commandController.getConnectionController().getRequestController().receiveRequest();
         Command command = null;
         String[] cArgs;
         while (!request.getRequestCode().equals(Request.RequestCode.OK)) {
             cArgs = request.getMsg().split(" ");
-            try {
-                command = commandController.searchCommand(cArgs[0]);
-            } catch (UnknownCommandException e) {
-
-            }
+            command = commandController.searchCommand(cArgs[0]);
             if (command != null) {
                 if (command.getName().equals("execute_script"))
                     recursionCounter++;
                 if (recursionCounter >= RECURSION_INTERRUPT) {
-                    commandController.sendError("Глубина рекурсии слишком большая (рекурсия может быть глубиной до "
+                    commandController.getConnectionController().getRequestController()
+                            .sendError("Глубина рекурсии слишком большая (рекурсия может быть глубиной до "
                             + RECURSION_INTERRUPT + ".\nВыход из рекурсии..");
                 }
                 commandController.invoke(command, cArgs);
             }
-            request = commandController.receiveRequest();
+            request = commandController.getConnectionController().getRequestController().receiveRequest();
         }
         recursionCounter = 0;
-        commandController.sendOK();
+        commandController.getConnectionController().getRequestController().sendOK();
         return null;
     }
 

@@ -27,8 +27,8 @@ public class InsertCommand extends Command {
         Long id = Long.parseLong(args[1]);
         if (!City.checkUniqueID(id, commandController.getDataController().getMap()))
             throw new IncorrectArgumentException("элемент с таким id уже существует в коллекции");
-        commandController.sendOK();
-        City city = (City) commandController.getConnectionController().receiveObject();
+        commandController.getConnectionController().getRequestController().sendOK();
+        City city = commandController.getConnectionController().getRequestController().receiveCity();
         if (city == null)
             throw new IncorrectArgumentException("город не был создан");
         city.setId(id);

@@ -1,9 +1,9 @@
 package client.connection_control;
 
 import client.commands.CommandController;
-import data_classes.City;
+import exceptions.ConfigFileNotFoundException;
+import exceptions.ConnectionException;
 import exceptions.MissingArgumentException;
-import connect_utils.Request;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -11,9 +11,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Control connection with server
@@ -32,64 +29,31 @@ public class ConnectionController {
     /**
      * Selector for all channels
      */
-    private Selector selector;
-
-    /**
-     * Port that client will connect
-     */
-    private int port;
+    private final Selector selector;
 
     /**
      * Server address
      */
-    private String address;
+    private final InetSocketAddress address;
+
+    private final RequestController requestController = new RequestController(this);
 
     /**
      * Create connection controller for connect to server
      *
      * @param controller current program controller
      * @throws MissingArgumentException if config file haven't got address and port
-     * @throws FileNotFoundException    if config file not found
      */
-    public ConnectionController(CommandController controller) throws MissingArgumentException, FileNotFoundException {
+    public ConnectionController(CommandController controller) throws MissingArgumentException,
+            ConfigFileNotFoundException, ConnectionException {
         this.commandController = controller;
-        readConfig();
+        address = commandController.getFileController().readConfig();
         try {
             selector = Selector.open();
             openChannel();
         } catch (IOException e) {
-            System.out.println("Ошибка создания подключения");
+            throw new ConnectionException("Ошибка создания подключения");
         }
-    }
-
-    /**
-     * Read config file with "config.excalibbur".
-     * File need to have "port: *digits*" and "address: *IP address/domain*"
-     *
-     * @throws FileNotFoundException    if file not found
-     * @throws MissingArgumentException if port or address not found in file
-     */
-    private void readConfig() throws FileNotFoundException, MissingArgumentException {
-        Scanner scanner = new Scanner(new FileInputStream("config.excalibbur"));
-        StringBuilder s = new StringBuilder();
-        while (scanner.hasNextLine())
-            s.append(scanner.nextLine()).append("\n");
-        Matcher matcher = Pattern.compile("(?<=port:)\\d+|(?<=port:\\s)\\d+|(?<=port:\\s{2})\\d+",
-                Pattern.CASE_INSENSITIVE).matcher(s.toString());
-        scanner.close();
-        if (matcher.find())
-            port = Integer.parseInt(s.substring(matcher.start(), matcher.end()));
-        else
-            throw new MissingArgumentException("в файле конфигурации не был найден порт. " +
-                    "Добавьте в файл строку типа \"port: 1234\"");
-        matcher = Pattern.compile("(?<=address:)[\\w\\d.]+|(?<=address:\\s)[\\w\\d.]+|(?<=address:\\s{2})[\\w\\d.]+",
-                Pattern.CASE_INSENSITIVE).matcher(s.toString());
-        if (matcher.find())
-            address = s.substring(matcher.start(), matcher.end());
-        else
-            throw new MissingArgumentException("в файле конфигурации не был найден адрес сервера. " +
-                    "Добавьте в файл строку типа\n" +
-                    "\"address: localhost\", \"address: 192.65.3.5\"");
     }
 
     /**
@@ -112,7 +76,7 @@ public class ConnectionController {
      * @throws IOException            if object couldn't receive
      * @throws ClassNotFoundException if object couldn't deserialize
      */
-    public Object processConnection() throws IOException, ClassNotFoundException {
+    protected Object processConnection() throws IOException, ClassNotFoundException {
         selector.select();
         for (SelectionKey key : selector.selectedKeys()) {
             if (key.isReadable()) {
@@ -123,54 +87,13 @@ public class ConnectionController {
     }
 
     /**
-     * Convert receiving object to Request
-     *
-     * @return Request from server
-     * @throws IOException            if Request couldn't receive
-     * @throws ClassNotFoundException if object couldn't deserialize
-     */
-    public Request receiveRequest() throws IOException, ClassNotFoundException {
-        Request request = (Request) processConnection();
-        if (request.getRequestCode() != Request.RequestCode.PART_OF_DATE)
-            return request;
-        StringBuilder stringBuilder = new StringBuilder();
-        while (request.getRequestCode() == Request.RequestCode.PART_OF_DATE) {
-            stringBuilder.append(new String(request.getMsgBytes()));
-            request = (Request) processConnection();
-        }
-        return new Request(request.getRequestCode(), stringBuilder.toString());
-    }
-
-    /**
-     * Send request to server
-     *
-     * @param channel that connect with server
-     * @param request that need to send
-     * @throws IOException if request couldn't send
-     */
-    public void sendRequest(SocketChannel channel, Request request) throws IOException {
-        sendObject(channel, request);
-    }
-
-    /**
-     * Send city object to server
-     *
-     * @param channel that connect with server
-     * @param city    that need to send
-     * @throws IOException if City object couldn't send
-     */
-    public void sendCity(SocketChannel channel, City city) throws IOException {
-        sendObject(channel, city);
-    }
-
-    /**
      * Send object to server
      *
      * @param channel where server is
      * @param object  that need to send
      * @throws IOException if object couldn't send
      */
-    private void sendObject(SocketChannel channel, Object object) throws IOException {
+    protected void sendObject(SocketChannel channel, Object object) throws IOException {
         ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         ObjectOutputStream objOut = new ObjectOutputStream(byteOut);
         objOut.writeObject(object);
@@ -201,7 +124,7 @@ public class ConnectionController {
      */
     public boolean tryToConnect() {
         try {
-            if (channel.connect(new InetSocketAddress(address, port)))
+            if (channel.connect(address))
                 return true;
             return channel.finishConnect();
         } catch (IOException e) {
@@ -219,12 +142,8 @@ public class ConnectionController {
             channel.close();
     }
 
-    public String getAddress() {
+    public InetSocketAddress getAddress() {
         return address;
-    }
-
-    public int getPort() {
-        return port;
     }
 
     public SocketChannel getChannel() {
@@ -237,5 +156,9 @@ public class ConnectionController {
 
     public CommandController getCommandController() {
         return commandController;
+    }
+
+    public RequestController getRequestController() {
+        return requestController;
     }
 }

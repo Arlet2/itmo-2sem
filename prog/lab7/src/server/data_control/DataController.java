@@ -1,21 +1,19 @@
 package server.data_control;
 
+import exceptions.ConfigFileNotFoundException;
+import exceptions.MissingArgumentException;
 import server.commands.CommandController;
 import data_classes.City;
 
-import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  * Control all data manipulations in files and console
  */
 public class DataController {
-    /**
-     * File path where collection is
-     */
-    public final String WORKING_PATH;
 
     /**
      * Last time when collection was modificated
@@ -28,24 +26,19 @@ public class DataController {
     private final HashMap<Long, City> map;
 
     /**
-     * that controls reading/writing of files
-     */
-    private final FileController fileController;
-
-    /**
      * that controls program's execution
      */
     private final CommandController commandController;
 
-    /**
-     * @param path of file where collection is
-     */
-    public DataController(final String path, CommandController commandController) throws IOException {
+    private final DataBaseController dataBaseController;
+
+    private final FilesController filesController;
+    public DataController(CommandController commandController) throws SQLException,
+            MissingArgumentException, ConfigFileNotFoundException {
         this.commandController = commandController;
-        WORKING_PATH = path;
+        filesController = new FilesController(this);
         map = new HashMap<>();
-        fileController = new FileController(this);
-        readFile(WORKING_PATH);
+        dataBaseController = new DataBaseController(this, "jdbc:postgresql://127.0.0.1:5432/postgres", "postgres");
     }
 
     /**
@@ -63,24 +56,6 @@ public class DataController {
         return modificationTime;
     }
 
-    /**
-     * Shell of FileController method
-     * see FileController:readFromFile()
-     */
-    public void readFile(final String path) throws IOException {
-        commandController.getLogger().log(Level.INFO, "Считывания из файла по пути " + path + "...");
-        fileController.readFromFile(path);
-        commandController.getLogger().log(Level.INFO, "Чтение завершено успешно.");
-    }
-
-    /**
-     * Shell of FileController method
-     * see FileController:writeFile()
-     */
-    public void writeFile(final String path) {
-        commandController.getLogger().log(Level.INFO, "Запись в файл по пути " + path + "...");
-        fileController.writeFile(path);
-    }
 
     /**
      * Put city to collection (key is id)
@@ -101,5 +76,13 @@ public class DataController {
 
     public CommandController getCommandController() {
         return commandController;
+    }
+
+    public DataBaseController getDataBaseController() {
+        return dataBaseController;
+    }
+
+    public FilesController getFilesController() {
+        return filesController;
     }
 }

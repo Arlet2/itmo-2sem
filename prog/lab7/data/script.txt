@@ -1,7 +1,6 @@
+info
 show
-replace_if_greater 2
-print_field_ascending_government
-insert 666
+execute_script script.txt
 show
-remove_key 666
-show
+info
+history

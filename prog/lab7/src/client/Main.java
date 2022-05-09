@@ -1,8 +1,25 @@
 package client;
 import client.commands.CommandController;
+import exceptions.ConfigFileNotFoundException;
+import exceptions.ConnectionException;
+import exceptions.MissingArgumentException;
 
 public class Main {
     public static void main(String[] args) {
-        new CommandController();
+        CommandController cc;
+        try {
+            cc = new CommandController();
+        } catch (MissingArgumentException e) {
+            System.out.println("Ошибка в файле конфигурации: " + e.getMessage());
+            return;
+        } catch (ConfigFileNotFoundException | ConnectionException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+        try {
+            cc.connect();
+        } catch (ConnectionException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

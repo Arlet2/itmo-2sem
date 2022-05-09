@@ -1,30 +1,59 @@
 package server;
+
+import exceptions.ConfigFileNotFoundException;
+import exceptions.MissingArgumentException;
 import server.commands.CommandController;
 import server.commands.SaveCommand;
-import exceptions.IncorrectArgumentException;
-import exceptions.MissingArgumentException;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.logging.Level;
 
+/*
+    TODO: Запихать в FilesController абсолютно всё взаимодействие с файлами (для клиента также)
+ */
 public class Main {
     public static void main(String[] args) {
+        /*
+        MessageDigest alg = MessageDigest.getInstance("sha-256");
+        alg.digest("hello".getBytes());
         try {
-            argsValidator(args);
-        } catch (MissingArgumentException | IncorrectArgumentException e) {
-            System.out.println("Ошибка инициализации коллекции: " + e.getMessage()
-                    + "\nПрограмма не может быть запущена");
-            return;
+            if (connection.createStatement().execute("SELECT * FROM coordinates;"))
+                System.out.println("супер.");
+            ResultSet set = connection.createStatement().executeQuery("SELECT * FROM coordinates;");
+            while (set.next()) {
+                System.out.println(set.getInt("id"));
+                System.out.println(set.getFloat("x"));
+                System.out.println(set.getInt("y"));
+            }
+            set = connection.createStatement().executeQuery("INSERT INTO coordinates (x, y) VALUES (13.3, 415);");
+            while(set.next()) {
+                System.out.println(set.getInt("id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        */
+        Logger.createLogger();
         final CommandController commandController;
         try {
-            commandController = new CommandController(args[0]);
-        } catch (IOException e) {
-            System.out.println("Ошибка прочтения: файл не найден.");
+            commandController = new CommandController();
+        } catch (SQLException e) {
+            Logger.getLogger().log(Level.WARNING, "Ошибка подключения к базе данных.");
             return;
-        } catch (InvalidPathException e) {
-            System.out.println("Ошибка прочтения: некорректный путь");
+        } catch (MissingArgumentException e) {
+            Logger.getLogger().log(Level.WARNING, "Не найдены обязательные данные в файлах: "+e.getMessage());
+            return;
+        } catch (ConfigFileNotFoundException e) {
+            Logger.getLogger().log(Level.WARNING, e.getMessage());
             return;
         }
         new Thread(() -> {
@@ -42,13 +71,5 @@ public class Main {
             }
         }).start(); // для закрытия сервака
         commandController.start();
-    }
-
-    private static void argsValidator(final String[] args)
-            throws MissingArgumentException, IncorrectArgumentException {
-        if (args.length == 0)
-            throw new MissingArgumentException("отсутствует имя файла");
-        if (args.length > 1)
-            throw new IncorrectArgumentException("слишком много аргументов");
     }
 }

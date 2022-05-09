@@ -79,6 +79,7 @@ public class CommandInfo implements Serializable {
         CITY,
         CITY_UPDATE,
         COMMANDS,
-        EXIT
+        EXIT,
+        AUTH
     }
 }

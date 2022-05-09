@@ -13,8 +13,7 @@ public class SaveCommand extends Command {
      */
     @Override
     public String execute(CommandController commandController, String[] args) {
-        commandController.getDataController().writeFile(commandController.getDataController().WORKING_PATH);
-        System.out.println("Коллекция успешно сохранена.");
+        System.out.println("Коллекция успешно не сохранена.");
         return null;
     }
 }

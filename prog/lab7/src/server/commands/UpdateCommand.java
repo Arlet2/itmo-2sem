@@ -27,8 +27,8 @@ public class UpdateCommand extends Command {
         Long id = Long.parseLong(args[1]);
         if (City.checkUniqueID(id, commandController.getDataController().getMap()))
             throw new IncorrectArgumentException("элемента с таким id не существует");
-        commandController.sendOK();
-        City city = (City) commandController.getConnectionController().receiveObject();
+        commandController.getConnectionController().getRequestController().sendOK();
+        City city = commandController.getConnectionController().getRequestController().receiveCity();
         if (city == null)
             throw new IncorrectArgumentException("город не был создан");
         city.setId(id);

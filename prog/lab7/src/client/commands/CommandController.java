@@ -7,6 +7,8 @@ import data_classes.Climate;
 import data_classes.Government;
 import client.data_control.ConsoleController;
 import client.data_control.FileController;
+import exceptions.ConfigFileNotFoundException;
+import exceptions.ConnectionException;
 import exceptions.IncorrectArgumentException;
 import exceptions.MissingArgumentException;
 
@@ -28,7 +30,7 @@ public class CommandController {
     /**
      * controls connection with server
      */
-    private ConnectionController connectionController;
+    private final ConnectionController connectionController;
 
     /**
      * controls reading from file
@@ -41,42 +43,25 @@ public class CommandController {
     private ArrayList<CommandInfo> allCommandsInfo;
 
     /**
-     * current scanner for listening user's command
-     */
-    private final Scanner scanner;
-
-    /**
      * Create scanner and read configuration for connection
      * After that start connection with user
      */
-    public CommandController() {
-        this.scanner = new Scanner(System.in);
-        try {
-            connectionController = new ConnectionController(this);
-        } catch (MissingArgumentException e) {
-            System.out.println("Ошибка в файле конфигурации: " + e.getMessage());
-            return;
-        } catch (FileNotFoundException e) {
-            System.out.println("Не найден файл конфигурации. Создайте файл конфигурации config.excalibbur\n" +
-                    "И добавьте в него строки \"address: localhost\" (допускается обычный ip, сервера)" +
-                    " и \"port: 1234\" (порт сервера)");
-            return;
-        }
-        connect();
+    public CommandController() throws MissingArgumentException, ConfigFileNotFoundException, ConnectionException {
+        connectionController = new ConnectionController(this);
     }
 
     /**
      * connect to server
      */
-    private void connect() {
+    public void connect() throws ConnectionException {
+        Scanner scanner = new Scanner(System.in);
         try {
             connectionController.openChannel();
         } catch (IOException e) {
-            System.out.println("Ошибка открытия сетевого канала.");
-            return;
+            throw new ConnectionException("Ошибка открытия сетевого канала.");
         }
-        System.out.println("Попытка подключения к " + connectionController.getAddress() +
-                ":" + connectionController.getPort() + "...");
+        System.out.println("Попытка подключения к " + connectionController.getAddress().getHostName() +
+                ":" + connectionController.getAddress().getPort() + "...");
         while (!connectionController.tryToConnect()) {
             System.out.println("Ошибка подключения к серверу. Попробовать снова? (y/n)");
             if (!scanner.nextLine().toLowerCase().equals("y")) {
@@ -85,18 +70,15 @@ public class CommandController {
             try {
                 connectionController.openChannel();
             } catch (IOException e) {
-                System.out.println("Ошибка открытия сетевого канала.");
-                return;
+                throw new ConnectionException("Ошибка открытия сетевого канала.");
             }
         }
         try {
-            allCommandsInfo = (ArrayList<CommandInfo>) connectionController.processConnection();
+            allCommandsInfo = connectionController.getRequestController().getCommandInfos();
         } catch (IOException e) {
-            System.out.println("Ошибка получения данных конфигурации сервера.");
-            return;
+            throw new ConnectionException("Ошибка получения данных конфигурации сервера.");
         } catch (ClassNotFoundException e) {
-            System.out.println("Получены неопознанные данные от сервера.");
-            return;
+            throw new ConnectionException("Получены неопознанные данные от сервера.");
         }
         System.out.println("Успешное соединение с сервером.");
         listenConsole();
@@ -106,6 +88,7 @@ public class CommandController {
      * Listen console for new command that sends it to server if it's correct
      */
     private void listenConsole() {
+        Scanner scanner = new Scanner(System.in);
         String input = "";
         String[] args;
         CommandInfo command;
@@ -121,7 +104,7 @@ public class CommandController {
             if (isValidCommand(args)) { // проверить арги и имя команды
                 command = parseCommand(args[0]);
                 try {
-                    connectionController.sendRequest(connectionController.getChannel(),
+                    connectionController.getRequestController().sendRequest(connectionController.getChannel(),
                             new Request(Request.RequestCode.COMMAND, input));
                 } catch (IOException e) {
                     System.out.println("Не удалось отправить команду на сервер.");
@@ -129,7 +112,7 @@ public class CommandController {
                 }
                 try {
                     if (invoke(command, args))
-                        processRequest(connectionController.receiveRequest());
+                        processRequest(connectionController.getRequestController().receiveRequest());
                 } catch (IOException e) {
                     System.out.println("Ошибка получения запроса от сервера");
                     e.printStackTrace();
@@ -139,8 +122,13 @@ public class CommandController {
             }
         }
         System.out.println("Соединение с сервером было разорвано.\nХотите попробовать переподключиться? (y/n)");
-        if (scanner.nextLine().equals("y"))
-            connect();
+        if (scanner.nextLine().equals("y")) {
+            try {
+                connect();
+            } catch (ConnectionException e) {
+                System.out.println(e.getMessage());
+            }
+        }
         else
             exit();
     }
@@ -161,22 +149,22 @@ public class CommandController {
         switch (command.getSendInfo()) {
             // могут слать null!!!
             case CITY:
-                request = connectionController.receiveRequest();
+                request = connectionController.getRequestController().receiveRequest();
                 if (!request.getRequestCode().equals(Request.RequestCode.OK)) {
                     processRequest(request);
                     return false;
                 }
                 System.out.println("Данные id корректны. Продолжение ввода...");
-                connectionController.sendCity(connectionController.getChannel(),
+                connectionController.getRequestController().sendCity(connectionController.getChannel(),
                         consoleController.createCityByUser(false));
                 break;
             case CITY_UPDATE:
-                request = connectionController.receiveRequest();
+                request = connectionController.getRequestController().receiveRequest();
                 if (!request.getRequestCode().equals(Request.RequestCode.OK)) {
                     processRequest(request);
                     return false;
                 }
-                connectionController.sendCity(connectionController.getChannel(),
+                connectionController.getRequestController().sendCity(connectionController.getChannel(),
                         consoleController.createCityByUser(true));
                 break;
             case EXIT:
@@ -184,7 +172,7 @@ public class CommandController {
                 break;
             case COMMANDS:
                 try {
-                    Request validRequest = connectionController.receiveRequest();
+                    Request validRequest = connectionController.getRequestController().receiveRequest();
                     if (!validRequest.getRequestCode().equals(Request.RequestCode.OK)) {
                         processRequest(validRequest);
                         break;
@@ -192,15 +180,15 @@ public class CommandController {
                     ArrayList<CommandInfo> commandsInfo = fileController.readScriptFile(args[1]);
                     ArrayList<String> strCommand = fileController.getStrCommand();
                     for (int i = 0; i < commandsInfo.size(); i++) {
-                        connectionController.sendRequest(connectionController.getChannel(),
+                        connectionController.getRequestController().sendRequest(connectionController.getChannel(),
                                 new Request(Request.RequestCode.COMMAND, strCommand.get(i)));
                         invoke(commandsInfo.get(i), strCommand.get(i).split(" "));
-                        processRequest(connectionController.receiveRequest());
+                        processRequest(connectionController.getRequestController().receiveRequest());
                     }
                 } catch (FileNotFoundException e) {
                     System.out.println("Файл скрипта не найден.");
                 } finally {
-                    connectionController.sendRequest(connectionController.getChannel(),
+                    connectionController.getRequestController().sendRequest(connectionController.getChannel(),
                             new Request(Request.RequestCode.OK, ""));
                 }
                 break;
@@ -341,5 +329,9 @@ public class CommandController {
 
     public ConnectionController getConnectionController() {
         return connectionController;
+    }
+
+    public FileController getFileController() {
+        return fileController;
     }
 }
