@@ -1,5 +1,6 @@
 package server.connection_control;
 
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import exceptions.ConfigFileNotFoundException;
 import server.Logger;
 import server.commands.CommandController;
@@ -100,18 +101,19 @@ public class ConnectionController {
      * @throws IOException if sending is failed
      */
     protected void sendRequest(Request request) throws IOException {
-        if (request.getMsgBytes().length > 2048) {
-            int byteCounter = 0;
-            int parts = request.getMsg().getBytes().length / 2048;
-            for (int partCount = 0; partCount < parts - 1; partCount++) {
+        final int byteSize = 10;
+        if (request.getMsgBytes().length > byteSize) {
+            int parts = request.getMsg().getBytes().length / byteSize;
+            for (int partCount = 0; partCount < parts; partCount++) {
                 sendObject(new Request(Request.RequestCode.PART_OF_DATE,
-                        Arrays.copyOfRange(request.getMsg().getBytes(), 2048 * partCount + byteCounter,
-                                (partCount + 1) * 2048)));
-                byteCounter = 1;
+                        Arrays.copyOfRange(request.getMsg().getBytes(), byteSize * partCount,
+                                (partCount + 1) * byteSize)));
+                requestController.receiveOK();
             }
-            if (request.getMsg().getBytes().length % 2048 != 0)
+            if (request.getMsg().getBytes().length % byteSize != 0)
                 sendObject(new Request(Request.RequestCode.PART_OF_DATE, Arrays.copyOfRange(request.getMsg().getBytes(),
-                        parts * 2048 + 1, request.getMsgBytes().length)));
+                        parts * byteSize, request.getMsgBytes().length)));
+            requestController.receiveOK();
             sendRequest(new Request(request.getRequestCode(), ""));
         } else
             sendObject(request);

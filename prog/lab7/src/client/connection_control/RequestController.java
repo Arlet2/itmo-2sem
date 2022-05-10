@@ -7,6 +7,7 @@ import data_classes.City;
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RequestController {
     private final ConnectionController connectionController;
@@ -24,12 +25,19 @@ public class RequestController {
         Request request = (Request) connectionController.processConnection();
         if (request.getRequestCode() != Request.RequestCode.PART_OF_DATE)
             return request;
-        StringBuilder stringBuilder = new StringBuilder();
+        ArrayList<Byte> bytes = new ArrayList<>();
         while (request.getRequestCode() == Request.RequestCode.PART_OF_DATE) {
-            stringBuilder.append(new String(request.getMsgBytes()));
+            for(byte b : request.getMsgBytes()) {
+                bytes.add(b);
+            }
+            sendRequest(connectionController.getChannel(), new Request(Request.RequestCode.OK,""));
             request = (Request) connectionController.processConnection();
         }
-        return new Request(request.getRequestCode(), stringBuilder.toString());
+        byte[] fbytes = new byte[bytes.size()];
+        for(int i=0;i<fbytes.length;i++) {
+            fbytes[i] = bytes.get(i);
+        }
+        return new Request(request.getRequestCode(), new String(fbytes));
     }
 
     /**

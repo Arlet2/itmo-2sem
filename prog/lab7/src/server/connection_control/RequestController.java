@@ -30,7 +30,13 @@ public class RequestController {
     public void sendReply(String msg) throws IOException {
         connectionController.sendRequest(new Request(Request.RequestCode.REPLY, msg));
     }
+    public void receiveOK() throws IOException {
+        try {
+            receiveRequest();
+        } catch (ClassNotFoundException e) {
 
+        }
+    }
     /**
      * Send ERROR request
      *
