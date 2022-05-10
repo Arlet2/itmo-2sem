@@ -9,7 +9,6 @@ import exceptions.IncorrectArgumentException;
 import exceptions.MissingArgumentException;
 import exceptions.UnknownCommandException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class CommandController {
     /**
      * that controls connection with user
      */
-    private ConnectionController connectionController;
+    private final ConnectionController connectionController;
 
     /**
      * history of all commands that was used
@@ -51,8 +50,6 @@ public class CommandController {
 
     /**
      * Create program working class
-     *
-     *
      */
     public CommandController() throws SQLException, MissingArgumentException, ConfigFileNotFoundException {
         this.dataController = new DataController(this);
@@ -89,7 +86,51 @@ public class CommandController {
         } catch (IOException e) {
             Logger.getLogger().log(Level.WARNING, "Ошибка попытки соединения с клиентом.");
         }
-        listenRequests();
+        boolean isAuth = false;
+        Request request;
+        String[] args;
+        while (!isAuth) {
+            try {
+                request = connectionController.getRequestController().receiveRequest();
+            } catch (IOException e) {
+                Logger.getLogger().log(Level.WARNING, "Ошибка получения запроса");
+                break;
+            } catch (ClassNotFoundException e) {
+                Logger.getLogger().log(Level.WARNING, "Получен некорректный запрос от клиента.");
+                continue;
+            }
+            try {
+                try {
+                    args = request.getMsg().split(" ");
+                    if (args[0].equals("register") || args[0].equals("login") || args[0].equals("help"))
+                        invoke(searchCommand(args[0]), args);
+                    else {
+                        connectionController.getRequestController().sendError("Доступ запрещен " +
+                                "неавторизованным пользователям.\nИспользуйте команды login или register " +
+                                "для авторизации или регистрации.\n" +
+                                "Пример использования: login sadness 1234");
+                        continue;
+                    }
+
+                } catch (IncorrectArgumentException e) {
+                    Logger.getLogger().log(Level.INFO, "Ошибка авторизации: " + e.getMessage());
+                    connectionController.getRequestController().sendError(e.getMessage());
+                    continue;
+                } catch (ClassNotFoundException e) {
+                    Logger.getLogger().log(Level.WARNING, "Ошибка получения запроса от клиента");
+                    continue;
+                }
+            } catch (IOException ex) {
+                Logger.getLogger().log(Level.WARNING, "Потеряно соединение с клиентом");
+                break;
+            }
+            if (!args[0].equals("help"))
+                isAuth = true;
+        }
+        if (isAuth)
+            listenRequests();
+        else
+            processClient();
     }
 
     /**
@@ -112,6 +153,8 @@ public class CommandController {
         allCommands.add(new FilterGreaterThanClimateCommand());
         allCommands.add(new PrintAscendingCommand());
         allCommands.add(new PrintFieldAscendingGovernment());
+        allCommands.add(new RegisterCommand());
+        allCommands.add(new LoginCommand());
         allCommands.forEach(command -> {
             if (!command.isServerCommand())
                 allCommandsInfo.add(new CommandInfo(command.getName(), command.getSendInfo(), command.getArgInfo()));

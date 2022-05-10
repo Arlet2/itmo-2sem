@@ -20,3 +20,811 @@ INFO: Получена команда exit
 INFO: Запись в файл по пути data\test.xml...
 апр 25, 2022 9:10:43 PM server.commands.CommandController processClient
 INFO: Ожидание подключение клиента...
+мая 09, 2022 11:05:58 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 09, 2022 11:05:58 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 09, 2022 11:33:21 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 09, 2022 11:33:21 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 09, 2022 11:33:26 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 09, 2022 11:36:07 PM server.commands.CommandController processClient
+WARNING: Ошибка получения запроса
+мая 09, 2022 11:36:07 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 09, 2022 11:36:12 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 09, 2022 11:37:52 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 09, 2022 11:37:52 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 09, 2022 11:38:06 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 09, 2022 11:38:28 PM server.commands.CommandController processClient
+INFO: Ошибка авторизации: пользователь не найден.
+мая 09, 2022 11:44:59 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 09, 2022 11:44:59 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 09, 2022 11:45:03 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 09, 2022 11:46:37 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 09, 2022 11:46:37 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 09, 2022 11:46:39 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 09, 2022 11:46:40 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 09, 2022 11:46:40 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:46:48 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 09, 2022 11:46:48 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:46:58 PM server.commands.CommandController invoke
+INFO: Получена команда info
+мая 09, 2022 11:46:58 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:48:00 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 09, 2022 11:48:00 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 09, 2022 11:48:04 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 09, 2022 11:48:09 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 09, 2022 11:48:09 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:48:23 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 09, 2022 11:48:23 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:48:34 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 09, 2022 11:48:34 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 09, 2022 11:48:37 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 09, 2022 11:49:14 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 09, 2022 11:49:36 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:51:42 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 09, 2022 11:51:42 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:52:08 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 09, 2022 11:52:09 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 09, 2022 11:52:11 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 09, 2022 11:52:13 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 09, 2022 11:52:13 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:52:14 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 09, 2022 11:52:14 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:52:19 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 09, 2022 11:52:19 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:52:26 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 09, 2022 11:52:26 PM server.commands.CommandController processClient
+INFO: Ошибка авторизации: Пользователь с таким логином уже существует.
+мая 09, 2022 11:54:16 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 09, 2022 11:54:16 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 09, 2022 11:54:20 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 09, 2022 11:54:23 PM server.commands.CommandController invoke
+INFO: Получена команда info
+мая 09, 2022 11:54:23 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:54:25 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 09, 2022 11:54:25 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:54:28 PM server.commands.CommandController invoke
+INFO: Получена команда exit
+мая 09, 2022 11:54:28 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 09, 2022 11:56:12 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 09, 2022 11:56:12 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 09, 2022 11:56:14 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 09, 2022 11:56:16 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 09, 2022 11:56:16 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:56:20 PM server.commands.CommandController invoke
+INFO: Получена команда info
+мая 09, 2022 11:56:20 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:56:23 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 09, 2022 11:56:23 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:56:35 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 09, 2022 11:56:35 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 09, 2022 11:56:38 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 09, 2022 11:56:41 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 09, 2022 11:56:41 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:57:06 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 09, 2022 11:57:06 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 09, 2022 11:57:10 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 09, 2022 11:57:11 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 09, 2022 11:57:11 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:57:37 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 09, 2022 11:57:37 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 09, 2022 11:57:43 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 09, 2022 11:57:44 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 09, 2022 11:57:44 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 09, 2022 11:57:46 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 09, 2022 11:57:46 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:04:33 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:04:34 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:04:39 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:05:00 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:05:00 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:09:19 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:09:19 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:10:20 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:10:20 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:10:22 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:10:23 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:10:23 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:10:39 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:10:39 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:10:51 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:10:53 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:10:53 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:10:56 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:10:56 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:11:18 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:11:18 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:11:24 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:11:36 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:11:36 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:12:09 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:12:09 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:12:13 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:12:18 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:12:18 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:13:49 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:13:49 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:13:55 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:13:56 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:13:56 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:14:31 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:14:31 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:14:34 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:14:48 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:14:48 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:15:36 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:15:36 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:16:01 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:16:01 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:16:03 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:16:04 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:16:04 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:16:39 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:16:39 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:16:42 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:16:45 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:16:45 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:17:17 AM server.commands.CommandController listenRequests
+WARNING: Ошибка получения запроса
+мая 10, 2022 12:17:17 AM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 12:17:17 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:17:21 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:17:23 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:17:23 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:20:06 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:20:06 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:20:11 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:20:16 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:20:16 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:21:43 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:21:43 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:21:48 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:21:51 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:21:51 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:22:37 AM server.commands.CommandController listenRequests
+WARNING: Ошибка получения запроса
+мая 10, 2022 12:22:37 AM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 12:22:37 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:22:39 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:23:10 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:23:10 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:24:54 AM server.commands.CommandController listenRequests
+WARNING: Ошибка получения запроса
+мая 10, 2022 12:24:54 AM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 12:24:54 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:24:56 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:25:05 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:25:05 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:26:08 AM server.commands.CommandController listenRequests
+WARNING: Ошибка получения запроса
+мая 10, 2022 12:26:08 AM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 12:26:08 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:26:10 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:26:16 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:26:16 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:27:41 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:27:41 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:27:42 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:27:43 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:27:43 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:27:56 AM server.commands.CommandController listenRequests
+WARNING: Ошибка получения запроса
+мая 10, 2022 12:27:56 AM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 12:27:56 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:27:59 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:28:01 AM server.commands.CommandController listenRequests
+WARNING: Ошибка получения запроса
+мая 10, 2022 12:28:01 AM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 12:28:01 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:28:01 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:28:02 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:28:02 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:28:23 AM server.commands.CommandController listenRequests
+WARNING: Ошибка получения запроса
+мая 10, 2022 12:28:23 AM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 12:28:23 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:28:25 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:28:48 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:28:48 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:30:25 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:30:25 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:30:28 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:30:29 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:30:29 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:31:04 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:31:04 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:31:14 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:31:16 AM server.commands.CommandController invoke
+INFO: Получена команда info
+мая 10, 2022 12:31:16 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:31:18 AM server.commands.CommandController invoke
+INFO: Получена команда info
+мая 10, 2022 12:31:18 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:31:20 AM server.commands.CommandController invoke
+INFO: Получена команда history
+мая 10, 2022 12:31:20 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:31:21 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:31:21 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:31:33 AM server.commands.CommandController listenRequests
+WARNING: Ошибка получения запроса
+мая 10, 2022 12:31:33 AM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 12:31:33 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:31:35 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:31:38 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:31:38 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:36:21 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:36:21 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:36:23 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:36:25 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:36:25 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:36:29 AM server.commands.CommandController invoke
+INFO: Получена команда exit
+мая 10, 2022 12:36:29 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:40:04 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:40:04 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:40:08 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:40:13 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:40:13 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:40:44 AM server.commands.CommandController listenRequests
+WARNING: Ошибка получения запроса
+мая 10, 2022 12:40:44 AM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 12:40:44 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:40:46 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:40:50 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:40:50 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:42:59 AM server.commands.CommandController listenRequests
+WARNING: Ошибка получения запроса
+мая 10, 2022 12:42:59 AM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 12:42:59 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:43:01 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:43:05 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:43:05 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:43:17 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:43:17 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:43:22 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:43:25 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:43:25 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:46:17 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:46:17 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:46:20 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:46:22 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:46:22 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:46:27 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:46:27 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:50:19 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:50:19 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:50:27 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:50:30 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:50:30 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:50:57 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:50:57 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:51:01 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:51:02 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:51:02 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:55:21 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:55:21 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:55:26 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:55:26 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:55:26 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:57:05 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:57:05 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:57:11 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:57:12 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:57:12 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:57:30 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:57:30 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:57:35 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:57:35 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:57:35 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 12:57:58 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:57:58 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:58:49 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:59:07 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 12:59:07 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 12:59:09 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 12:59:12 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 12:59:12 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 1:00:02 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7802.
+мая 10, 2022 1:00:02 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 1:00:05 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 1:00:08 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 1:00:08 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 1:06:27 AM server.commands.CommandController listenRequests
+WARNING: Ошибка получения запроса
+мая 10, 2022 1:06:27 AM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 1:06:27 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 1:06:30 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7802.
+мая 10, 2022 1:06:35 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 1:06:35 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 1:09:01 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 1:09:01 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 1:09:06 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 1:09:08 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 1:09:08 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 1:50:41 AM server.commands.CommandController listenRequests
+WARNING: Ошибка получения запроса
+мая 10, 2022 1:50:41 AM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 1:50:41 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 1:50:45 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 1:50:52 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 1:50:52 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 1:51:05 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 1:51:05 AM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 1:51:11 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 1:51:38 AM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 1:51:38 AM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:01:04 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 3:01:04 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:01:11 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:01:12 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 3:01:12 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:02:57 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 3:02:57 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:03:00 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:03:01 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 3:03:01 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:03:26 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 3:03:26 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:04:06 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 3:04:06 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:04:10 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:04:11 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 3:04:11 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:04:49 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 3:04:49 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:04:52 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:04:53 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 3:04:53 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:05:26 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 3:05:26 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:05:30 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:05:31 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 3:05:31 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:07:08 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 3:07:08 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:07:12 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:07:14 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 3:07:14 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:18:16 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 3:18:16 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:22:03 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 3:22:03 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:22:07 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:22:42 PM server.commands.CommandController processClient
+WARNING: Ошибка получения запроса
+мая 10, 2022 3:22:42 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:22:44 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:22:45 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 3:22:45 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:22:51 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 3:22:51 PM server.commands.CommandController processClient
+INFO: Ошибка авторизации: пользователь не найден.
+мая 10, 2022 3:25:07 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 3:25:07 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:25:08 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:25:19 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 3:25:19 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:28:55 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 3:28:55 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:28:58 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:29:11 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 3:29:11 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:30:08 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 3:30:08 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: пользователь не найден.
+мая 10, 2022 3:30:18 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 3:30:18 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: пользователь не найден.
+мая 10, 2022 3:31:40 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 3:31:40 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:31:43 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:31:50 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 3:31:50 PM server.commands.CommandController processClient
+INFO: Ошибка авторизации: Пользователь с таким логином уже существует.
+мая 10, 2022 3:32:22 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 3:32:22 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:32:26 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:32:30 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 3:32:30 PM server.commands.CommandController processClient
+INFO: Ошибка авторизации: Пользователь с таким логином уже существует.
+мая 10, 2022 3:32:35 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 3:32:35 PM server.commands.CommandController processClient
+INFO: Ошибка авторизации: пользователь не найден.
+мая 10, 2022 3:32:41 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 3:32:41 PM server.commands.CommandController processClient
+INFO: Ошибка авторизации: Пользователь с таким логином уже существует.
+мая 10, 2022 3:34:51 PM server.commands.CommandController processClient
+WARNING: Ошибка получения запроса
+мая 10, 2022 3:34:51 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:34:55 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:35:05 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 3:35:05 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:35:07 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:35:13 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 3:35:13 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:35:19 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 3:35:19 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:35:37 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 3:35:37 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:35:40 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:35:46 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 3:35:46 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:35:50 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 3:35:50 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:36:28 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 3:36:28 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 3:36:34 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 3:36:40 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 3:36:40 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 3:36:51 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 3:36:51 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.

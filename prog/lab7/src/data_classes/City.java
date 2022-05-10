@@ -268,6 +268,15 @@ public class City implements Comparable<City>, Serializable {
         this.climate = climate;
     }
 
+    public void setClimate(String climate) {
+        for(Climate cl : Climate.values()) {
+            if(climate.equals(cl.name())) {
+                this.climate = cl;
+                break;
+            }
+        }
+    }
+
     /**
      * Get climate in string (upper case)
      *
@@ -293,6 +302,15 @@ public class City implements Comparable<City>, Serializable {
      */
     public void setGovernment(final Government government) {
         this.government = government;
+    }
+
+    public void setGovernment(String government) {
+        for(Government gov : Government.values()) {
+            if(government.equals(gov.name())) {
+                this.government = gov;
+                break;
+            }
+        }
     }
 
     /**
