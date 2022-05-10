@@ -3,9 +3,9 @@ package server.commands;
 import connect_utils.CommandInfo;
 import data_classes.City;
 import exceptions.IncorrectArgumentException;
-import exceptions.MissingArgumentException;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class InsertCommand extends Command {
     InsertCommand() {
@@ -32,6 +32,12 @@ public class InsertCommand extends Command {
         if (city == null)
             throw new IncorrectArgumentException("город не был создан");
         city.setId(id);
+        try {
+            commandController.getDataController().getDataBaseController().addCity(city, "hello");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IncorrectArgumentException("не удалось добавить город в базу данных");
+        }
         commandController.getDataController().putCityToMap(city);
         commandController.getDataController().updateModificationTime();
         return "Город был добавлен в коллекцию.\n";

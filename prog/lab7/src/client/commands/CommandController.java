@@ -81,6 +81,7 @@ public class CommandController {
             throw new ConnectionException("Получены неопознанные данные от сервера.");
         }
         System.out.println("Успешное соединение с сервером.");
+        System.out.println("Авторизуйтесь для работы. Используйте help для помощи.");
         listenConsole();
     }
 
@@ -128,8 +129,7 @@ public class CommandController {
             } catch (ConnectionException e) {
                 System.out.println(e.getMessage());
             }
-        }
-        else
+        } else
             exit();
     }
 

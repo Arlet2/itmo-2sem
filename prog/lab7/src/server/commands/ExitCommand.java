@@ -1,8 +1,10 @@
 package server.commands;
 
 import connect_utils.CommandInfo;
+import server.Logger;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 public class ExitCommand extends Command {
     ExitCommand() {
@@ -19,8 +21,7 @@ public class ExitCommand extends Command {
     @Override
     public String execute(CommandController commandController, String[] args) throws IOException {
         commandController.getConnectionController().disconnect();
-        System.out.println("Пользователь отключился от сервера.");
-        new SaveCommand().execute(commandController, null);
+        Logger.getLogger().log(Level.INFO, "Пользователь отключился от сервера.");
         return null;
     }
 }

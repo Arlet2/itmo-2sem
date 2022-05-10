@@ -7,7 +7,6 @@ import exceptions.NullValueException;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class City implements Comparable<City>, Serializable {
@@ -98,34 +97,6 @@ public class City implements Comparable<City>, Serializable {
         if (id <= 0)
             throw new IncorrectValueException("значение ID должно быть больше 0");
         this.id = id;
-    }
-
-    /**
-     * Generate unique ID for desired collection
-     *
-     * @param map where we have got all elements
-     */
-    public void generateID(final HashMap<Long, City> map) {
-        if (map.isEmpty()) {
-            id = 1L;
-            return;
-        }
-        ArrayList<Long> ids = new ArrayList<>();
-        for (City i : map.values())
-            ids.add(i.getId());
-        ids.sort(Long::compare);
-        // если минимальное значение не минимально возможное, то заполняем к 1 от минимального
-        if (ids.get(0) != 1)
-            id = ids.get(0) - 1;
-            // если минимальное значение уже единица, то пытаемся заполнить пробелы после минимального
-        else {
-            for (long i = 2; ; i++) {
-                if (checkUniqueID(i, map)) {
-                    id = i;
-                    break;
-                }
-            }
-        }
     }
 
     /**
@@ -269,8 +240,10 @@ public class City implements Comparable<City>, Serializable {
     }
 
     public void setClimate(String climate) {
-        for(Climate cl : Climate.values()) {
-            if(climate.equals(cl.name())) {
+        if (climate == null)
+            return;
+        for (Climate cl : Climate.values()) {
+            if (climate.equals(cl.name())) {
                 this.climate = cl;
                 break;
             }
@@ -305,8 +278,10 @@ public class City implements Comparable<City>, Serializable {
     }
 
     public void setGovernment(String government) {
-        for(Government gov : Government.values()) {
-            if(government.equals(gov.name())) {
+        if (government == null)
+            return;
+        for (Government gov : Government.values()) {
+            if (government.equals(gov.name())) {
                 this.government = gov;
                 break;
             }

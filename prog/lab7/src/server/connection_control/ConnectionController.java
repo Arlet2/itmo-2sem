@@ -1,6 +1,5 @@
 package server.connection_control;
 
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import exceptions.ConfigFileNotFoundException;
 import server.Logger;
 import server.commands.CommandController;
@@ -43,7 +42,8 @@ public class ConnectionController {
      */
     private final CommandController commandController;
 
-    private final RequestController requestController = new RequestController(this);;
+    private final RequestController requestController = new RequestController(this);
+    ;
 
     /**
      * Create new connection controller for connecting with users.
@@ -101,7 +101,7 @@ public class ConnectionController {
      * @throws IOException if sending is failed
      */
     protected void sendRequest(Request request) throws IOException {
-        final int byteSize = 10;
+        final int byteSize = 2048; // 2048
         if (request.getMsgBytes().length > byteSize) {
             int parts = request.getMsg().getBytes().length / byteSize;
             for (int partCount = 0; partCount < parts; partCount++) {

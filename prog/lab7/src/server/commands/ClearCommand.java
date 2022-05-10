@@ -1,6 +1,9 @@
 package server.commands;
 
+import exceptions.IncorrectArgumentException;
+
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ClearCommand extends Command {
     ClearCommand() {
@@ -15,9 +18,16 @@ public class ClearCommand extends Command {
      * @param args              for command from console input (args[0] is program name)
      */
     @Override
-    public String execute(CommandController commandController, String[] args) throws IOException {
-        commandController.getDataController().getMap().clear();
+    public String execute(CommandController commandController, String[] args)
+            throws IOException, IncorrectArgumentException {
+        try {
+            commandController.getDataController().getDataBaseController().clearAll(args[0]);
+            commandController.getDataController().refreshMap();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IncorrectArgumentException("не удалось удалить данные из базы данных");
+        }
         commandController.getDataController().updateModificationTime();
-        return "Коллекция успешно очищена.\n";
+        return "Коллекция успешно очищена от ваших объектов.\n";
     }
 }

@@ -828,3 +828,802 @@ INFO: Отправлен ответ клиенту.
 INFO: Получена команда login
 мая 10, 2022 3:36:51 PM server.commands.CommandController invoke
 INFO: Отправлен ответ клиенту.
+мая 10, 2022 4:55:47 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 4:55:47 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 4:55:51 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 4:55:58 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 4:55:58 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 4:56:01 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 4:56:01 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 4:56:09 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 4:56:19 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: не удалось добавить город в базу данных
+мая 10, 2022 4:56:42 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 4:56:42 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 4:56:57 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 4:57:11 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 4:57:11 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 4:57:15 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 4:57:23 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: не удалось добавить город в базу данных
+мая 10, 2022 5:05:41 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 5:05:41 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 5:05:50 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 5:06:27 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 5:06:27 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 5:06:30 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 5:06:37 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: не удалось добавить город в базу данных
+мая 10, 2022 5:09:10 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 5:09:10 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 5:09:20 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 5:09:25 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 5:09:25 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 5:09:31 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 5:09:40 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: не удалось добавить город в базу данных
+мая 10, 2022 5:21:06 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 5:21:06 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 5:21:11 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 5:21:15 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 5:21:15 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 5:21:41 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 5:21:48 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: не удалось добавить город в базу данных
+мая 10, 2022 5:29:24 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 5:29:24 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 5:29:45 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 5:29:55 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 5:29:55 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 5:30:06 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 5:30:13 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: не удалось добавить город в базу данных
+мая 10, 2022 5:30:39 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 5:30:39 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 5:31:06 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 5:31:15 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 5:31:15 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 5:31:18 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 5:31:25 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: не удалось добавить город в базу данных
+мая 10, 2022 5:35:57 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 5:35:57 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 5:36:01 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 5:36:07 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 5:36:07 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 5:36:33 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 5:36:41 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: не удалось добавить город в базу данных
+мая 10, 2022 5:37:11 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 5:37:11 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 5:37:15 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 5:37:25 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 5:37:25 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 5:37:28 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 5:37:36 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 5:39:32 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 5:39:32 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 5:55:29 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 5:55:29 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 6:03:31 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 6:03:31 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 6:19:08 PM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 10, 2022 6:20:05 PM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 10, 2022 6:21:06 PM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 10, 2022 6:21:30 PM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 10, 2022 7:45:02 PM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 10, 2022 7:46:46 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 7:46:46 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 7:46:53 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 7:47:01 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 7:47:01 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 7:47:04 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 7:47:04 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 7:47:52 PM server.commands.CommandController invoke
+INFO: Получена команда remove_key
+мая 10, 2022 7:47:52 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:00:39 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 8:00:39 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 8:00:42 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 8:00:46 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 8:00:46 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:01:39 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 8:01:47 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:02:10 PM server.commands.CommandController invoke
+INFO: Получена команда remove_key
+мая 10, 2022 8:02:10 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:03:14 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 8:03:14 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:04:00 PM server.commands.CommandController invoke
+INFO: Получена команда remove_key
+мая 10, 2022 8:04:00 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: элемента с таким id не существует
+мая 10, 2022 8:04:06 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 8:04:21 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:04:25 PM server.commands.CommandController invoke
+INFO: Получена команда remove_key
+мая 10, 2022 8:04:25 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:09:23 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 8:09:23 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 8:09:30 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 8:09:39 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 8:09:39 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:09:49 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 8:09:49 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:11:39 PM server.commands.CommandController invoke
+INFO: Получена команда history
+мая 10, 2022 8:11:39 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:11:57 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 8:12:03 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:12:08 PM server.commands.CommandController invoke
+INFO: Получена команда remove_key
+мая 10, 2022 8:12:08 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:15:33 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 8:15:34 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 8:15:35 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 8:15:38 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 8:15:38 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:15:43 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 8:15:43 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:16:51 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 8:16:51 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 8:16:55 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 8:17:02 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 8:17:02 PM server.commands.CommandController clientAuth
+INFO: Ошибка авторизации: неверный пароль пользователя
+мая 10, 2022 8:17:06 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 8:17:06 PM server.commands.CommandController clientAuth
+INFO: Ошибка авторизации: неверный пароль пользователя
+мая 10, 2022 8:17:11 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 8:17:11 PM server.commands.CommandController clientAuth
+INFO: Ошибка авторизации: неверный пароль пользователя
+мая 10, 2022 8:18:41 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 8:18:41 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 8:18:48 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 8:18:51 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 8:18:51 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:19:05 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 8:19:05 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:19:09 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 8:19:09 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:19:22 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 8:19:22 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: неверный пароль пользователя
+мая 10, 2022 8:19:32 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 8:19:39 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: не удалось добавить город в базу данных
+мая 10, 2022 8:20:19 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 8:20:25 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:20:28 PM server.commands.CommandController invoke
+INFO: Получена команда remove_key
+мая 10, 2022 8:20:28 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: не удалось удалить элемент из базы данных
+мая 10, 2022 8:21:51 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 8:21:51 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 8:21:55 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 8:22:05 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 8:22:05 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:22:08 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 8:22:16 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:22:19 PM server.commands.CommandController invoke
+INFO: Получена команда remove_key
+мая 10, 2022 8:22:19 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:42:41 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 8:42:41 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 8:42:44 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 8:42:47 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 8:42:47 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:42:54 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 8:42:54 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:43:14 PM server.commands.CommandController listenRequests
+WARNING: Ошибка получения запроса
+мая 10, 2022 8:43:14 PM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 8:43:14 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 8:43:19 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 8:43:26 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 8:43:26 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 8:43:31 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 8:43:39 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 8:43:39 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:43:44 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 8:43:44 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:44:59 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 8:45:07 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 8:45:09 PM server.commands.CommandController invoke
+INFO: Получена команда remove_key
+мая 10, 2022 8:45:09 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:07:16 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 9:07:16 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 9:08:06 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 9:08:14 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 9:08:14 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:08:15 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 9:08:15 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:08:19 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 9:08:24 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:08:32 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 9:08:44 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:08:48 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 9:08:48 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:08:56 PM server.commands.CommandController invoke
+INFO: Получена команда exit
+мая 10, 2022 9:08:56 PM server.commands.ExitCommand execute
+INFO: Пользователь отключился от сервера.
+мая 10, 2022 9:08:56 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 9:09:01 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 9:09:06 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 9:09:06 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:09:08 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 9:09:08 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:09:10 PM server.commands.CommandController invoke
+INFO: Получена команда clear
+мая 10, 2022 9:09:10 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:09:13 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 9:09:13 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:19:22 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 9:19:22 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 9:19:24 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 9:19:28 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 9:19:28 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:19:31 PM server.commands.CommandController invoke
+INFO: Получена команда insert
+мая 10, 2022 9:19:31 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: элемент с таким id уже существует в коллекции
+мая 10, 2022 9:19:38 PM server.commands.CommandController invoke
+INFO: Получена команда exit
+мая 10, 2022 9:19:38 PM server.commands.ExitCommand execute
+INFO: Пользователь отключился от сервера.
+мая 10, 2022 9:19:38 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 9:19:43 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 9:23:27 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 9:23:27 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:23:31 PM server.commands.CommandController invoke
+INFO: Получена команда clear
+мая 10, 2022 9:23:31 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:23:33 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 9:23:33 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:23:35 PM server.commands.CommandController invoke
+INFO: Получена команда clear
+мая 10, 2022 9:23:35 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:23:36 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 9:23:36 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:37:42 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 9:37:42 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 9:37:44 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 9:37:46 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 9:37:46 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:38:07 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 9:38:07 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 9:38:10 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 9:38:11 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 9:38:11 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:38:20 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 9:38:20 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:38:23 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 9:38:23 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:38:29 PM server.commands.CommandController invoke
+INFO: Получена команда update
+мая 10, 2022 9:38:38 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: не удалось обновить элемент в базе данных
+мая 10, 2022 9:40:40 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 9:40:40 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 9:40:49 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 9:40:51 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 9:40:51 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:41:23 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 9:41:23 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:41:24 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 9:41:24 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:41:34 PM server.commands.CommandController invoke
+INFO: Получена команда update
+мая 10, 2022 9:41:44 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: не удалось обновить элемент в базе данных
+мая 10, 2022 9:45:38 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 9:45:38 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 9:45:42 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 9:45:48 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 9:45:48 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:45:52 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 9:45:52 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:45:55 PM server.commands.CommandController invoke
+INFO: Получена команда update
+мая 10, 2022 9:45:55 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: вы не владеете этим объектом. Вы не можете его изменять.
+
+мая 10, 2022 9:46:23 PM server.commands.CommandController invoke
+INFO: Получена команда exit
+мая 10, 2022 9:46:23 PM server.commands.ExitCommand execute
+INFO: Пользователь отключился от сервера.
+мая 10, 2022 9:46:23 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 9:46:31 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 9:46:40 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 9:46:40 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:46:43 PM server.commands.CommandController invoke
+INFO: Получена команда update
+мая 10, 2022 9:46:53 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: не удалось обновить элемент в базе данных
+мая 10, 2022 9:47:32 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 9:47:32 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 9:47:36 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 9:47:37 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 9:47:37 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:47:42 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 9:47:42 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:47:46 PM server.commands.CommandController invoke
+INFO: Получена команда update
+мая 10, 2022 9:48:03 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:48:05 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 9:48:05 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:54:29 PM server.commands.CommandController invoke
+INFO: Получена команда exit
+мая 10, 2022 9:54:29 PM server.commands.ExitCommand execute
+INFO: Пользователь отключился от сервера.
+мая 10, 2022 9:54:29 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 9:54:37 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 9:54:37 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 9:54:40 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 9:54:43 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 9:54:43 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:54:48 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 9:54:48 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:54:50 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 9:54:50 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:54:52 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 9:54:52 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:55:27 PM server.commands.CommandController invoke
+INFO: Получена команда print_ascending
+мая 10, 2022 9:55:27 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:55:34 PM server.commands.CommandController invoke
+INFO: Получена команда history
+мая 10, 2022 9:55:34 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:55:40 PM server.commands.CommandController invoke
+INFO: Получена команда history
+мая 10, 2022 9:55:40 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:55:44 PM server.commands.CommandController invoke
+INFO: Получена команда history
+мая 10, 2022 9:55:44 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:56:13 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 9:56:13 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:56:35 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 9:56:35 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:58:03 PM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 9:58:03 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 9:58:07 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 9:58:11 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 9:58:11 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:58:17 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 9:58:17 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: Пользователь с таким логином уже существует.
+мая 10, 2022 9:58:22 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 9:58:22 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:58:38 PM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 9:58:38 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 9:58:41 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 9:58:47 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 9:58:47 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:59:08 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 9:59:08 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 9:59:52 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 9:59:52 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:02:38 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 10:02:38 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 10:02:38 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 10:02:44 PM server.commands.CommandController clientAuth
+WARNING: Ошибка получения запроса
+мая 10, 2022 10:04:35 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 10:04:35 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 10:04:37 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 10:04:46 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 10:04:46 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:05:04 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 10:05:04 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:05:27 PM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 10:05:27 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 10:05:30 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 10:05:39 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 10:05:39 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:05:54 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 10:05:54 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:06:22 PM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 10:06:22 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 10:06:25 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 10:06:34 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 10:06:34 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:06:55 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 10:06:55 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:12:50 PM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 10:12:50 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 10:12:53 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 10:13:05 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 10:13:05 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 10:13:09 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 10:13:11 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 10:13:11 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:13:17 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 10:13:17 PM server.commands.CommandController clientAuth
+INFO: Ошибка авторизации: пользователь не найден.
+мая 10, 2022 10:13:24 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 10:13:24 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:13:29 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 10:13:29 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:13:33 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 10:13:33 PM server.commands.CommandController listenRequests
+WARNING: Некорректный аргумент: Пользователь с таким логином уже существует.
+мая 10, 2022 10:13:42 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 10:13:42 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:13:57 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 10:13:57 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:15:22 PM server.commands.CommandController invoke
+INFO: Получена команда help
+мая 10, 2022 10:15:22 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:15:24 PM server.commands.CommandController invoke
+INFO: Получена команда show
+мая 10, 2022 10:15:24 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:15:28 PM server.commands.CommandController invoke
+INFO: Получена команда exit
+мая 10, 2022 10:15:28 PM server.commands.ExitCommand execute
+INFO: Пользователь отключился от сервера.
+мая 10, 2022 10:15:28 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 10:15:34 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 10:16:23 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 10:16:23 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:16:27 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 10:16:27 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:16:45 PM server.commands.CommandController listenRequests
+WARNING: Ошибка получения запроса
+мая 10, 2022 10:16:45 PM server.commands.CommandController listenRequests
+WARNING: Ошибка подключения с клиентом. Сброс соединения...
+мая 10, 2022 10:16:45 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 10:16:48 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 10:16:53 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 10:16:53 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 10:17:26 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 10:17:33 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 10:17:33 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:17:36 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 10:17:36 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:17:49 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845.
+мая 10, 2022 10:17:49 PM server.commands.CommandController processClient
+INFO: Ожидание подключение клиента...
+мая 10, 2022 10:17:53 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 10, 2022 10:17:57 PM server.commands.CommandController invoke
+INFO: Получена команда login
+мая 10, 2022 10:17:57 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.
+мая 10, 2022 10:18:01 PM server.commands.CommandController invoke
+INFO: Получена команда register
+мая 10, 2022 10:18:01 PM server.commands.CommandController invoke
+INFO: Отправлен ответ клиенту.

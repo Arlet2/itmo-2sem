@@ -3,7 +3,8 @@ package server.commands;
 import connect_utils.CommandInfo;
 import data_classes.City;
 import exceptions.IncorrectArgumentException;
-import exceptions.MissingArgumentException;
+
+import java.sql.SQLException;
 
 
 public class RemoveLowerKeyCommand extends Command {
@@ -26,8 +27,15 @@ public class RemoveLowerKeyCommand extends Command {
         boolean isMapModified = false;
         for (City city : commandController.getDataController().getMap().values()) {
             if (city.getId() < id) {
-                isMapModified = true;
-                commandController.getDataController().getMap().remove(city.getId());
+                try {
+                    if (!commandController.getDataController().getDataBaseController().isOwner(args[0], city.getId()))
+                        continue;
+                    commandController.getDataController().getDataBaseController().removeCity(city.getId());
+                    commandController.getDataController().getMap().remove(city.getId());
+                    isMapModified = true;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
         if (isMapModified) {

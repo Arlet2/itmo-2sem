@@ -3,9 +3,9 @@ package server.commands;
 import connect_utils.CommandInfo;
 import data_classes.City;
 import exceptions.IncorrectArgumentException;
-import exceptions.MissingArgumentException;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ReplaceIfGreaterCommand extends Command {
     private boolean isMapModified = false;
@@ -30,12 +30,21 @@ public class ReplaceIfGreaterCommand extends Command {
         long id = Long.parseLong(args[1]);
         if (City.checkUniqueID(id, commandController.getDataController().getMap()))
             throw new IncorrectArgumentException("элемента с данным id не существует");
-        commandController.getConnectionController().getRequestController().sendOK();
-        City city = commandController.getConnectionController().getRequestController().receiveCity();
-        city.setId(id);
-        deleteNullValues(commandController.getDataController().getMap().get(id), city);
-        replaceCity(commandController.getDataController().getMap().get(id), city);
-        commandController.getDataController().putCityToMap(city);
+        try {
+            if (!commandController.getDataController().getDataBaseController().isOwner(args[0], id))
+                throw new IncorrectArgumentException("вы не владеете этим элементом. Вы не можете изменять его.");
+
+            commandController.getConnectionController().getRequestController().sendOK();
+            City city = commandController.getConnectionController().getRequestController().receiveCity();
+            city.setId(id);
+            deleteNullValues(commandController.getDataController().getMap().get(id), city);
+            replaceCity(commandController.getDataController().getMap().get(id), city);
+            commandController.getDataController().getDataBaseController().updateCity(city);
+            commandController.getDataController().putCityToMap(city);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IncorrectArgumentException("не удалось обновить элемент в базе данных");
+        }
         if (isMapModified) {
             commandController.getDataController().updateModificationTime();
             return "Значение элемента с id " + id + " было обновлено.\n";

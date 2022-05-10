@@ -2,10 +2,9 @@ package server.commands;
 
 import connect_utils.CommandInfo;
 import exceptions.IncorrectArgumentException;
-import server.data_control.PasswordController;
+import server.data_control.PasswordManager;
 
 import java.io.IOException;
-import java.security.MessageDigest;
 import java.sql.SQLException;
 
 public class LoginCommand extends Command {
@@ -21,14 +20,18 @@ public class LoginCommand extends Command {
     @Override
     public String execute(CommandController commandController, String[] args) throws IncorrectArgumentException,
             IOException, ClassNotFoundException {
+        if (!args[0].equals("login"))
+            return "Вы уже авторизованы.\n" +
+                    "Для смены пользователя нужно переподключение.\n";
         try {
-            if (!PasswordController.checkPasswords(args[1],
+            if (!PasswordManager.checkPasswords(args[2],
                     commandController.getDataController().getDataBaseController().getUserSalt(args[1]),
                     commandController.getDataController().getDataBaseController().getUserPassword(args[1])))
                 throw new IncorrectArgumentException("неверный пароль пользователя");
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new IncorrectArgumentException("пользователь не найден.");
         }
-        return "Пользователь успешно авторизован.\n";
+        return "Вы были успешно авторизованы.\n";
     }
 }

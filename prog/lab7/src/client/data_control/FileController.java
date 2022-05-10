@@ -52,6 +52,7 @@ public class FileController {
         });
         return commandsInfo;
     }
+
     /**
      * Read config file with "config.excalibbur".
      * File need to have "port: *digits*" and "address: *IP address/domain*"
@@ -91,6 +92,7 @@ public class FileController {
                     "\"address: localhost\", \"address: 192.65.3.5\"");
         return new InetSocketAddress(address, port);
     }
+
     public ArrayList<String> getStrCommand() {
         return strCommand;
     }

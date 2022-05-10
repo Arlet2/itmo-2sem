@@ -1,8 +1,6 @@
 package server.commands;
 
 import exceptions.IncorrectArgumentException;
-import exceptions.MissingArgumentException;
-import exceptions.UnknownCommandException;
 
 import java.io.IOException;
 

@@ -2,12 +2,12 @@ package server.commands;
 
 import connect_utils.CommandInfo;
 import exceptions.IncorrectArgumentException;
-import server.data_control.PasswordController;
+import server.data_control.PasswordManager;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class RegisterCommand extends Command{
+public class RegisterCommand extends Command {
     RegisterCommand() {
         super("register", "login password", "регистрирует нового пользователя в системе",
                 null, new CommandInfo.ArgumentInfo[]{CommandInfo.ArgumentInfo.STRING,
@@ -18,13 +18,17 @@ public class RegisterCommand extends Command{
     public String execute(CommandController commandController, String[] args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
         String password;
-        String salt = PasswordController.generateSalt();
+        String salt = PasswordManager.generateSalt();
         try {
-            password = PasswordController.createHash(args[1]+salt);
+            password = PasswordManager.createHash(args[2] + salt);
             commandController.getDataController().getDataBaseController().createUser(args[1], password, salt);
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new IncorrectArgumentException("Пользователь с таким логином уже существует.");
         }
-        return "Пользователь был успешно зарегистрирован.\n";
+        if (!args[0].equals("register"))
+            return "Был зарегистрирован новый пользователь.\n" +
+                    "Ваш логин остался без изменения. Для смены пользователя переподключитесь.\n";
+        return "Вы были успешно зарегистрированы и авторизованы.\n";
     }
 }

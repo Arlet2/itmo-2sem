@@ -2,7 +2,6 @@ package server.commands;
 
 import connect_utils.*;
 import exceptions.IncorrectArgumentException;
-import exceptions.UnknownCommandException;
 
 import java.io.IOException;
 
@@ -45,7 +44,7 @@ public class ExecuteScriptCommand extends Command {
                 if (recursionCounter >= RECURSION_INTERRUPT) {
                     commandController.getConnectionController().getRequestController()
                             .sendError("Глубина рекурсии слишком большая (рекурсия может быть глубиной до "
-                            + RECURSION_INTERRUPT + ".\nВыход из рекурсии..");
+                                    + RECURSION_INTERRUPT + ".\nВыход из рекурсии..");
                 }
                 commandController.invoke(command, cArgs);
             }

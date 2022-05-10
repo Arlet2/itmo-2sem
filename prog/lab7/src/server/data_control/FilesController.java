@@ -11,9 +11,11 @@ import java.util.regex.Pattern;
 
 public class FilesController {
     private final DataController dataController;
+
     FilesController(DataController dataController) {
         this.dataController = dataController;
     }
+
     public String readDBPassword() throws MissingArgumentException, ConfigFileNotFoundException {
         Scanner scanner;
         try {
@@ -33,6 +35,7 @@ public class FilesController {
             throw new MissingArgumentException("в файле конфигурации базы данных не был найден пароль. " +
                     "Добавьте в этот файл строку \"password: ***\"");
     }
+
     public int readConfigPort() throws MissingArgumentException, ConfigFileNotFoundException {
         Scanner scanner;
         try {
@@ -52,6 +55,6 @@ public class FilesController {
             return Integer.parseInt(s.substring(matcher.start(), matcher.end()));
         else
             throw new MissingArgumentException("в файле конфигурации подключения не был найден порт. " +
-                        "Добавьте в файл строку типа \"port: 1234\"");
+                    "Добавьте в файл строку типа \"port: 1234\"");
     }
 }

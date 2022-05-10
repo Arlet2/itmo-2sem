@@ -1,4 +1,5 @@
 package client;
+
 import client.commands.CommandController;
 import exceptions.ConfigFileNotFoundException;
 import exceptions.ConnectionException;

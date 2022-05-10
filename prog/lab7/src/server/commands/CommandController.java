@@ -36,26 +36,32 @@ public class CommandController {
     /**
      * history of all commands that was used
      */
-    private final ArrayList<Command> history;
+    private final ArrayList<Command> history = new ArrayList<>();
+    ;
 
     /**
      * collection of all commands that user can use
      */
-    private final ArrayList<Command> allCommands;
+    private final ArrayList<Command> allCommands = new ArrayList<>();
+    ;
 
     /**
      * collection of data about all commands that will send to user
      */
-    private final ArrayList<CommandInfo> allCommandsInfo;
+    private final ArrayList<CommandInfo> allCommandsInfo = new ArrayList<>();
+    ;
+
+    /**
+     *
+     */
+    private final ArrayList<Command> authCommands = new ArrayList<>();
+    ;
 
     /**
      * Create program working class
      */
     public CommandController() throws SQLException, MissingArgumentException, ConfigFileNotFoundException {
         this.dataController = new DataController(this);
-        history = new ArrayList<>();
-        allCommands = new ArrayList<>();
-        allCommandsInfo = new ArrayList<>();
         connectionController = new ConnectionController(this);
         commandInit();
     }
@@ -78,18 +84,53 @@ public class CommandController {
      * Wait creating connection from user
      */
     private void processClient() {
-        Logger.getLogger().log(Level.INFO, "Ожидание подключение клиента...");
-        history.clear();
-        try {
-            connectionController.connect();
-            connectionController.getRequestController().sendCommandList(allCommandsInfo);
-        } catch (IOException e) {
-            Logger.getLogger().log(Level.WARNING, "Ошибка попытки соединения с клиентом.");
+        while (true) {
+            Logger.getLogger().log(Level.INFO, "Ожидание подключение клиента...");
+            history.clear();
+            try {
+                connectionController.connect();
+                connectionController.getRequestController().sendCommandList(allCommandsInfo);
+            } catch (IOException e) {
+                Logger.getLogger().log(Level.WARNING, "Ошибка попытки соединения с клиентом.");
+            }
+            listenRequests();
         }
-        boolean isAuth = false;
+    }
+
+    /**
+     * Initialization commands to allCommands that can be used by user
+     */
+    private void commandInit() {
+        allCommands.add(new HelpCommand());
+        allCommands.add(new RegisterCommand());
+        allCommands.add(new LoginCommand());
+        allCommands.add(new InfoCommand());
+        allCommands.add(new ShowCommand());
+        allCommands.add(new InsertCommand());
+        allCommands.add(new UpdateCommand());
+        allCommands.add(new RemoveKeyCommand());
+        allCommands.add(new ClearCommand());
+        allCommands.add(new ExitCommand());
+        allCommands.add(new ExecuteScriptCommand());
+        allCommands.add(new HistoryCommand());
+        allCommands.add(new ReplaceIfGreaterCommand());
+        allCommands.add(new RemoveLowerKeyCommand());
+        allCommands.add(new FilterGreaterThanClimateCommand());
+        allCommands.add(new PrintAscendingCommand());
+        allCommands.add(new PrintFieldAscendingGovernment());
+        allCommands.forEach(command -> {
+            if (!command.isServerCommand())
+                allCommandsInfo.add(new CommandInfo(command.getName(), command.getSendInfo(), command.getArgInfo()));
+        });
+        authCommands.add(allCommands.get(0));
+        authCommands.add(allCommands.get(1));
+        authCommands.add(allCommands.get(2));
+    }
+
+    private String clientAuth() {
         Request request;
         String[] args;
-        while (!isAuth) {
+        while (true) {
             try {
                 request = connectionController.getRequestController().receiveRequest();
             } catch (IOException e) {
@@ -102,7 +143,8 @@ public class CommandController {
             try {
                 try {
                     args = request.getMsg().split(" ");
-                    if (args[0].equals("register") || args[0].equals("login") || args[0].equals("help"))
+                    Command command = searchCommand(args[0]);
+                    if (authCommands.contains(command))
                         invoke(searchCommand(args[0]), args);
                     else {
                         connectionController.getRequestController().sendError("Доступ запрещен " +
@@ -124,47 +166,20 @@ public class CommandController {
                 Logger.getLogger().log(Level.WARNING, "Потеряно соединение с клиентом");
                 break;
             }
-            if (!args[0].equals("help"))
-                isAuth = true;
+            if (!args[0].equals("help")) {
+                return args[1];
+            }
         }
-        if (isAuth)
-            listenRequests();
-        else
-            processClient();
-    }
-
-    /**
-     * Initialization commands to allCommands that can be used by user
-     */
-    private void commandInit() {
-        allCommands.add(new HelpCommand());
-        allCommands.add(new InfoCommand());
-        allCommands.add(new ShowCommand());
-        allCommands.add(new InsertCommand());
-        allCommands.add(new UpdateCommand());
-        allCommands.add(new RemoveKeyCommand());
-        allCommands.add(new ClearCommand());
-        allCommands.add(new SaveCommand());
-        allCommands.add(new ExitCommand());
-        allCommands.add(new ExecuteScriptCommand());
-        allCommands.add(new HistoryCommand());
-        allCommands.add(new ReplaceIfGreaterCommand());
-        allCommands.add(new RemoveLowerKeyCommand());
-        allCommands.add(new FilterGreaterThanClimateCommand());
-        allCommands.add(new PrintAscendingCommand());
-        allCommands.add(new PrintFieldAscendingGovernment());
-        allCommands.add(new RegisterCommand());
-        allCommands.add(new LoginCommand());
-        allCommands.forEach(command -> {
-            if (!command.isServerCommand())
-                allCommandsInfo.add(new CommandInfo(command.getName(), command.getSendInfo(), command.getArgInfo()));
-        });
+        return null;
     }
 
     /**
      * Use when connection with user exists. Listen request from user and execute command from one.
      */
-    public void listenRequests() {
+    private void listenRequests() {
+        String login = clientAuth();
+        if (login == null)
+            return;
         String[] input;
         Request request;
         Command command;
@@ -186,6 +201,7 @@ public class CommandController {
             try {
                 try {
                     command = searchCommand(input[0].toLowerCase());
+                    input[0] = login;
                     invoke(command, input);
                 } catch (IncorrectArgumentException e) {
                     Logger.getLogger().log(Level.WARNING, "Некорректный аргумент: " + e.getMessage());
@@ -203,7 +219,6 @@ public class CommandController {
         }
         if (connectionController.isConnected())
             Logger.getLogger().log(Level.WARNING, "Ошибка подключения с клиентом. Сброс соединения...");
-        processClient();
     }
 
     /**
@@ -264,5 +279,9 @@ public class CommandController {
 
     public ArrayList<Command> getAllCommands() {
         return allCommands;
+    }
+
+    public ArrayList<Command> getAuthCommands() {
+        return authCommands;
     }
 }

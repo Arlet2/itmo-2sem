@@ -1,6 +1,7 @@
 package server.commands;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class HelpCommand extends Command {
     public HelpCommand() {
@@ -16,7 +17,12 @@ public class HelpCommand extends Command {
     @Override
     public String execute(CommandController commandController, String[] args) throws IOException {
         StringBuilder data = new StringBuilder();
-        commandController.getAllCommands().forEach(command -> {
+        ArrayList<Command> commands;
+        if (!args[0].equals("help"))
+            commands = commandController.getAllCommands();
+        else
+            commands = commandController.getAuthCommands();
+        commands.forEach(command -> {
             if (!command.isServerCommand())
                 data.append(String.format("%-50s - %-1s %n", command.getName() + " " + command.getSignature(),
                         command.getDescription()));

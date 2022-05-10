@@ -5,7 +5,6 @@ import exceptions.MissingArgumentException;
 import server.commands.CommandController;
 import data_classes.City;
 
-import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -33,12 +32,21 @@ public class DataController {
     private final DataBaseController dataBaseController;
 
     private final FilesController filesController;
+
     public DataController(CommandController commandController) throws SQLException,
             MissingArgumentException, ConfigFileNotFoundException {
         this.commandController = commandController;
         filesController = new FilesController(this);
         map = new HashMap<>();
         dataBaseController = new DataBaseController(this, "jdbc:postgresql://127.0.0.1:5432/postgres", "postgres");
+        refreshMap();
+    }
+
+    public void refreshMap() throws SQLException {
+        map.clear();
+        dataBaseController.getAllCities().forEach(city -> {
+            map.put(city.getId(), city);
+        });
     }
 
     /**

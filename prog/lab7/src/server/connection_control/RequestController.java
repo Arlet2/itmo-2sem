@@ -9,9 +9,11 @@ import java.util.ArrayList;
 
 public class RequestController {
     private final ConnectionController connectionController;
-    RequestController (ConnectionController connectionController) {
+
+    RequestController(ConnectionController connectionController) {
         this.connectionController = connectionController;
     }
+
     /**
      * Send OK request to user
      *
@@ -30,6 +32,7 @@ public class RequestController {
     public void sendReply(String msg) throws IOException {
         connectionController.sendRequest(new Request(Request.RequestCode.REPLY, msg));
     }
+
     public void receiveOK() throws IOException {
         try {
             receiveRequest();
@@ -37,6 +40,7 @@ public class RequestController {
 
         }
     }
+
     /**
      * Send ERROR request
      *
@@ -46,9 +50,11 @@ public class RequestController {
     public void sendError(String msg) throws IOException {
         connectionController.sendRequest(new Request(Request.RequestCode.ERROR, msg + "\n"));
     }
+
     public void sendCommandList(ArrayList<CommandInfo> list) throws IOException {
         connectionController.sendObject(list);
     }
+
     /**
      * Receive request from user
      *
@@ -59,6 +65,7 @@ public class RequestController {
     public Request receiveRequest() throws IOException, ClassNotFoundException {
         return (Request) connectionController.receiveObject();
     }
+
     public City receiveCity() throws IOException, ClassNotFoundException {
         return (City) connectionController.receiveObject();
     }
