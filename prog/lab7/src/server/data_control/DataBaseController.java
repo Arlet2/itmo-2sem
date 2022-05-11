@@ -67,7 +67,7 @@ public class DataBaseController {
         return result.getString(1);
     }
 
-    public void createUser(String login, String password, String salt) throws SQLException {
+    protected void createUser(String login, String password, String salt) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("INSERT INTO users VALUES(?, ?, ?)");
         ps.setString(1, login);
         ps.setString(2, password);
@@ -91,51 +91,51 @@ public class DataBaseController {
         return login.equals(resultSet.getString(1));
     }
 
-    public void addCity(City city, String login) throws SQLException {
-        PreparedStatement ps;
-        int sh = 0;
-        //if (city.getId() != null) {
-        ps = connection.prepareStatement("INSERT INTO cities(id, name, coordinatesid, creationdate, " +
-                "area, population, metersabovesealevel, establishmentdate, climate, government, governor, owner)" +
-                " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        ps.setLong(1, city.getId());
-        sh = 1;
-        //}
-        //else {
-        //ps = connection.prepareStatement("INSERT INTO cities(name, coordinatesid, creationdate, " +
-        //"area, population, metersabovesealevel, establishmentdate, climate, government, governor, owner)" +
-        //" VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        //}
-        ps.setString(1 + sh, city.getName());
-
-        PreparedStatement subPs = connection.prepareStatement("INSERT INTO coordinates(id, x, y) VALUES(?, ?, ?)");
-        subPs.setLong(1, city.getId());
-        subPs.setFloat(2, city.getCoordinates().getX());
-        subPs.setInt(3, city.getCoordinates().getY());
-        subPs.execute();
-
-        ps.setLong(2 + sh, city.getId());
-        ps.setString(3 + sh, city.getCreationDate().toString());
-        ps.setLong(4 + sh, city.getArea());
-        ps.setInt(5 + sh, city.getPopulation());
-        ps.setLong(6 + sh, city.getMetersAboveSeaLevel());
-        ps.setString(7 + sh, city.getEstablishmentDate().toString());
-        ps.setObject(8 + sh, city.getClimate(), Types.OTHER);
-        ps.setObject(9 + sh, city.getGovernment(), Types.OTHER);
-
+    protected void addCity(City city, String login) throws SQLException {
+        PreparedStatement subPs;
+        long id;
+        if (city.getId() == null) {
+            subPs = connection.prepareStatement("INSERT INTO coordinates(x, y) VALUES(?, ?) RETURNING id");
+            subPs.setFloat(1, city.getCoordinates().getX());
+            subPs.setInt(2, city.getCoordinates().getY());
+            ResultSet result = subPs.executeQuery();
+            result.next();
+            id = result.getLong(1);
+        } else {
+            id = city.getId();
+            subPs = connection.prepareStatement("INSERT INTO coordinates(id, x, y) VALUES(?, ?, ?) RETURNING");
+            subPs.setLong(1, id);
+            subPs.setFloat(2, city.getCoordinates().getX());
+            subPs.setInt(3, city.getCoordinates().getY());
+            subPs.execute();
+        }
         subPs = connection.prepareStatement("INSERT INTO humans(id, age, birthday) VALUES(?, ?, ?)");
-        subPs.setLong(1, city.getId());
+        subPs.setLong(1, id);
         subPs.setLong(2, city.getGovernor().getAge());
         subPs.setString(3, city.getGovernor().getBirthday().toString());
         subPs.execute();
 
-        ps.setLong(10 + sh, city.getId());
-        ps.setString(11 + sh, login);
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO cities(id, name, coordinatesid, creationdate, " +
+                "area, population, metersabovesealevel, establishmentdate, climate, government, governor, owner)" +
+                " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        ps.setLong(1, id);
+        ps.setString(2, city.getName());
+        ps.setLong(3, id);
+        ps.setString(4, city.getCreationDate().toString());
+        ps.setLong(5, city.getArea());
+        ps.setInt(6, city.getPopulation());
+        ps.setLong(7, city.getMetersAboveSeaLevel());
+        ps.setString(8, city.getEstablishmentDate().toString());
+        ps.setObject(9, city.getClimate(), Types.OTHER);
+        ps.setObject(10, city.getGovernment(), Types.OTHER);
+        ps.setLong(11, id);
+        ps.setString(12, login);
 
         ps.execute();
     }
 
-    public void updateCity(City city) throws SQLException {
+
+    protected void updateCity(City city) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("UPDATE cities " +
                 "SET name = ?, " +
                 "creationdate = ?, " +
@@ -172,7 +172,7 @@ public class DataBaseController {
         ps.execute();
     }
 
-    public void removeCity(long id) throws SQLException {
+    protected void removeCity(long id) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("DELETE FROM cities WHERE id=?");
         ps.setLong(1, id);
         ps.execute();
@@ -184,7 +184,7 @@ public class DataBaseController {
         subPs.execute();
     }
 
-    public void clearAll(String login) throws SQLException {
+    protected void clearAll(String login) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("SELECT FROM cities * WHERE owner=?");
         ps.setString(1, login);
         ResultSet resultSet = ps.executeQuery();
