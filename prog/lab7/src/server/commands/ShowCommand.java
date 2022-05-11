@@ -15,13 +15,15 @@ public class ShowCommand extends Command {
      */
     @Override
     public String execute(CommandController commandController, String[] args) {
-        int counter = 1;
-        if (commandController.getDataController().getMap().isEmpty()) {
+        if (commandController.getDataController().isMapEmpty()) {
             return "Коллекция пуста.\n";
         }
         StringBuilder data = new StringBuilder();
+        int counter = 1;
+        commandController.getDataController().readLock();
         for (City i : commandController.getDataController().getMap().values())
             data.append("Город ").append(counter++).append("\n").append(i).append("\n");
+        commandController.getDataController().readUnlock();
         return data.toString();
     }
 }

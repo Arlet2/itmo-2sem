@@ -32,14 +32,19 @@ public class FilterGreaterThanClimateCommand extends Command {
             }
         }
         boolean isExist = false;
-        for (City i : commandController.getDataController().getMap().values()) {
-            if (i.getClimate() == null)
-                continue;
-            if (i.getClimate().ordinal() > climate.ordinal()) {
-                isExist = true;
-                break;
+        commandController.getDataController().readLock();
+        if (climate != null) {
+            for (City i : commandController.getDataController().getMap().values()) {
+                if (i.getClimate() == null)
+                    continue;
+                if (i.getClimate().ordinal() > climate.ordinal()) {
+                    isExist = true;
+                    break;
+                }
             }
         }
+        else
+            isExist = true;
         if (!isExist) {
             return "Таких элементов не существует в коллекции.\n";
         }
@@ -52,6 +57,7 @@ public class FilterGreaterThanClimateCommand extends Command {
             else if (city.getClimate().ordinal() > finalClimate.ordinal())
                 data.append(city).append("\n");
         });
+        commandController.getDataController().readUnlock();
         return data.toString();
     }
 }

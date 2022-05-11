@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class ReplaceIfGreaterCommand extends Command {
-    private boolean isMapModified = false;
 
     ReplaceIfGreaterCommand() {
         super("replace_if_greater", "id {element}", "заменяет значение по id, если новое значение больше старого",
@@ -28,7 +27,7 @@ public class ReplaceIfGreaterCommand extends Command {
     public String execute(CommandController commandController, String[] args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
         long id = Long.parseLong(args[1]);
-        if (City.checkUniqueID(id, commandController.getDataController().getMap()))
+        if (commandController.getDataController().checkUniqueID(id))
             throw new IncorrectArgumentException("элемента с данным id не существует");
         try {
             if (!commandController.getDataController().getDataBaseController().isOwner(args[0], id))
@@ -39,17 +38,14 @@ public class ReplaceIfGreaterCommand extends Command {
             city.setId(id);
             deleteNullValues(commandController.getDataController().getMap().get(id), city);
             replaceCity(commandController.getDataController().getMap().get(id), city);
-            commandController.getDataController().getDataBaseController().updateCity(city);
-            commandController.getDataController().putCityToMap(city);
+            commandController.getDataController().updateCity(city);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IncorrectArgumentException("не удалось обновить элемент в базе данных");
         }
-        if (isMapModified) {
-            commandController.getDataController().updateModificationTime();
-            return "Значение элемента с id " + id + " было обновлено.\n";
-        }
-        return "Значение элемента с id " + id + " не было изменено.\n";
+        commandController.getDataController().updateModificationTime();
+        return "Значение элемента с id " + id + " было обновлено.\n";
+
     }
 
     /**
@@ -62,53 +58,42 @@ public class ReplaceIfGreaterCommand extends Command {
     private void replaceCity(final City oldCity, City newCity) {
         if (oldCity.getName().compareTo(newCity.getName()) < 0) {
             oldCity.setName(newCity.getName());
-            isMapModified = true;
         }
         if (oldCity.getCoordinates().getX() < newCity.getCoordinates().getX()) {
             oldCity.getCoordinates().setX(newCity.getCoordinates().getX());
-            isMapModified = true;
         }
         if (oldCity.getCoordinates().getY() < newCity.getCoordinates().getY()) {
             oldCity.getCoordinates().setY(newCity.getCoordinates().getY());
-            isMapModified = true;
         }
         if (oldCity.getEstablishmentDate().isBefore(newCity.getEstablishmentDate())) {
             oldCity.setEstablishmentDate(newCity.getEstablishmentDate());
-            isMapModified = true;
         }
         if (oldCity.getArea() < newCity.getArea()) {
             oldCity.setArea(oldCity.getArea());
-            isMapModified = true;
         }
         if (oldCity.getPopulation() < newCity.getPopulation()) {
             oldCity.setPopulation(newCity.getPopulation());
-            isMapModified = true;
         }
         if (oldCity.getMetersAboveSeaLevel() < newCity.getMetersAboveSeaLevel()) {
             oldCity.setMetersAboveSeaLevel(newCity.getMetersAboveSeaLevel());
-            isMapModified = true;
         }
         if (oldCity.getClimate() == null)
             oldCity.setClimate(newCity.getClimate());
         else if (newCity.getClimate() == null) ;
         else if (oldCity.getClimate().ordinal() < newCity.getClimate().ordinal()) {
             oldCity.setClimate(newCity.getClimate());
-            isMapModified = true;
         }
         if (oldCity.getGovernment() == null)
             oldCity.setGovernment(newCity.getGovernment());
         else if (newCity.getGovernment() == null) ;
         if (oldCity.getGovernment().ordinal() < newCity.getGovernment().ordinal()) {
             oldCity.setGovernment(newCity.getGovernment());
-            isMapModified = true;
         }
         if (oldCity.getGovernor().getAge() < newCity.getGovernor().getAge()) {
             oldCity.getGovernor().setAge(newCity.getGovernor().getAge());
-            isMapModified = true;
         }
         if (oldCity.getGovernor().getBirthday().isBefore(newCity.getGovernor().getBirthday())) {
             oldCity.getGovernor().setBirthday(newCity.getGovernor().getBirthday());
-            isMapModified = true;
         }
         newCity = oldCity;
     }

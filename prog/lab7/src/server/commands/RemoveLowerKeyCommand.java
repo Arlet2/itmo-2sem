@@ -30,8 +30,7 @@ public class RemoveLowerKeyCommand extends Command {
                 try {
                     if (!commandController.getDataController().getDataBaseController().isOwner(args[0], city.getId()))
                         continue;
-                    commandController.getDataController().getDataBaseController().removeCity(city.getId());
-                    commandController.getDataController().getMap().remove(city.getId());
+                    commandController.getDataController().removeCity(city.getId());
                     isMapModified = true;
                 } catch (SQLException e) {
                     e.printStackTrace();

@@ -8,10 +8,6 @@ import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.logging.Level;
 
-/*
- *  TODO: добавить возможность добавления с авто id от бд
- */
-
 public class Main {
     public static void main(String[] args) {
         Logger.createLogger();

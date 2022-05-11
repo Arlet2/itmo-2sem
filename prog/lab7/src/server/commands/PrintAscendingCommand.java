@@ -15,14 +15,15 @@ public class PrintAscendingCommand extends Command {
      */
     @Override
     public String execute(CommandController commandController, String[] args) {
-        AtomicInteger counter = new AtomicInteger(1);
-        if (commandController.getDataController().getMap().isEmpty()) {
+        if (commandController.getDataController().isMapEmpty()) {
             return "Коллекция пуста.\n";
         }
         StringBuilder data = new StringBuilder();
-
+        AtomicInteger counter = new AtomicInteger(1);
+        commandController.getDataController().readLock();
         commandController.getDataController().getMap().values().stream().sorted().forEach(city ->
                 data.append("Город ").append(counter.getAndIncrement()).append("\n").append(city).append("\n"));
+        commandController.getDataController().readUnlock();
         return data.toString();
     }
 }

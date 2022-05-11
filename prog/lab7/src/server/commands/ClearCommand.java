@@ -21,8 +21,7 @@ public class ClearCommand extends Command {
     public String execute(CommandController commandController, String[] args)
             throws IOException, IncorrectArgumentException {
         try {
-            commandController.getDataController().getDataBaseController().clearAll(args[0]);
-            commandController.getDataController().refreshMap();
+            commandController.getDataController().clearMap(args[0]);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IncorrectArgumentException("не удалось удалить данные из базы данных");

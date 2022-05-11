@@ -25,7 +25,7 @@ public class InsertCommand extends Command {
     public String execute(CommandController commandController, String[] args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
         Long id = Long.parseLong(args[1]);
-        if (!City.checkUniqueID(id, commandController.getDataController().getMap()))
+        if (!commandController.getDataController().checkUniqueID(id))
             throw new IncorrectArgumentException("элемент с таким id уже существует в коллекции");
         commandController.getConnectionController().getRequestController().sendOK();
         City city = commandController.getConnectionController().getRequestController().receiveCity();
@@ -33,12 +33,11 @@ public class InsertCommand extends Command {
             throw new IncorrectArgumentException("город не был создан");
         city.setId(id);
         try {
-            commandController.getDataController().getDataBaseController().addCity(city, "hello");
+            commandController.getDataController().addCity(city, args[0]);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IncorrectArgumentException("не удалось добавить город в базу данных");
         }
-        commandController.getDataController().putCityToMap(city);
         commandController.getDataController().updateModificationTime();
         return "Город был добавлен в коллекцию.\n";
     }

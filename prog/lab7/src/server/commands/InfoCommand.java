@@ -17,6 +17,7 @@ public class InfoCommand extends Command {
     @Override
     public String execute(CommandController commandController, String[] args) {
         StringBuilder data = new StringBuilder();
+        commandController.getDataController().readLock();
         data.append("Информация о коллекции").append("\n");
         data.append("Ключом выступает поле id").append("\n");
         data.append("Время модификации коллекции: ").append(
@@ -27,6 +28,7 @@ public class InfoCommand extends Command {
             data.append(id).append(" ");
         });
         data.append("\n");
+        commandController.getDataController().readUnlock();
         return data.toString();
     }
 

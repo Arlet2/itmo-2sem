@@ -100,17 +100,6 @@ public class City implements Comparable<City>, Serializable {
     }
 
     /**
-     * Checking unique of the giving id in the giving collection
-     *
-     * @param id  city id for check
-     * @param map collection where we'll check
-     * @return <b>true</b> if id in collection is unique <p>else <b>false</b>
-     */
-    public static boolean checkUniqueID(final Long id, final HashMap<Long, City> map) {
-        return !map.containsKey(id);
-    }
-
-    /**
      * Get id of this city
      */
     public Long getId() {

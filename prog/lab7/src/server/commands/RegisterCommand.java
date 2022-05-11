@@ -21,7 +21,7 @@ public class RegisterCommand extends Command {
         String salt = PasswordManager.generateSalt();
         try {
             password = PasswordManager.createHash(args[2] + salt);
-            commandController.getDataController().getDataBaseController().createUser(args[1], password, salt);
+            commandController.getDataController().createUser(args[1], password, salt);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IncorrectArgumentException("Пользователь с таким логином уже существует.");

@@ -25,7 +25,7 @@ public class UpdateCommand extends Command {
     public String execute(CommandController commandController, String[] args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
         Long id = Long.parseLong(args[1]);
-        if (City.checkUniqueID(id, commandController.getDataController().getMap()))
+        if (commandController.getDataController().checkUniqueID(id))
             throw new IncorrectArgumentException("элемента с таким id не существует");
         try {
             if (!commandController.getDataController().getDataBaseController().isOwner(args[0], id))
@@ -37,8 +37,7 @@ public class UpdateCommand extends Command {
                 throw new IncorrectArgumentException("город не был создан");
             city.setId(id);
             deleteNullValues(commandController.getDataController().getMap().get(id), city);
-            commandController.getDataController().getDataBaseController().updateCity(city);
-            commandController.getDataController().putCityToMap(city);
+            commandController.getDataController().updateCity(city);
             commandController.getDataController().updateModificationTime();
             return "Элемент с id " + id + " был обновлён.\n";
         } catch (SQLException e) {

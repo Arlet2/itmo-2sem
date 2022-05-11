@@ -23,13 +23,12 @@ public class RemoveKeyCommand extends Command {
     @Override
     public String execute(CommandController commandController, String[] args) throws IncorrectArgumentException {
         long id = Long.parseLong(args[1]);
-        if (City.checkUniqueID(id, commandController.getDataController().getMap()))
+        if (commandController.getDataController().checkUniqueID(id))
             throw new IncorrectArgumentException("элемента с таким id не существует");
         try {
             if (!commandController.getDataController().getDataBaseController().isOwner(args[0], id))
                 return "Вы не владеете этим объектом и не можете его удалить.\n";
-            commandController.getDataController().getDataBaseController().removeCity(id);
-            commandController.getDataController().getMap().remove(id);
+            commandController.getDataController().removeCity(id);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IncorrectArgumentException("не удалось удалить элемент из базы данных");
