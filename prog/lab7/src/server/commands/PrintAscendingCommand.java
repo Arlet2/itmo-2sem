@@ -1,5 +1,7 @@
 package server.commands;
 
+import server.connection_control.User;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PrintAscendingCommand extends Command {
@@ -14,7 +16,7 @@ public class PrintAscendingCommand extends Command {
      * @param args              for command from console input (args[0] is program name)
      */
     @Override
-    public String execute(CommandController commandController, String[] args) {
+    public String execute(User user, CommandController commandController, String[] args) {
         if (commandController.getDataController().isMapEmpty()) {
             return "Коллекция пуста.\n";
         }

@@ -1,5 +1,7 @@
 package server.commands;
 
+import server.connection_control.User;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -15,10 +17,10 @@ public class HelpCommand extends Command {
      * @param args              for command from console input (args[0] is program name)
      */
     @Override
-    public String execute(CommandController commandController, String[] args) throws IOException {
+    public String execute(User user, CommandController commandController, String[] args) throws IOException {
         StringBuilder data = new StringBuilder();
         ArrayList<Command> commands;
-        if (!args[0].equals("help"))
+        if (user != null)
             commands = commandController.getAllCommands();
         else
             commands = commandController.getAuthCommands();

@@ -2,6 +2,7 @@ package server.commands;
 
 import connect_utils.CommandInfo;
 import exceptions.IncorrectArgumentException;
+import server.connection_control.User;
 import server.data_control.PasswordManager;
 
 import java.io.IOException;
@@ -18,9 +19,9 @@ public class LoginCommand extends Command {
     }
 
     @Override
-    public String execute(CommandController commandController, String[] args) throws IncorrectArgumentException,
+    public String execute(User user, CommandController commandController, String[] args) throws IncorrectArgumentException,
             IOException, ClassNotFoundException {
-        if (!args[0].equals("login"))
+        if (user!=null)
             return "Вы уже авторизованы.\n" +
                     "Для смены пользователя нужно переподключение.\n";
         try {

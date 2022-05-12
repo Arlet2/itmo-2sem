@@ -16,21 +16,11 @@ import java.util.logging.Level;
  * controls connections with users
  */
 public class ConnectionController {
-    /**
-     * current socket with user
-     */
-    private Socket socket;
 
     /**
      * socket's factory
      */
     private ServerSocket serverSocket;
-
-    /**
-     * check current connection with user
-     * can be true if connection will be interrupted
-     */
-    private boolean isConnected = false;
 
     /**
      * current port where server is located
@@ -74,12 +64,11 @@ public class ConnectionController {
      *
      * @throws IOException if connection was failed
      */
-    public void connect() throws IOException {
-        isConnected = false;
-        socket = serverSocket.accept();
+    public Socket connect() throws IOException {
+        Socket socket = serverSocket.accept();
         Logger.getLogger().log(Level.INFO, "Принято подключение от клиента "
                 + socket.getInetAddress() + ":" + socket.getLocalPort() + ".");
-        isConnected = true;
+        return socket;
     }
 
     /**
@@ -89,7 +78,7 @@ public class ConnectionController {
      * @throws IOException            if receiving is failed
      * @throws ClassNotFoundException if object can't be serialized
      */
-    protected Object receiveObject() throws IOException, ClassNotFoundException {
+    protected Object receiveObject(Socket socket) throws IOException, ClassNotFoundException {
         return new ObjectInputStream(socket.getInputStream()).readObject();
     }
 
@@ -100,23 +89,23 @@ public class ConnectionController {
      * @param request that was sent to client
      * @throws IOException if sending is failed
      */
-    protected void sendRequest(Request request) throws IOException {
+    protected void sendRequest(Socket socket, Request request) throws IOException {
         final int byteSize = 2048; // 2048
         if (request.getMsgBytes().length > byteSize) {
             int parts = request.getMsg().getBytes().length / byteSize;
             for (int partCount = 0; partCount < parts; partCount++) {
-                sendObject(new Request(Request.RequestCode.PART_OF_DATE,
+                sendObject(socket, new Request(Request.RequestCode.PART_OF_DATE,
                         Arrays.copyOfRange(request.getMsg().getBytes(), byteSize * partCount,
                                 (partCount + 1) * byteSize)));
                 requestController.receiveOK();
             }
             if (request.getMsg().getBytes().length % byteSize != 0)
-                sendObject(new Request(Request.RequestCode.PART_OF_DATE, Arrays.copyOfRange(request.getMsg().getBytes(),
+                sendObject(socket, new Request(Request.RequestCode.PART_OF_DATE, Arrays.copyOfRange(request.getMsg().getBytes(),
                         parts * byteSize, request.getMsgBytes().length)));
             requestController.receiveOK();
-            sendRequest(new Request(request.getRequestCode(), ""));
+            sendRequest(socket, new Request(request.getRequestCode(), ""));
         } else
-            sendObject(request);
+            sendObject(socket, request);
     }
 
     /**
@@ -125,7 +114,7 @@ public class ConnectionController {
      * @param object that need to send to client
      * @throws IOException if sending is failed
      */
-    protected void sendObject(Object object) throws IOException {
+    protected void sendObject(Socket socket, Object object) throws IOException {
         ObjectOutputStream objOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
         objOut.writeObject(object);
         objOut.flush();
@@ -134,20 +123,14 @@ public class ConnectionController {
     /**
      * Close connection with client
      *
-     * @throws IOException if something wrong with connection
      */
-    public void disconnect() throws IOException {
-        if (socket != null)
-            socket.close();
-        isConnected = false;
-    }
+    public static void disconnect(Socket socket) {
+        try {
+            if (socket != null)
+                socket.close();
+        } catch (IOException e) {
 
-    public Socket getSocket() {
-        return socket;
-    }
-
-    public boolean isConnected() {
-        return isConnected;
+        }
     }
 
     public CommandController getCommandController() {

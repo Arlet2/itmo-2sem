@@ -1,5 +1,7 @@
 package server.commands;
 
+import server.connection_control.User;
+
 public class PrintFieldAscendingGovernment extends Command {
     PrintFieldAscendingGovernment() {
         super("print_field_ascending_government", "",
@@ -13,7 +15,7 @@ public class PrintFieldAscendingGovernment extends Command {
      * @param args              for command from console input (args[0] is program name)
      */
     @Override
-    public String execute(CommandController commandController, String[] args) {
+    public String execute(User user, CommandController commandController, String[] args) {
         StringBuilder data = new StringBuilder();
         commandController.getDataController().readLock();
         commandController.getDataController().getMap().values().stream().sorted((o1, o2) -> {

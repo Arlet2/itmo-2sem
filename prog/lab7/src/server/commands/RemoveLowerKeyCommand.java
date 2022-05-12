@@ -3,6 +3,7 @@ package server.commands;
 import connect_utils.CommandInfo;
 import data_classes.City;
 import exceptions.IncorrectArgumentException;
+import server.connection_control.User;
 
 import java.sql.SQLException;
 
@@ -22,13 +23,15 @@ public class RemoveLowerKeyCommand extends Command {
      * @throws IncorrectArgumentException if id is incorrect
      */
     @Override
-    public String execute(CommandController commandController, String[] args) throws IncorrectArgumentException {
+    public String execute(User user, CommandController commandController, String[] args)
+            throws IncorrectArgumentException {
         long id = Long.parseLong(args[1]);
         boolean isMapModified = false;
         for (City city : commandController.getDataController().getMap().values()) {
             if (city.getId() < id) {
                 try {
-                    if (!commandController.getDataController().getDataBaseController().isOwner(args[0], city.getId()))
+                    if (!commandController.getDataController().getDataBaseController()
+                            .isOwner(user.getLogin(), city.getId()))
                         continue;
                     commandController.getDataController().removeCity(city.getId());
                     isMapModified = true;

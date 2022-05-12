@@ -2,6 +2,7 @@ package server.commands;
 
 import connect_utils.*;
 import exceptions.IncorrectArgumentException;
+import server.connection_control.User;
 
 import java.io.IOException;
 
@@ -29,11 +30,11 @@ public class ExecuteScriptCommand extends Command {
      * @throws IncorrectArgumentException if file_name if empty/file doesn't exist
      */
     @Override
-    public String execute(CommandController commandController, String[] args) throws IncorrectArgumentException,
+    public String execute(User user, CommandController commandController, String[] args) throws IncorrectArgumentException,
             IOException, ClassNotFoundException {
         commandController.getConnectionController().getRequestController().sendOK();
         Request request = commandController.getConnectionController().getRequestController().receiveRequest();
-        Command command = null;
+        Command command;
         String[] cArgs;
         while (!request.getRequestCode().equals(Request.RequestCode.OK)) {
             cArgs = request.getMsg().split(" ");
@@ -46,7 +47,7 @@ public class ExecuteScriptCommand extends Command {
                             .sendError("Глубина рекурсии слишком большая (рекурсия может быть глубиной до "
                                     + RECURSION_INTERRUPT + ".\nВыход из рекурсии..");
                 }
-                commandController.invoke(command, cArgs);
+                commandController.invoke(user, command, cArgs);
             }
             request = commandController.getConnectionController().getRequestController().receiveRequest();
         }

@@ -3,8 +3,6 @@ package server.commands;
 import data_classes.City;
 import data_classes.Coordinates;
 import connect_utils.CommandInfo;
-import exceptions.IncorrectArgumentException;
-import exceptions.MissingArgumentException;
 
 /**
  * abstract class for all commands
@@ -59,30 +57,6 @@ public abstract class Command implements Executable {
         this.sendInfo = sendInfo;
         this.argInfo = argInfo;
         this.isServerCommand = isServerCommand;
-    }
-
-    /**
-     * Validate id as argument in command
-     *
-     * @param args of command that enter
-     * @return id from args
-     * @throws IncorrectArgumentException if id is incorrect in args
-     * @throws MissingArgumentException   if id is missing in args
-     */
-    protected long idValidator(String[] args) throws IncorrectArgumentException, MissingArgumentException {
-        if (args.length < 2)
-            throw new MissingArgumentException("id");
-        if (args[1].isEmpty())
-            throw new MissingArgumentException("id");
-        long id;
-        try {
-            id = Long.parseLong(args[1]);
-        } catch (NumberFormatException e) {
-            throw new IncorrectArgumentException("id - целое число");
-        }
-        if (id <= 0)
-            throw new IncorrectArgumentException("id - число больше 0");
-        return id;
     }
 
     /**

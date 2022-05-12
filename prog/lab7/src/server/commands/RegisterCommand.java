@@ -2,6 +2,7 @@ package server.commands;
 
 import connect_utils.CommandInfo;
 import exceptions.IncorrectArgumentException;
+import server.connection_control.User;
 import server.data_control.PasswordManager;
 
 import java.io.IOException;
@@ -15,7 +16,7 @@ public class RegisterCommand extends Command {
     }
 
     @Override
-    public String execute(CommandController commandController, String[] args)
+    public String execute(User user, CommandController commandController, String[] args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
         String password;
         String salt = PasswordManager.generateSalt();
@@ -26,7 +27,7 @@ public class RegisterCommand extends Command {
             e.printStackTrace();
             throw new IncorrectArgumentException("Пользователь с таким логином уже существует.");
         }
-        if (!args[0].equals("register"))
+        if (user != null)
             return "Был зарегистрирован новый пользователь.\n" +
                     "Ваш логин остался без изменения. Для смены пользователя переподключитесь.\n";
         return "Вы были успешно зарегистрированы и авторизованы.\n";

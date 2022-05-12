@@ -1,5 +1,7 @@
 package server.commands;
 
+import server.connection_control.User;
+
 import java.time.LocalDateTime;
 
 public class InfoCommand extends Command {
@@ -15,7 +17,7 @@ public class InfoCommand extends Command {
      * @param args              for command from console input (args[0] is program name)
      */
     @Override
-    public String execute(CommandController commandController, String[] args) {
+    public String execute(User user, CommandController commandController, String[] args) {
         StringBuilder data = new StringBuilder();
         commandController.getDataController().readLock();
         data.append("Информация о коллекции").append("\n");

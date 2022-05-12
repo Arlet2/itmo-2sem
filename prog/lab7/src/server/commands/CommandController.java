@@ -4,24 +4,25 @@ import exceptions.ConfigFileNotFoundException;
 import server.Logger;
 import server.connection_control.ConnectionController;
 import connect_utils.*;
+import server.connection_control.User;
 import server.data_control.DataController;
 import exceptions.IncorrectArgumentException;
 import exceptions.MissingArgumentException;
 import exceptions.UnknownCommandException;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 /**
  * controls execution of all commands
  */
 public class CommandController {
-    /**
-     * max value of commands for keep in history
-     */
-    protected static final int MAX_COMMANDS_IN_HISTORY = 13;
+
+    public static final int MAX_COMMANDS_IN_HISTORY = 13;
 
     /**
      * that controls data for program
@@ -34,28 +35,21 @@ public class CommandController {
     private final ConnectionController connectionController;
 
     /**
-     * history of all commands that was used
-     */
-    private final ArrayList<Command> history = new ArrayList<>();
-    ;
-
-    /**
      * collection of all commands that user can use
      */
     private final ArrayList<Command> allCommands = new ArrayList<>();
-    ;
 
     /**
      * collection of data about all commands that will send to user
      */
     private final ArrayList<CommandInfo> allCommandsInfo = new ArrayList<>();
-    ;
 
     /**
      *
      */
     private final ArrayList<Command> authCommands = new ArrayList<>();
-    ;
+
+    private final HashMap<String, ArrayList<Command>> history = new HashMap<>();
 
     /**
      * Create program working class
@@ -84,17 +78,20 @@ public class CommandController {
      * Wait creating connection from user
      */
     private void processClient() {
-        while (true) {
-            Logger.getLogger().log(Level.INFO, "Ожидание подключение клиента...");
-            history.clear();
-            try {
-                connectionController.connect();
-                connectionController.getRequestController().sendCommandList(allCommandsInfo);
-            } catch (IOException e) {
-                Logger.getLogger().log(Level.WARNING, "Ошибка попытки соединения с клиентом.");
-            }
-            listenRequests();
+        //Logger.getLogger().log(Level.INFO, "Ожидание подключение клиента...");
+        Socket socket;
+        try {
+            socket = connectionController.connect();
+            connectionController.getRequestController().sendCommandList(allCommandsInfo);
+        } catch (IOException e) {
+            Logger.getLogger().log(Level.WARNING, "Ошибка попытки соединения с клиентом.");
+            return;
         }
+        String login = clientAuth();
+        if (login == null)
+            return;
+        history.put(login, new ArrayList<>());
+        listenRequests(new User(socket, login));
     }
 
     /**
@@ -145,7 +142,7 @@ public class CommandController {
                     args = request.getMsg().split(" ");
                     Command command = searchCommand(args[0]);
                     if (authCommands.contains(command))
-                        invoke(searchCommand(args[0]), args);
+                        invoke(null, searchCommand(args[0]), args);
                     else {
                         connectionController.getRequestController().sendError("Доступ запрещен " +
                                 "неавторизованным пользователям.\nИспользуйте команды login или register " +
@@ -176,14 +173,11 @@ public class CommandController {
     /**
      * Use when connection with user exists. Listen request from user and execute command from one.
      */
-    private void listenRequests() {
-        String login = clientAuth();
-        if (login == null)
-            return;
+    private void listenRequests(User user) {
         String[] input;
         Request request;
         Command command;
-        while (connectionController.isConnected()) {
+        while (user.isConnected()) {
             try {
                 request = connectionController.getRequestController().receiveRequest();
                 if (!request.getRequestCode().equals(Request.RequestCode.COMMAND)) {
@@ -201,8 +195,7 @@ public class CommandController {
             try {
                 try {
                     command = searchCommand(input[0].toLowerCase());
-                    input[0] = login;
-                    invoke(command, input);
+                    invoke(user, command, input);
                 } catch (IncorrectArgumentException e) {
                     Logger.getLogger().log(Level.WARNING, "Некорректный аргумент: " + e.getMessage());
                     connectionController.getRequestController().sendError("получен некорректный аргумент команды - " + e.getMessage());
@@ -217,7 +210,7 @@ public class CommandController {
                 break;
             }
         }
-        if (connectionController.isConnected())
+        if (user.isConnected())
             Logger.getLogger().log(Level.WARNING, "Ошибка подключения с клиентом. Сброс соединения...");
     }
 
@@ -228,30 +221,18 @@ public class CommandController {
      * @param args    for this command
      * @throws IncorrectArgumentException if requiring args is incorrect
      */
-    protected void invoke(final Command command, final String[] args) throws IncorrectArgumentException, IOException, ClassNotFoundException {
+    protected void invoke(User user, final Command command, final String[] args) throws IncorrectArgumentException, IOException, ClassNotFoundException {
         Logger.getLogger().log(Level.INFO, "Получена команда " + command.getName());
-        addToHistory(command);
-        String reply = command.execute(this, args);
+        addCommandToHistory(user.getLogin(), command);
+        String reply = command.execute(user, this, args);
         if (reply != null) {
             Logger.getLogger().log(Level.INFO, "Отправлен ответ клиенту.");
             connectionController.getRequestController().sendReply(reply);
         }
     }
 
-    /**
-     * Add command to history and if history is overflow delete first command
-     *
-     * @param command that be added to history
-     */
-    private void addToHistory(Command command) {
-        if (history.size() == MAX_COMMANDS_IN_HISTORY) {
-            history.remove(0);
-        }
-        history.add(command);
-    }
-
-    protected ArrayList<Command> getHistory() {
-        return history;
+    public ArrayList<Command> getHistory(String login) {
+        return history.get(login);
     }
 
     /**
@@ -267,6 +248,13 @@ public class CommandController {
                 return i;
         }
         throw new UnknownCommandException();
+    }
+
+    public void addCommandToHistory(String login, Command command) {
+        if (history.get(login).size() == MAX_COMMANDS_IN_HISTORY) {
+            history.get(login).remove(0);
+        }
+        history.get(login).add(command);
     }
 
     public DataController getDataController() {

@@ -3,6 +3,7 @@ package server.commands;
 import connect_utils.CommandInfo;
 import data_classes.City;
 import exceptions.IncorrectArgumentException;
+import server.connection_control.User;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -24,13 +25,13 @@ public class ReplaceIfGreaterCommand extends Command {
      * @throws IncorrectArgumentException if id is incorrect
      */
     @Override
-    public String execute(CommandController commandController, String[] args)
+    public String execute(User user, CommandController commandController, String[] args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
         long id = Long.parseLong(args[1]);
         if (commandController.getDataController().checkUniqueID(id))
             throw new IncorrectArgumentException("элемента с данным id не существует");
         try {
-            if (!commandController.getDataController().getDataBaseController().isOwner(args[0], id))
+            if (!commandController.getDataController().getDataBaseController().isOwner(user.getLogin(), id))
                 throw new IncorrectArgumentException("вы не владеете этим элементом. Вы не можете изменять его.");
 
             commandController.getConnectionController().getRequestController().sendOK();

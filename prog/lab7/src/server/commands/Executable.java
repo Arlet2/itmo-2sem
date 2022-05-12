@@ -1,6 +1,7 @@
 package server.commands;
 
 import exceptions.IncorrectArgumentException;
+import server.connection_control.User;
 
 import java.io.IOException;
 
@@ -16,6 +17,6 @@ public interface Executable {
      * @param args              for command from console input (args[0] is program name)
      * @throws IncorrectArgumentException if requiring args is incorrect
      */
-    String execute(CommandController commandController, String[] args) throws IncorrectArgumentException,
+    String execute(User user, CommandController commandController, String[] args) throws IncorrectArgumentException,
             IOException, ClassNotFoundException;
 }

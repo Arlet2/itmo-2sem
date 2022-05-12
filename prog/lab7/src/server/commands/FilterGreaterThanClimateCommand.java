@@ -4,6 +4,7 @@ import connect_utils.CommandInfo;
 import data_classes.City;
 import data_classes.Climate;
 import exceptions.IncorrectArgumentException;
+import server.connection_control.User;
 
 import java.io.IOException;
 
@@ -22,7 +23,7 @@ public class FilterGreaterThanClimateCommand extends Command {
      * @throws IncorrectArgumentException if climate is incorrect
      */
     @Override
-    public String execute(CommandController commandController, String[] args)
+    public String execute(User user, CommandController commandController, String[] args)
             throws IncorrectArgumentException, IOException {
         Climate climate = null;
         for (Climate i : Climate.values()) {

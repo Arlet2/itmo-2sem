@@ -1,6 +1,7 @@
 package server.commands;
 
 import data_classes.City;
+import server.connection_control.User;
 
 public class ShowCommand extends Command {
     ShowCommand() {
@@ -14,7 +15,7 @@ public class ShowCommand extends Command {
      * @param args              for command from console input (args[0] is program name)
      */
     @Override
-    public String execute(CommandController commandController, String[] args) {
+    public String execute(User user, CommandController commandController, String[] args) {
         if (commandController.getDataController().isMapEmpty()) {
             return "Коллекция пуста.\n";
         }
