@@ -394,7 +394,4 @@ public class ConsoleController {
         return LocalTime.of(hour, minute);
     }
 
-    public CommandController getCommandController() {
-        return commandController;
-    }
 }

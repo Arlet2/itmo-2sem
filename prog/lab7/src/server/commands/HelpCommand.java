@@ -13,17 +13,17 @@ public class HelpCommand extends Command {
     /**
      * print name, signature, description for all command
      *
-     * @param commandController that uses for program
+     * @param programController that uses for program
      * @param args              for command from console input (args[0] is program name)
      */
     @Override
-    public String execute(User user, CommandController commandController, String[] args) throws IOException {
+    public String execute(User user, ProgramController programController, String[] args) throws IOException {
         StringBuilder data = new StringBuilder();
         ArrayList<Command> commands;
-        if (user != null)
-            commands = commandController.getAllCommands();
+        if (user.getLogin() != null)
+            commands = programController.getAllCommands();
         else
-            commands = commandController.getAuthCommands();
+            commands = programController.getAuthCommands();
         commands.forEach(command -> {
             if (!command.isServerCommand())
                 data.append(String.format("%-50s - %-1s %n", command.getName() + " " + command.getSignature(),

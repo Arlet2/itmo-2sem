@@ -25,34 +25,39 @@ public class ExecuteScriptCommand extends Command {
     /**
      * execute script from file
      *
-     * @param commandController that uses for program
+     * @param programController that uses for program
      * @param args              file name
      * @throws IncorrectArgumentException if file_name if empty/file doesn't exist
      */
     @Override
-    public String execute(User user, CommandController commandController, String[] args) throws IncorrectArgumentException,
+    public String execute(User user, ProgramController programController, String[] args)
+            throws IncorrectArgumentException,
             IOException, ClassNotFoundException {
-        commandController.getConnectionController().getRequestController().sendOK();
-        Request request = commandController.getConnectionController().getRequestController().receiveRequest();
+        programController.getConnectionController().getRequestController().sendOK(user.getSocket());
+        Request request = programController.getConnectionController().getRequestController()
+                .receiveRequest(user.getSocket());
         Command command;
         String[] cArgs;
         while (!request.getRequestCode().equals(Request.RequestCode.OK)) {
             cArgs = request.getMsg().split(" ");
-            command = commandController.searchCommand(cArgs[0]);
+            command = programController.searchCommand(cArgs[0]);
             if (command != null) {
                 if (command.getName().equals("execute_script"))
                     recursionCounter++;
                 if (recursionCounter >= RECURSION_INTERRUPT) {
-                    commandController.getConnectionController().getRequestController()
-                            .sendError("Глубина рекурсии слишком большая (рекурсия может быть глубиной до "
+                    programController.getConnectionController().getRequestController()
+                            .sendError(user.getSocket(), "Глубина рекурсии слишком большая " +
+                                    "(рекурсия может быть глубиной до "
                                     + RECURSION_INTERRUPT + ".\nВыход из рекурсии..");
                 }
-                commandController.invoke(user, command, cArgs);
+                programController.invoke(user, command, cArgs);
             }
-            request = commandController.getConnectionController().getRequestController().receiveRequest();
+            request = programController.getConnectionController().getRequestController()
+                    .receiveRequest(user.getSocket());
         }
         recursionCounter = 0;
-        commandController.getConnectionController().getRequestController().sendOK();
+        programController.getConnectionController().getRequestController()
+                .sendOK(user.getSocket());
         return null;
     }
 

@@ -7,7 +7,6 @@ import java.util.Random;
 
 public class PasswordManager {
     public static boolean checkPasswords(String password, String salt, String hashPassword) {
-        System.out.println((password + salt) + " " + createHash(password + salt) + " " + hashPassword);
         return createHash(password + salt).equals(hashPassword);
     }
 

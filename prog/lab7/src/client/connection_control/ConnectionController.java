@@ -16,10 +16,6 @@ import java.nio.channels.SocketChannel;
  * Control connection with server
  */
 public class ConnectionController {
-    /**
-     * Current program controller
-     */
-    private final CommandController commandController;
 
     /**
      * Current channel with server
@@ -46,8 +42,7 @@ public class ConnectionController {
      */
     public ConnectionController(CommandController controller) throws MissingArgumentException,
             ConfigFileNotFoundException, ConnectionException {
-        this.commandController = controller;
-        address = commandController.getFileController().readConfig();
+        address = controller.getFileController().readConfig();
         try {
             selector = Selector.open();
             openChannel();
@@ -148,14 +143,6 @@ public class ConnectionController {
 
     public SocketChannel getChannel() {
         return channel;
-    }
-
-    public Selector getSelector() {
-        return selector;
-    }
-
-    public CommandController getCommandController() {
-        return commandController;
     }
 
     public RequestController getRequestController() {

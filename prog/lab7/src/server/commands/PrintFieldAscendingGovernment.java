@@ -11,14 +11,14 @@ public class PrintFieldAscendingGovernment extends Command {
     /**
      * print field government from all cities
      *
-     * @param commandController that uses for program
+     * @param programController that uses for program
      * @param args              for command from console input (args[0] is program name)
      */
     @Override
-    public String execute(User user, CommandController commandController, String[] args) {
+    public String execute(User user, ProgramController programController, String[] args) {
         StringBuilder data = new StringBuilder();
-        commandController.getDataController().readLock();
-        commandController.getDataController().getMap().values().stream().sorted((o1, o2) -> {
+        programController.getDataController().readLock();
+        programController.getDataController().getMap().values().stream().sorted((o1, o2) -> {
             if (o1.getGovernment() == null && o2.getGovernment() == null)
                 return 0;
             if (o1.getGovernment() == null)
@@ -28,7 +28,7 @@ public class PrintFieldAscendingGovernment extends Command {
             return Integer.compare(o1.getGovernment().ordinal() - o2.getGovernment().ordinal(), 0);
         }).forEach(city -> data.append("id ").append(city.getId()).append(": ")
                 .append(city.getGovernmentString()).append("\n"));
-        commandController.getDataController().readUnlock();
+        programController.getDataController().readUnlock();
         return data.toString();
     }
 }

@@ -18,12 +18,12 @@ public class FilterGreaterThanClimateCommand extends Command {
     /**
      * print elements that have got climate that greater than climate from args
      *
-     * @param commandController that uses for program
+     * @param programController that uses for program
      * @param args              climate
      * @throws IncorrectArgumentException if climate is incorrect
      */
     @Override
-    public String execute(User user, CommandController commandController, String[] args)
+    public String execute(User user, ProgramController programController, String[] args)
             throws IncorrectArgumentException, IOException {
         Climate climate = null;
         for (Climate i : Climate.values()) {
@@ -33,9 +33,9 @@ public class FilterGreaterThanClimateCommand extends Command {
             }
         }
         boolean isExist = false;
-        commandController.getDataController().readLock();
+        programController.getDataController().readLock();
         if (climate != null) {
-            for (City i : commandController.getDataController().getMap().values()) {
+            for (City i : programController.getDataController().getMap().values()) {
                 if (i.getClimate() == null)
                     continue;
                 if (i.getClimate().ordinal() > climate.ordinal()) {
@@ -43,22 +43,21 @@ public class FilterGreaterThanClimateCommand extends Command {
                     break;
                 }
             }
-        }
-        else
+        } else
             isExist = true;
         if (!isExist) {
             return "Таких элементов не существует в коллекции.\n";
         }
         StringBuilder data = new StringBuilder();
         Climate finalClimate = climate;
-        commandController.getDataController().getMap().values().forEach(city -> {
+        programController.getDataController().getMap().values().forEach(city -> {
             if (finalClimate == null && city.getClimate() != null)
                 data.append(city).append("\n");
             else if (city.getClimate() == null && finalClimate == null) ;
             else if (city.getClimate().ordinal() > finalClimate.ordinal())
                 data.append(city).append("\n");
         });
-        commandController.getDataController().readUnlock();
+        programController.getDataController().readUnlock();
         return data.toString();
     }
 }

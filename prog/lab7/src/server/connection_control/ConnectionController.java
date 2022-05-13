@@ -2,9 +2,9 @@ package server.connection_control;
 
 import exceptions.ConfigFileNotFoundException;
 import server.Logger;
-import server.commands.CommandController;
 import exceptions.MissingArgumentException;
 import connect_utils.Request;
+import server.data_control.FilesController;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -27,26 +27,18 @@ public class ConnectionController {
      */
     private final int port;
 
-    /**
-     * command controller that controls this program
-     */
-    private final CommandController commandController;
-
     private final RequestController requestController = new RequestController(this);
-    ;
 
     /**
      * Create new connection controller for connecting with users.
      * Reading config file with name "config.excalibbur" with connection's data
      * File need to have "port: *digits*"
      *
-     * @param commandController current controller
      * @throws MissingArgumentException if port couldn't find in config file
      */
-    public ConnectionController(CommandController commandController)
+    public ConnectionController()
             throws ConfigFileNotFoundException, MissingArgumentException {
-        this.commandController = commandController;
-        port = commandController.getDataController().getFilesController().readConfigPort();
+        port = FilesController.readConfigPort();
     }
 
     /**
@@ -56,7 +48,7 @@ public class ConnectionController {
      */
     public void start() throws IOException {
         serverSocket = new ServerSocket(port);
-        Logger.getLogger().log(Level.INFO, "Сервер запущен на порте " + port + ".");
+        Logger.getLogger().log(Level.INFO, "Сервер запущен на порте " + port + " и готов принимать клиентов.");
     }
 
     /**
@@ -97,12 +89,12 @@ public class ConnectionController {
                 sendObject(socket, new Request(Request.RequestCode.PART_OF_DATE,
                         Arrays.copyOfRange(request.getMsg().getBytes(), byteSize * partCount,
                                 (partCount + 1) * byteSize)));
-                requestController.receiveOK();
+                requestController.receiveOK(socket);
             }
             if (request.getMsg().getBytes().length % byteSize != 0)
                 sendObject(socket, new Request(Request.RequestCode.PART_OF_DATE, Arrays.copyOfRange(request.getMsg().getBytes(),
                         parts * byteSize, request.getMsgBytes().length)));
-            requestController.receiveOK();
+            requestController.receiveOK(socket);
             sendRequest(socket, new Request(request.getRequestCode(), ""));
         } else
             sendObject(socket, request);
@@ -122,19 +114,14 @@ public class ConnectionController {
 
     /**
      * Close connection with client
-     *
      */
     public static void disconnect(Socket socket) {
         try {
             if (socket != null)
                 socket.close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
 
         }
-    }
-
-    public CommandController getCommandController() {
-        return commandController;
     }
 
     public RequestController getRequestController() {

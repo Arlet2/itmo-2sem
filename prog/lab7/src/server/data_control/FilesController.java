@@ -10,13 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FilesController {
-    private final DataController dataController;
 
-    FilesController(DataController dataController) {
-        this.dataController = dataController;
-    }
-
-    public String readDBPassword() throws MissingArgumentException, ConfigFileNotFoundException {
+    public static String readDBPassword() throws MissingArgumentException, ConfigFileNotFoundException {
         Scanner scanner;
         try {
             scanner = new Scanner(new FileInputStream("db.con"));
@@ -36,7 +31,7 @@ public class FilesController {
                     "Добавьте в этот файл строку \"password: ***\"");
     }
 
-    public int readConfigPort() throws MissingArgumentException, ConfigFileNotFoundException {
+    public static int readConfigPort() throws MissingArgumentException, ConfigFileNotFoundException {
         Scanner scanner;
         try {
             scanner = new Scanner(new FileInputStream("config.excalibbur"));

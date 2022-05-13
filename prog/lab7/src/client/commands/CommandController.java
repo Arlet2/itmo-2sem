@@ -64,7 +64,7 @@ public class CommandController {
                 ":" + connectionController.getAddress().getPort() + "...");
         while (!connectionController.tryToConnect()) {
             System.out.println("Ошибка подключения к серверу. Попробовать снова? (y/n)");
-            if (!scanner.nextLine().toLowerCase().equals("y")) {
+            if (!scanner.nextLine().equalsIgnoreCase("y")) {
                 exit();
             }
             try {
@@ -116,7 +116,6 @@ public class CommandController {
                         processRequest(connectionController.getRequestController().receiveRequest());
                 } catch (IOException e) {
                     System.out.println("Ошибка получения запроса от сервера");
-                    e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     System.out.println("Получен некорректный ответ от сервера.");
                 }
@@ -203,7 +202,7 @@ public class CommandController {
         System.out.println("Завершение выполнения программы...");
         try {
             getConnectionController().disconnect();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
 
         }
         System.exit(0);

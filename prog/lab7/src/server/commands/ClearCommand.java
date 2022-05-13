@@ -15,19 +15,19 @@ public class ClearCommand extends Command {
      * Clear collection
      * <p>Change modification time</p>
      *
-     * @param commandController that uses for program
+     * @param programController that uses for program
      * @param args              for command from console input (args[0] is program name)
      */
     @Override
-    public String execute(User user, CommandController commandController, String[] args)
+    public String execute(User user, ProgramController programController, String[] args)
             throws IOException, IncorrectArgumentException {
         try {
-            commandController.getDataController().clearMap(user.getLogin());
+            programController.getDataController().clearMap(user.getLogin());
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IncorrectArgumentException("не удалось удалить данные из базы данных");
         }
-        commandController.getDataController().updateModificationTime();
+        programController.getDataController().updateModificationTime();
         return "Коллекция успешно очищена от ваших объектов.\n";
     }
 }

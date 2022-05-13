@@ -18,28 +18,28 @@ public class InsertCommand extends Command {
      * insert element with id in args
      * <p>Change modification time if command completes</p>
      *
-     * @param commandController that uses for program
+     * @param programController that uses for program
      * @param args              id
      * @throws IncorrectArgumentException if id is incorrect
      */
     @Override
-    public String execute(User user, CommandController commandController, String[] args)
+    public String execute(User user, ProgramController programController, String[] args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
         Long id = Long.parseLong(args[1]);
-        if (!commandController.getDataController().checkUniqueID(id))
+        if (!programController.getDataController().isUniqueId(id))
             throw new IncorrectArgumentException("элемент с таким id уже существует в коллекции");
-        commandController.getConnectionController().getRequestController().sendOK();
-        City city = commandController.getConnectionController().getRequestController().receiveCity();
+        programController.getConnectionController().getRequestController().sendOK(user.getSocket());
+        City city = programController.getConnectionController().getRequestController().receiveCity(user.getSocket());
         if (city == null)
             throw new IncorrectArgumentException("город не был создан");
         city.setId(id);
         try {
-            commandController.getDataController().addCity(city, user.getLogin());
+            programController.getDataController().addCity(city, user.getLogin());
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IncorrectArgumentException("не удалось добавить город в базу данных");
         }
-        commandController.getDataController().updateModificationTime();
+        programController.getDataController().updateModificationTime();
         return "Город был добавлен в коллекцию.\n";
     }
 }

@@ -19,15 +19,15 @@ public class LoginCommand extends Command {
     }
 
     @Override
-    public String execute(User user, CommandController commandController, String[] args) throws IncorrectArgumentException,
-            IOException, ClassNotFoundException {
-        if (user!=null)
+    public String execute(User user, ProgramController programController, String[] args)
+            throws IncorrectArgumentException, IOException, ClassNotFoundException {
+        if (user.getLogin() != null)
             return "Вы уже авторизованы.\n" +
                     "Для смены пользователя нужно переподключение.\n";
         try {
             if (!PasswordManager.checkPasswords(args[2],
-                    commandController.getDataController().getDataBaseController().getUserSalt(args[1]),
-                    commandController.getDataController().getDataBaseController().getUserPassword(args[1])))
+                    programController.getDataController().getDataBaseController().getUserSalt(args[1]),
+                    programController.getDataController().getDataBaseController().getUserPassword(args[1])))
                 throw new IncorrectArgumentException("неверный пароль пользователя");
         } catch (SQLException e) {
             e.printStackTrace();

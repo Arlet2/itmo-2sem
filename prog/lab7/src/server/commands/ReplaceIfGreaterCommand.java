@@ -20,31 +20,32 @@ public class ReplaceIfGreaterCommand extends Command {
      * replace all fields in element with id from args that be lower than new fields
      * <p>Modification time can be changed</p>
      *
-     * @param commandController that uses for program
+     * @param programController that uses for program
      * @param args              id
      * @throws IncorrectArgumentException if id is incorrect
      */
     @Override
-    public String execute(User user, CommandController commandController, String[] args)
+    public String execute(User user, ProgramController programController, String[] args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
         long id = Long.parseLong(args[1]);
-        if (commandController.getDataController().checkUniqueID(id))
+        if (programController.getDataController().isUniqueId(id))
             throw new IncorrectArgumentException("элемента с данным id не существует");
         try {
-            if (!commandController.getDataController().getDataBaseController().isOwner(user.getLogin(), id))
+            if (!programController.getDataController().getDataBaseController().isOwner(user.getLogin(), id))
                 throw new IncorrectArgumentException("вы не владеете этим элементом. Вы не можете изменять его.");
 
-            commandController.getConnectionController().getRequestController().sendOK();
-            City city = commandController.getConnectionController().getRequestController().receiveCity();
+            programController.getConnectionController().getRequestController().sendOK(user.getSocket());
+            City city = programController.getConnectionController().getRequestController()
+                    .receiveCity(user.getSocket());
             city.setId(id);
-            deleteNullValues(commandController.getDataController().getMap().get(id), city);
-            replaceCity(commandController.getDataController().getMap().get(id), city);
-            commandController.getDataController().updateCity(city);
+            deleteNullValues(programController.getDataController().getMap().get(id), city);
+            replaceCity(programController.getDataController().getMap().get(id), city);
+            programController.getDataController().updateCity(city);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IncorrectArgumentException("не удалось обновить элемент в базе данных");
         }
-        commandController.getDataController().updateModificationTime();
+        programController.getDataController().updateModificationTime();
         return "Значение элемента с id " + id + " было обновлено.\n";
 
     }

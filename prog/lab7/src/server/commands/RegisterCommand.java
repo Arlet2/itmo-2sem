@@ -16,18 +16,18 @@ public class RegisterCommand extends Command {
     }
 
     @Override
-    public String execute(User user, CommandController commandController, String[] args)
+    public String execute(User user, ProgramController programController, String[] args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
         String password;
         String salt = PasswordManager.generateSalt();
         try {
             password = PasswordManager.createHash(args[2] + salt);
-            commandController.getDataController().createUser(args[1], password, salt);
+            programController.getDataController().createUser(args[1], password, salt);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IncorrectArgumentException("Пользователь с таким логином уже существует.");
         }
-        if (user != null)
+        if (user.getLogin() != null)
             return "Был зарегистрирован новый пользователь.\n" +
                     "Ваш логин остался без изменения. Для смены пользователя переподключитесь.\n";
         return "Вы были успешно зарегистрированы и авторизованы.\n";

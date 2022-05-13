@@ -11,20 +11,20 @@ public class ShowCommand extends Command {
     /**
      * Print collection
      *
-     * @param commandController that uses for program
+     * @param programController that uses for program
      * @param args              for command from console input (args[0] is program name)
      */
     @Override
-    public String execute(User user, CommandController commandController, String[] args) {
-        if (commandController.getDataController().isMapEmpty()) {
+    public String execute(User user, ProgramController programController, String[] args) {
+        if (programController.getDataController().isMapEmpty()) {
             return "Коллекция пуста.\n";
         }
         StringBuilder data = new StringBuilder();
         int counter = 1;
-        commandController.getDataController().readLock();
-        for (City i : commandController.getDataController().getMap().values())
+        programController.getDataController().readLock();
+        for (City i : programController.getDataController().getMap().values())
             data.append("Город ").append(counter++).append("\n").append(i).append("\n");
-        commandController.getDataController().readUnlock();
+        programController.getDataController().readUnlock();
         return data.toString();
     }
 }

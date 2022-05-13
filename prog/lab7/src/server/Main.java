@@ -2,18 +2,24 @@ package server;
 
 import exceptions.ConfigFileNotFoundException;
 import exceptions.MissingArgumentException;
-import server.commands.CommandController;
+import server.commands.ProgramController;
 
 import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.logging.Level;
 
+/*
+   TODO: починить execute_script
+   TODO: проверить все команды
+   TODO: Написать javadoc
+ */
+
 public class Main {
     public static void main(String[] args) {
         Logger.createLogger();
-        final CommandController commandController;
+        final ProgramController programController;
         try {
-            commandController = new CommandController();
+            programController = new ProgramController();
         } catch (SQLException e) {
             Logger.getLogger().log(Level.WARNING, "Ошибка подключения к базе данных.");
             e.printStackTrace();
@@ -25,18 +31,21 @@ public class Main {
             Logger.getLogger().log(Level.WARNING, e.getMessage());
             return;
         }
-        new Thread(() -> {
+        Thread consoleListener = new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
             String input;
             while (true) {
                 input = scanner.nextLine().toLowerCase();
-                if (input.equals("exit")) {
-                    System.out.println("Отключение сервера...");
+                if (input.equals("stop")) {
+                    Logger.getLogger().log(Level.INFO, "Отключение сервера...");
+                    programController.stop();
                     System.exit(0);
                 } else
-                    System.out.println("Незнакомая команда. Попробуйте exit или help.");
+                    System.out.println("Незнакомая команда. Попробуйте stop");
             }
-        }).start(); // для закрытия сервака
-        commandController.start();
+        }); // для остановки сервера
+        consoleListener.setDaemon(true);
+        consoleListener.start();
+        programController.start();
     }
 }

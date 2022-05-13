@@ -13,24 +13,22 @@ public class InfoCommand extends Command {
      * Print information about collection:
      * <p>What is used as key, modification time, size, key set</p>
      *
-     * @param commandController that uses for program
+     * @param programController that uses for program
      * @param args              for command from console input (args[0] is program name)
      */
     @Override
-    public String execute(User user, CommandController commandController, String[] args) {
+    public String execute(User user, ProgramController programController, String[] args) {
         StringBuilder data = new StringBuilder();
-        commandController.getDataController().readLock();
+        programController.getDataController().readLock();
         data.append("Информация о коллекции").append("\n");
         data.append("Ключом выступает поле id").append("\n");
         data.append("Время модификации коллекции: ").append(
-                getDate(commandController.getDataController().getModificationTime())).append("\n");
-        data.append("Размер коллекции: ").append(commandController.getDataController().getMap().size()).append("\n");
+                getDate(programController.getDataController().getModificationTime())).append("\n");
+        data.append("Размер коллекции: ").append(programController.getDataController().getMap().size()).append("\n");
         data.append("Ключи коллекции:").append(" ");
-        commandController.getDataController().getMap().keySet().forEach(id -> {
-            data.append(id).append(" ");
-        });
+        programController.getDataController().getMap().keySet().forEach(id -> data.append(id).append(" "));
         data.append("\n");
-        commandController.getDataController().readUnlock();
+        programController.getDataController().readUnlock();
         return data.toString();
     }
 

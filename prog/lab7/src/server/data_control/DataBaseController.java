@@ -17,7 +17,7 @@ public class DataBaseController {
     DataBaseController(DataController dataController, String dbUrl, String dbUser) throws SQLException,
             MissingArgumentException, ConfigFileNotFoundException {
         this.dataController = dataController;
-        connection = DriverManager.getConnection(dbUrl, dbUser, dataController.getFilesController().readDBPassword());
+        connection = DriverManager.getConnection(dbUrl, dbUser, FilesController.readDBPassword());
     }
 
     public ArrayList<City> getAllCities() throws SQLException {
@@ -103,7 +103,7 @@ public class DataBaseController {
             id = result.getLong(1);
         } else {
             id = city.getId();
-            subPs = connection.prepareStatement("INSERT INTO coordinates(id, x, y) VALUES(?, ?, ?) RETURNING");
+            subPs = connection.prepareStatement("INSERT INTO coordinates(id, x, y) VALUES(?, ?, ?)");
             subPs.setLong(1, id);
             subPs.setFloat(2, city.getCoordinates().getX());
             subPs.setInt(3, city.getCoordinates().getY());

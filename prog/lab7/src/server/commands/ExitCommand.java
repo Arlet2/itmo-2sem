@@ -16,13 +16,14 @@ public class ExitCommand extends Command {
     /**
      * exit from command
      *
-     * @param commandController that uses for program
+     * @param programController that uses for program
      * @param args              for command from console input (args[0] is program name)
      */
     @Override
-    public String execute(User user, CommandController commandController, String[] args) throws IOException {
+    public String execute(User user, ProgramController programController, String[] args) throws IOException {
         user.disconnect();
-        Logger.getLogger().log(Level.INFO, "Пользователь "+user.getLogin()+" отключился от сервера.");
+        Logger.getLogger().log(Level.INFO, "Пользователь " +
+                (user.getLogin() == null ? user.getAddress() : user.getLogin()) + " отключился от сервера.");
         return null;
     }
 }

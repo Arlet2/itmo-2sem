@@ -18,22 +18,22 @@ public class RemoveLowerKeyCommand extends Command {
      * remove all elements with id that lower than id in args
      * <p>Modification time can be changed</p>
      *
-     * @param commandController that uses for program
+     * @param programController that uses for program
      * @param args              id
      * @throws IncorrectArgumentException if id is incorrect
      */
     @Override
-    public String execute(User user, CommandController commandController, String[] args)
+    public String execute(User user, ProgramController programController, String[] args)
             throws IncorrectArgumentException {
         long id = Long.parseLong(args[1]);
         boolean isMapModified = false;
-        for (City city : commandController.getDataController().getMap().values()) {
+        for (City city : programController.getDataController().getMap().values()) {
             if (city.getId() < id) {
                 try {
-                    if (!commandController.getDataController().getDataBaseController()
+                    if (!programController.getDataController().getDataBaseController()
                             .isOwner(user.getLogin(), city.getId()))
                         continue;
-                    commandController.getDataController().removeCity(city.getId());
+                    programController.getDataController().removeCity(city.getId());
                     isMapModified = true;
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -41,7 +41,7 @@ public class RemoveLowerKeyCommand extends Command {
             }
         }
         if (isMapModified) {
-            commandController.getDataController().updateModificationTime();
+            programController.getDataController().updateModificationTime();
             return "Коллекция была изменена.\n";
         }
         return "Коллекция осталась без изменений.\n";

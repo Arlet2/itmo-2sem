@@ -12,20 +12,20 @@ public class PrintAscendingCommand extends Command {
     /**
      * print sorted collection
      *
-     * @param commandController that uses for program
+     * @param programController that uses for program
      * @param args              for command from console input (args[0] is program name)
      */
     @Override
-    public String execute(User user, CommandController commandController, String[] args) {
-        if (commandController.getDataController().isMapEmpty()) {
+    public String execute(User user, ProgramController programController, String[] args) {
+        if (programController.getDataController().isMapEmpty()) {
             return "Коллекция пуста.\n";
         }
         StringBuilder data = new StringBuilder();
         AtomicInteger counter = new AtomicInteger(1);
-        commandController.getDataController().readLock();
-        commandController.getDataController().getMap().values().stream().sorted().forEach(city ->
+        programController.getDataController().readLock();
+        programController.getDataController().getMap().values().stream().sorted().forEach(city ->
                 data.append("Город ").append(counter.getAndIncrement()).append("\n").append(city).append("\n"));
-        commandController.getDataController().readUnlock();
+        programController.getDataController().readUnlock();
         return data.toString();
     }
 }

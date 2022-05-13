@@ -18,28 +18,30 @@ public class UpdateCommand extends Command {
     /**
      * update element with id from args by new from console input
      *
-     * @param commandController that uses for program
+     * @param programController that uses for program
      * @param args              id
      * @throws IncorrectArgumentException if id is incorrect
      */
     @Override
-    public String execute(User user, CommandController commandController, String[] args)
+    public String execute(User user, ProgramController programController, String[] args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
         Long id = Long.parseLong(args[1]);
-        if (commandController.getDataController().checkUniqueID(id))
+        if (programController.getDataController().isUniqueId(id))
             throw new IncorrectArgumentException("элемента с таким id не существует");
         try {
-            if (!commandController.getDataController().getDataBaseController().isOwner(user.getLogin(), id))
+            if (!programController.getDataController().getDataBaseController().isOwner(user.getLogin(), id))
                 throw new IncorrectArgumentException("вы не владеете этим объектом. Вы не можете его изменять.");
 
-            commandController.getConnectionController().getRequestController().sendOK();
-            City city = commandController.getConnectionController().getRequestController().receiveCity();
+            programController.getConnectionController().getRequestController()
+                    .sendOK(user.getSocket());
+            City city = programController.getConnectionController().getRequestController()
+                    .receiveCity(user.getSocket());
             if (city == null)
                 throw new IncorrectArgumentException("город не был создан");
             city.setId(id);
-            deleteNullValues(commandController.getDataController().getMap().get(id), city);
-            commandController.getDataController().updateCity(city);
-            commandController.getDataController().updateModificationTime();
+            deleteNullValues(programController.getDataController().getMap().get(id), city);
+            programController.getDataController().updateCity(city);
+            programController.getDataController().updateModificationTime();
             return "Элемент с id " + id + " был обновлён.\n";
         } catch (SQLException e) {
             e.printStackTrace();

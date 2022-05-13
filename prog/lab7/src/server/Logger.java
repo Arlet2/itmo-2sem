@@ -1,10 +1,12 @@
 package server;
 
-import server.commands.CommandController;
+import server.commands.ProgramController;
+import server.connection_control.User;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
 
 public class Logger {
@@ -21,7 +23,12 @@ public class Logger {
         } catch (IOException e) {
             System.out.println("Не удалось открыть файл конфигурации логгера.");
         }
-        logger = java.util.logging.Logger.getLogger(CommandController.class.getName());
+        logger = java.util.logging.Logger.getLogger(ProgramController.class.getName());
+    }
+
+    public static void logDisconnect(User user) {
+        Logger.getLogger().log(Level.WARNING,
+                "Потеряно соединение с клиентом " + (user.getLogin() == null ? user.getAddress() : user.getLogin()));
     }
 
     public static java.util.logging.Logger getLogger() {

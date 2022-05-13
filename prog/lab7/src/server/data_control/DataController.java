@@ -2,14 +2,12 @@ package server.data_control;
 
 import exceptions.ConfigFileNotFoundException;
 import exceptions.MissingArgumentException;
-import server.commands.CommandController;
 import data_classes.City;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.Predicate;
 
 /**
  * Control all data manipulations in files and console
@@ -26,22 +24,13 @@ public class DataController {
      */
     private final HashMap<Long, City> map;
 
-    /**
-     * that controls program's execution
-     */
-    private final CommandController commandController;
-
     private final DataBaseController dataBaseController;
-
-    private final FilesController filesController;
 
     ReentrantReadWriteLock mapLock = new ReentrantReadWriteLock();
     ReentrantReadWriteLock authLock = new ReentrantReadWriteLock();
 
-    public DataController(CommandController commandController) throws SQLException,
+    public DataController() throws SQLException,
             MissingArgumentException, ConfigFileNotFoundException {
-        this.commandController = commandController;
-        filesController = new FilesController(this);
         map = new HashMap<>();
         dataBaseController = new DataBaseController(this, "jdbc:postgresql://127.0.0.1:5432/postgres", "postgres");
         refreshMap();
@@ -50,9 +39,7 @@ public class DataController {
     public void refreshMap() throws SQLException {
         mapLock.writeLock().lock();
         map.clear();
-        dataBaseController.getAllCities().forEach(city -> {
-            map.put(city.getId(), city);
-        });
+        dataBaseController.getAllCities().forEach(city -> map.put(city.getId(), city));
         mapLock.writeLock().unlock();
     }
 
@@ -111,28 +98,23 @@ public class DataController {
         modificationTime = LocalDateTime.now();
         mapLock.writeLock().unlock();
     }
-    public boolean checkUniqueID(Long id) {
-        return map.containsKey(id);
+
+    public boolean isUniqueId(Long id) {
+        return !map.containsKey(id);
     }
+
     /**
      * Get modification time
      */
     public boolean isMapEmpty() {
         return map.isEmpty();
     }
+
     public LocalDateTime getModificationTime() {
         return modificationTime;
     }
 
-    public CommandController getCommandController() {
-        return commandController;
-    }
-
     public DataBaseController getDataBaseController() {
         return dataBaseController;
-    }
-
-    public FilesController getFilesController() {
-        return filesController;
     }
 }
