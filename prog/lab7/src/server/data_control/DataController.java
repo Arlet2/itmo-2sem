@@ -1,7 +1,6 @@
 package server.data_control;
 
 import exceptions.ConfigFileNotFoundException;
-import exceptions.MissingArgumentException;
 import data_classes.City;
 
 import java.sql.SQLException;

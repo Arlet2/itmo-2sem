@@ -23,7 +23,8 @@ public class FilesController {
             s.append(scanner.nextLine()).append("\n");
         }
         scanner.close();
-        Matcher matcher = Pattern.compile("(?<=password:\\s{0,10})[^\\s]+", Pattern.CASE_INSENSITIVE).matcher(s.toString());
+        Matcher matcher = Pattern.compile("(?<=password:\\s{0,10})[^\\s]+", Pattern.CASE_INSENSITIVE)
+                .matcher(s.toString());
         if (matcher.find())
             return s.substring(matcher.start(), matcher.end());
         else

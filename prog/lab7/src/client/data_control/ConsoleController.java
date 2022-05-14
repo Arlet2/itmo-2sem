@@ -17,11 +17,6 @@ import java.util.Scanner;
  * Control all console data entering by user
  */
 public class ConsoleController {
-    private final CommandController commandController;
-
-    public ConsoleController(CommandController controller) {
-        this.commandController = controller;
-    }
 
     /**
      * Get city from console input by user

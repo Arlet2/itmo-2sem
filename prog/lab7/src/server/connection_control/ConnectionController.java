@@ -92,8 +92,9 @@ public class ConnectionController {
                 requestController.receiveOK(socket);
             }
             if (request.getMsg().getBytes().length % byteSize != 0)
-                sendObject(socket, new Request(Request.RequestCode.PART_OF_DATE, Arrays.copyOfRange(request.getMsg().getBytes(),
-                        parts * byteSize, request.getMsgBytes().length)));
+                sendObject(socket, new Request(Request.RequestCode.PART_OF_DATE,
+                        Arrays.copyOfRange(request.getMsg().getBytes(),
+                                parts * byteSize, request.getMsgBytes().length)));
             requestController.receiveOK(socket);
             sendRequest(socket, new Request(request.getRequestCode(), ""));
         } else

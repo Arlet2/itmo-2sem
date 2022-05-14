@@ -55,7 +55,7 @@ public class ExecuteScriptCommand extends Command {
                     reply = programController.invoke(user, command, cArgs);
                 } catch (IncorrectArgumentException e) {
                     programController.getConnectionController().getRequestController()
-                            .sendError(user.getSocket(), "получен некорректный аргумент - "+e.getMessage());
+                            .sendError(user.getSocket(), "получен некорректный аргумент - " + e.getMessage());
                 } catch (IOException e) {
                     user.disconnect();
                     return null;

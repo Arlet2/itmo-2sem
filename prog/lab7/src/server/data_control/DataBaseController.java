@@ -114,8 +114,8 @@ public class DataBaseController {
         subPs.setString(3, city.getGovernor().getBirthday().toString());
         subPs.execute();
 
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO cities(id, name, coordinatesid, creationdate, " +
-                "area, population, metersabovesealevel, establishmentdate, climate, government, governor, owner)" +
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO cities(id, name, coordinatesid, creationdate, "
+                + "area, population, metersabovesealevel, establishmentdate, climate, government, governor, owner)" +
                 " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         ps.setLong(1, id);
         ps.setString(2, city.getName());

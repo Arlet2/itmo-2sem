@@ -7,7 +7,6 @@ import exceptions.NullValueException;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
 
 public class City implements Comparable<City>, Serializable {
     /**
