@@ -38,6 +38,7 @@ public class ExecuteScriptCommand extends Command {
                 .receiveRequest(user.getSocket());
         Command command;
         String[] cArgs;
+        String reply = null;
         while (!request.getRequestCode().equals(Request.RequestCode.OK)) {
             cArgs = request.getMsg().split(" ");
             command = programController.searchCommand(cArgs[0]);
@@ -50,7 +51,20 @@ public class ExecuteScriptCommand extends Command {
                                     "(рекурсия может быть глубиной до "
                                     + RECURSION_INTERRUPT + ".\nВыход из рекурсии..");
                 }
-                programController.invoke(user, command, cArgs);
+                try {
+                    reply = programController.invoke(user, command, cArgs);
+                } catch (IncorrectArgumentException e) {
+                    programController.getConnectionController().getRequestController()
+                            .sendError(user.getSocket(), "получен некорректный аргумент - "+e.getMessage());
+                } catch (IOException e) {
+                    user.disconnect();
+                    return null;
+                } catch (ClassNotFoundException ignored) {
+
+                }
+                if (reply != null)
+                    programController.getConnectionController().getRequestController()
+                            .sendReply(user.getSocket(), reply);
             }
             request = programController.getConnectionController().getRequestController()
                     .receiveRequest(user.getSocket());

@@ -2,7 +2,6 @@ package server.data_control;
 
 import data_classes.City;
 import exceptions.ConfigFileNotFoundException;
-import exceptions.MissingArgumentException;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -15,7 +14,7 @@ public class DataBaseController {
     private final DataController dataController;
 
     DataBaseController(DataController dataController, String dbUrl, String dbUser) throws SQLException,
-            MissingArgumentException, ConfigFileNotFoundException {
+            ConfigFileNotFoundException {
         this.dataController = dataController;
         connection = DriverManager.getConnection(dbUrl, dbUser, FilesController.readDBPassword());
     }

@@ -2369,3 +2369,159 @@ INFO: Получена команда exit от клиента l
 WARNING: Потеряно соединение с клиентом l
 мая 13, 2022 4:38:31 AM server.commands.ExitCommand execute
 INFO: Пользователь l отключился от сервера.
+мая 14, 2022 3:11:16 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 14, 2022 3:11:21 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 14, 2022 3:11:28 AM server.commands.ProgramController invoke
+INFO: Получена команда login от клиента 127.0.0.1
+мая 14, 2022 3:11:29 AM server.commands.ProgramController invoke
+INFO: Получена команда show от клиента l
+мая 14, 2022 3:11:29 AM server.commands.ProgramController lambda$listenRequests$12
+INFO: Отправлен ответ клиенту l.
+мая 14, 2022 3:11:30 AM server.commands.ProgramController invoke
+INFO: Получена команда show от клиента l
+мая 14, 2022 3:11:30 AM server.commands.ProgramController lambda$listenRequests$12
+INFO: Отправлен ответ клиенту l.
+мая 14, 2022 3:11:36 AM server.commands.ProgramController invoke
+INFO: Получена команда execute_script от клиента l
+мая 14, 2022 3:11:36 AM server.commands.ProgramController invoke
+INFO: Получена команда help от клиента l
+мая 14, 2022 3:11:36 AM server.commands.ProgramController invoke
+INFO: Получена команда help от клиента l
+мая 14, 2022 3:11:36 AM server.commands.ProgramController invoke
+INFO: Получена команда info от клиента l
+мая 14, 2022 3:11:36 AM server.commands.ProgramController invoke
+INFO: Получена команда insert от клиента l
+мая 14, 2022 3:11:36 AM server.commands.ProgramController lambda$listenRequests$10
+WARNING: Некорректный аргумент: элемент с таким id уже существует в коллекции
+мая 14, 2022 3:12:19 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 14, 2022 3:12:23 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 14, 2022 3:12:26 AM server.commands.ProgramController invoke
+INFO: Получена команда login от клиента 127.0.0.1
+мая 14, 2022 3:12:28 AM server.commands.ProgramController invoke
+INFO: Получена команда show от клиента l
+мая 14, 2022 3:12:28 AM server.commands.ProgramController lambda$listenRequests$12
+INFO: Отправлен ответ клиенту l.
+мая 14, 2022 3:12:35 AM server.commands.ProgramController invoke
+INFO: Получена команда execute_script от клиента l
+мая 14, 2022 3:12:35 AM server.commands.ProgramController invoke
+INFO: Получена команда help от клиента l
+мая 14, 2022 3:12:35 AM server.commands.ProgramController invoke
+INFO: Получена команда help от клиента l
+мая 14, 2022 3:12:35 AM server.commands.ProgramController invoke
+INFO: Получена команда info от клиента l
+мая 14, 2022 3:12:35 AM server.commands.ProgramController invoke
+INFO: Получена команда insert от клиента l
+мая 14, 2022 3:12:35 AM server.commands.ProgramController lambda$listenRequests$10
+WARNING: Некорректный аргумент: элемент с таким id уже существует в коллекции
+мая 14, 2022 3:14:11 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 14, 2022 3:14:13 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 14, 2022 3:14:19 AM server.commands.ProgramController invoke
+INFO: Получена команда login от клиента 127.0.0.1
+мая 14, 2022 3:14:20 AM server.commands.ProgramController invoke
+INFO: Получена команда show от клиента l
+мая 14, 2022 3:14:20 AM server.commands.ProgramController lambda$listenRequests$12
+INFO: Отправлен ответ клиенту l.
+мая 14, 2022 3:14:28 AM server.commands.ProgramController invoke
+INFO: Получена команда execute_script от клиента l
+мая 14, 2022 3:14:28 AM server.commands.ProgramController invoke
+INFO: Получена команда help от клиента l
+мая 14, 2022 3:14:28 AM server.commands.ProgramController invoke
+INFO: Получена команда help от клиента l
+мая 14, 2022 3:14:28 AM server.commands.ProgramController invoke
+INFO: Получена команда info от клиента l
+мая 14, 2022 3:14:28 AM server.commands.ProgramController invoke
+INFO: Получена команда insert от клиента l
+мая 14, 2022 3:14:28 AM server.commands.ProgramController lambda$listenRequests$10
+WARNING: Некорректный аргумент: элемент с таким id уже существует в коллекции
+мая 14, 2022 3:15:43 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 14, 2022 3:15:46 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 14, 2022 3:15:48 AM server.commands.ProgramController invoke
+INFO: Получена команда login от клиента 127.0.0.1
+мая 14, 2022 3:15:53 AM server.commands.ProgramController invoke
+INFO: Получена команда execute_script от клиента l
+мая 14, 2022 3:15:53 AM server.commands.ProgramController invoke
+INFO: Получена команда help от клиента l
+мая 14, 2022 3:15:53 AM server.commands.ProgramController invoke
+INFO: Получена команда help от клиента l
+мая 14, 2022 3:15:53 AM server.commands.ProgramController invoke
+INFO: Получена команда info от клиента l
+мая 14, 2022 3:15:55 AM server.commands.ProgramController invoke
+INFO: Получена команда show от клиента l
+мая 14, 2022 3:15:55 AM server.commands.ProgramController lambda$listenRequests$12
+INFO: Отправлен ответ клиенту l.
+мая 14, 2022 3:15:57 AM server.commands.ProgramController invoke
+INFO: Получена команда show от клиента l
+мая 14, 2022 3:15:57 AM server.commands.ProgramController lambda$listenRequests$12
+INFO: Отправлен ответ клиенту l.
+мая 14, 2022 3:20:46 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 14, 2022 3:20:49 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 14, 2022 3:21:07 AM server.commands.ProgramController invoke
+INFO: Получена команда login от клиента 127.0.0.1
+мая 14, 2022 3:21:15 AM server.commands.ProgramController invoke
+INFO: Получена команда show от клиента l
+мая 14, 2022 3:21:15 AM server.commands.ProgramController lambda$listenRequests$12
+INFO: Отправлен ответ клиенту l.
+мая 14, 2022 3:21:24 AM server.commands.ProgramController invoke
+INFO: Получена команда execute_script от клиента l
+мая 14, 2022 3:21:24 AM server.commands.ProgramController invoke
+INFO: Получена команда help от клиента l
+мая 14, 2022 3:21:24 AM server.commands.ProgramController invoke
+INFO: Получена команда help от клиента l
+мая 14, 2022 3:21:24 AM server.commands.ProgramController invoke
+INFO: Получена команда info от клиента l
+мая 14, 2022 3:21:24 AM server.commands.ProgramController invoke
+INFO: Получена команда insert от клиента l
+мая 14, 2022 3:21:49 AM server.commands.ProgramController invoke
+INFO: Получена команда execute_script от клиента l
+мая 14, 2022 3:21:49 AM server.commands.ProgramController invoke
+INFO: Получена команда help от клиента l
+мая 14, 2022 3:21:49 AM server.commands.ProgramController invoke
+INFO: Получена команда help от клиента l
+мая 14, 2022 3:21:49 AM server.commands.ProgramController invoke
+INFO: Получена команда info от клиента l
+мая 14, 2022 3:21:49 AM server.commands.ProgramController invoke
+INFO: Получена команда insert от клиента l
+мая 14, 2022 3:21:49 AM server.commands.ProgramController lambda$listenRequests$10
+WARNING: Некорректный аргумент: элемент с таким id уже существует в коллекции
+мая 14, 2022 3:24:40 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 14, 2022 3:24:43 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 14, 2022 3:24:48 AM server.commands.ProgramController invoke
+INFO: Получена команда login от клиента 127.0.0.1
+мая 14, 2022 3:24:49 AM server.commands.ProgramController invoke
+INFO: Получена команда show от клиента l
+мая 14, 2022 3:24:49 AM server.commands.ProgramController lambda$listenRequests$12
+INFO: Отправлен ответ клиенту l.
+мая 14, 2022 3:24:56 AM server.commands.ProgramController invoke
+INFO: Получена команда execute_script от клиента l
+мая 14, 2022 3:24:56 AM server.commands.ProgramController invoke
+INFO: Получена команда help от клиента l
+мая 14, 2022 3:24:56 AM server.commands.ProgramController invoke
+INFO: Получена команда help от клиента l
+мая 14, 2022 3:24:56 AM server.commands.ProgramController invoke
+INFO: Получена команда info от клиента l
+мая 14, 2022 3:24:56 AM server.commands.ProgramController invoke
+INFO: Получена команда insert от клиента l
+мая 14, 2022 3:25:01 AM server.commands.ProgramController invoke
+INFO: Получена команда show от клиента l
+мая 14, 2022 3:25:01 AM server.commands.ProgramController lambda$listenRequests$12
+INFO: Отправлен ответ клиенту l.
+мая 14, 2022 3:37:14 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 14, 2022 3:37:19 AM server.commands.ProgramController invoke
+INFO: Получена команда insert от клиента l
+мая 14, 2022 3:37:19 AM server.commands.ProgramController lambda$listenRequests$10
+WARNING: Некорректный аргумент: элемент с таким id уже существует в коллекции
+мая 14, 2022 3:37:22 AM server.commands.ProgramController invoke
+INFO: Получена команда insert от клиента l

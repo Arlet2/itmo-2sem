@@ -36,17 +36,17 @@ public class ProgramController {
     /**
      * collection of all commands that user can use
      */
-    private final ArrayList<Command> allCommands = new ArrayList<>();
+    private final ArrayList<Command> allCommands = new ArrayList<>(16);
 
     /**
      * collection of data about all commands that will send to user
      */
-    private final ArrayList<CommandInfo> allCommandsInfo = new ArrayList<>();
+    private final ArrayList<CommandInfo> allCommandsInfo = new ArrayList<>(16);
 
     /**
      *
      */
-    private final ArrayList<Command> authCommands = new ArrayList<>();
+    private final ArrayList<Command> authCommands = new ArrayList<>(3);
 
     private final ExecutorService listeners = Executors.newCachedThreadPool();
     private final ExecutorService executors = Executors.newFixedThreadPool(5);

@@ -29,10 +29,9 @@ public class DataController {
     ReentrantReadWriteLock mapLock = new ReentrantReadWriteLock();
     ReentrantReadWriteLock authLock = new ReentrantReadWriteLock();
 
-    public DataController() throws SQLException,
-            MissingArgumentException, ConfigFileNotFoundException {
+    public DataController() throws SQLException, ConfigFileNotFoundException {
         map = new HashMap<>();
-        dataBaseController = new DataBaseController(this, "jdbc:postgresql://127.0.0.1:5432/postgres", "postgres");
+        dataBaseController = new DataBaseController(this, "jdbc:postgres://pg:5432/studs", "s338861");
         refreshMap();
     }
 

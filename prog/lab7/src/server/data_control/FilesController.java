@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class FilesController {
 
-    public static String readDBPassword() throws MissingArgumentException, ConfigFileNotFoundException {
+    public static String readDBPassword() throws ConfigFileNotFoundException {
         Scanner scanner;
         try {
             scanner = new Scanner(new FileInputStream("db.con"));
@@ -27,8 +27,7 @@ public class FilesController {
         if (matcher.find())
             return s.substring(matcher.start(), matcher.end());
         else
-            throw new MissingArgumentException("в файле конфигурации базы данных не был найден пароль. " +
-                    "Добавьте в этот файл строку \"password: ***\"");
+            return "";
     }
 
     public static int readConfigPort() throws MissingArgumentException, ConfigFileNotFoundException {
