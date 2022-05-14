@@ -10,7 +10,13 @@
 /prog/lab6/lab6-server/lab6.iml
 /prog/lab6/lab6-server/out
 
+/prog/lab7/.idea
+/prog/lab7/lab7.iml
+/prog/lab7/out
+/prog/lab7/db.con
+
 # for debug
 prog/lab5/debug
 prog/lab6/lab6-client/debug
 prog/lab6/lab6-server/debug
+prog/lab7/debug
