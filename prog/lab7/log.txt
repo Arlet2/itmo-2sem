@@ -2525,3 +2525,15 @@ INFO: Получена команда insert от клиента l
 WARNING: Некорректный аргумент: элемент с таким id уже существует в коллекции
 мая 14, 2022 3:37:22 AM server.commands.ProgramController invoke
 INFO: Получена команда insert от клиента l
+мая 14, 2022 4:07:40 AM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 14, 2022 4:19:22 AM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 14, 2022 4:29:46 AM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 14, 2022 4:29:55 AM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 14, 2022 4:31:57 AM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 14, 2022 5:07:57 AM server.Main main
+WARNING: Ошибка подключения к базе данных.

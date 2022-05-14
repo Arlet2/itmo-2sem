@@ -31,7 +31,7 @@ public class DataController {
 
     public DataController() throws SQLException, ConfigFileNotFoundException {
         map = new HashMap<>();
-        dataBaseController = new DataBaseController(this, "jdbc:postgres://pg:5432/studs", "s338861");
+        dataBaseController = new DataBaseController(this, "jdbc:postgresql://pg:5432/studs", "s338861");
         refreshMap();
     }
 

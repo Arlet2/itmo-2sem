@@ -14,9 +14,9 @@ public class FilesController {
     public static String readDBPassword() throws ConfigFileNotFoundException {
         Scanner scanner;
         try {
-            scanner = new Scanner(new FileInputStream("db.con"));
+            scanner = new Scanner(new FileInputStream("database.config"));
         } catch (FileNotFoundException e) {
-            throw new ConfigFileNotFoundException("Не был найден файл конфигурации базы данных.");
+            throw new ConfigFileNotFoundException("Не был найден файл конфигурации базы данных database.config.");
         }
         StringBuilder s = new StringBuilder();
         while (scanner.hasNextLine()) {
