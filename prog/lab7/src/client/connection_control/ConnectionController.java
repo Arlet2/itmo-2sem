@@ -32,6 +32,9 @@ public class ConnectionController {
      */
     private final InetSocketAddress address;
 
+    /**
+     * Controller that controls all requests
+     */
     private final RequestController requestController = new RequestController(this);
 
     /**

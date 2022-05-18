@@ -27,6 +27,9 @@ public class ConnectionController {
      */
     private final int port;
 
+    /**
+     * Controller for all requests
+     */
     private final RequestController requestController = new RequestController(this);
 
     /**

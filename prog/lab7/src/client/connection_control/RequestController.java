@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
+/**
+ * Class uses for control all requests
+ */
 public class RequestController {
     private final ConnectionController connectionController;
 

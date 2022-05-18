@@ -28,6 +28,12 @@ public class Request implements Serializable {
         msgBytes = msg.getBytes();
     }
 
+    /**
+     * Create data object for sending
+     *
+     * @param requestCode of this request
+     * @param bytes       of message for this request
+     */
     public Request(final RequestCode requestCode, final byte[] bytes) {
         this.requestCode = requestCode;
         msgBytes = bytes;
@@ -52,6 +58,7 @@ public class Request implements Serializable {
      * ERROR - explanation of error with arguments or execution
      * NEXT_REQUEST_CITY - next object for receiving is City
      * OK - all arguments that need to check on server is ok OR server is ready to continue processing of command
+     * PART_OF_DATE - if it not all data what sender was sent
      */
     public enum RequestCode {
         REPLY,

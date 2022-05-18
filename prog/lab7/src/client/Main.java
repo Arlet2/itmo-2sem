@@ -6,6 +6,11 @@ import exceptions.ConnectionException;
 import exceptions.MissingArgumentException;
 
 public class Main {
+    /**
+     * Start execution of program
+     *
+     * @param args do not use
+     */
     public static void main(String[] args) {
         CommandController cc;
         try {

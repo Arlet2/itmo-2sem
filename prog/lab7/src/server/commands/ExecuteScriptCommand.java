@@ -23,16 +23,18 @@ public class ExecuteScriptCommand extends Command {
     }
 
     /**
-     * execute script from file
+     * Execute script file from client
      *
-     * @param programController that uses for program
-     * @param args              file name
-     * @throws IncorrectArgumentException if file_name if empty/file doesn't exist
+     * @param user              that execute this command
+     * @param programController that execute this command
+     * @param args              of command
+     * @return null
+     * @throws IOException            if connection was closed
+     * @throws ClassNotFoundException if server receive something that not expected
      */
     @Override
     public String execute(User user, ProgramController programController, String[] args)
-            throws IncorrectArgumentException,
-            IOException, ClassNotFoundException {
+            throws IOException, ClassNotFoundException {
         programController.getConnectionController().getRequestController().sendOK(user.getSocket());
         Request request = programController.getConnectionController().getRequestController()
                 .receiveRequest(user.getSocket());

@@ -9,8 +9,19 @@ import java.io.Serializable;
  * Information for client about commands that he can use
  */
 public class CommandInfo implements Serializable {
+    /**
+     * Name of command
+     */
     private final String name;
+
+    /**
+     * Information that need to send on execution of this command
+     */
     private final SendInfo sendInfo;
+
+    /**
+     * List of arguments that need to check before sending
+     */
     private final ArgumentInfo[] argInfo;
 
     /**

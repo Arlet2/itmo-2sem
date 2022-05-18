@@ -8,7 +8,11 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * Control all requests between server and clients
+ */
 public class RequestController {
+
     private final ConnectionController connectionController;
 
     RequestController(ConnectionController connectionController) {
@@ -34,6 +38,12 @@ public class RequestController {
         connectionController.sendRequest(socket, new Request(Request.RequestCode.REPLY, msg));
     }
 
+    /**
+     * Get OK-reply
+     *
+     * @param socket of client
+     * @throws IOException if connection was closed
+     */
     public void receiveOK(Socket socket) throws IOException {
         try {
             receiveRequest(socket);
@@ -52,6 +62,13 @@ public class RequestController {
         connectionController.sendRequest(socket, new Request(Request.RequestCode.ERROR, msg + "\n"));
     }
 
+    /**
+     * Send list of command that user can use on server
+     *
+     * @param socket of user that need to send it
+     * @param list   of commands
+     * @throws IOException if connection is closed
+     */
     public void sendCommandList(Socket socket, ArrayList<CommandInfo> list) throws IOException {
         connectionController.sendObject(socket, list);
     }
@@ -67,6 +84,14 @@ public class RequestController {
         return (Request) connectionController.receiveObject(socket);
     }
 
+    /**
+     * Get city from client
+     *
+     * @param socket of client
+     * @return city that was received
+     * @throws IOException            if connection was closed
+     * @throws ClassNotFoundException if receiving information is not city
+     */
     public City receiveCity(Socket socket) throws IOException, ClassNotFoundException {
         return (City) connectionController.receiveObject(socket);
     }

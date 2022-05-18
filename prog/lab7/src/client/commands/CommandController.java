@@ -25,7 +25,7 @@ public class CommandController {
     /**
      * controls user's interaction with console
      */
-    private final ConsoleController consoleController = new ConsoleController(this);
+    private final ConsoleController consoleController = new ConsoleController();
 
     /**
      * controls connection with server

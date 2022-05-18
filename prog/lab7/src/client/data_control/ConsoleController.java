@@ -1,6 +1,5 @@
 package client.data_control;
 
-import client.commands.CommandController;
 import data_classes.City;
 import data_classes.Climate;
 import data_classes.Government;

@@ -9,8 +9,16 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Class uses for read configuration files
+ */
 public class FilesController {
-
+    /**
+     * Read database password from file database.config and return it
+     *
+     * @return password from file
+     * @throws ConfigFileNotFoundException if file does not exist
+     */
     public static String readDBPassword() throws ConfigFileNotFoundException {
         Scanner scanner;
         try {
@@ -31,6 +39,13 @@ public class FilesController {
             return "";
     }
 
+    /**
+     * Read config file config.excalibbur for connection
+     *
+     * @return port where need to create serverSocket
+     * @throws MissingArgumentException    if port does not find in file
+     * @throws ConfigFileNotFoundException if file does not find
+     */
     public static int readConfigPort() throws MissingArgumentException, ConfigFileNotFoundException {
         Scanner scanner;
         try {

@@ -14,13 +14,15 @@ public class ExitCommand extends Command {
     }
 
     /**
-     * exit from command
+     * Close connection with user
      *
-     * @param programController that uses for program
-     * @param args              for command from console input (args[0] is program name)
+     * @param user              that execute this command
+     * @param programController that execute this command
+     * @param args              of command
+     * @return null
      */
     @Override
-    public String execute(User user, ProgramController programController, String[] args) throws IOException {
+    public String execute(User user, ProgramController programController, String[] args) {
         user.disconnect();
         Logger.getLogger().log(Level.INFO, "Пользователь " +
                 (user.getLogin() == null ? user.getAddress() : user.getLogin()) + " отключился от сервера.");
