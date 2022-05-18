@@ -1,0 +1,52 @@
+ORG 0x0
+V0:	WORD $DEFAULT, 0x180 ; Вектор прерывания #0
+V1:	WORD $INT1, 0x180 ; Вектор прерывания #1
+V2:	WORD $INT2, 0x180 ; Вектор прерывания #2
+V3:	WORD $DEFAULT, 0x180 ; Вектор прерывания #3
+V4:	WORD $DEFAULT, 0x180 ; Вектор прерывания #4
+V5:	WORD $DEFAULT, 0x180 ; Вектор прерывания #5
+V6:	WORD $DEFAULT, 0x180 ; Вектор прерывания #6
+V7:	WORD $DEFAULT, 0x180 ; Вектор прерывания #7
+DEFAULT:	PUSH
+	CLA
+	OUT	0x2
+	IN	0x4
+	IN 	0x6
+	IN	0x8
+	POP
+	IRET	; Выход из прерывания
+ORG 0x40
+START:	DI
+	LD #9
+	OUT 0x7	; установка в ВУ-3 вектора 1
+	LD #0xA
+	OUT 0x5	; установка в ВУ-2 вектора 2
+	EI
+L:	LD	0x03B
+	SUB 	#3
+	CMP	MIN
+	BGE	SV
+LM:	LD	MAX
+SV:	ST	0x03B
+	JUMP	L
+
+INT1:	PUSH
+	NOP
+	LD	0x03B
+	ASL
+	ASL
+	ADD	0x03B
+	NEG
+	ADD	#3
+	OUT 0x6
+	POP
+	IRET
+INT2:	IN	0x4
+	NOP
+	AND	#0x000F
+	AND	0x03B
+	ST	0x03B
+	NOP
+	IRET
+MIN:	WORD	0xFFE8
+MAX:	WORD	0x0019
