@@ -15,8 +15,14 @@
 /prog/lab7/out
 /prog/lab7/database.config
 
+/prog/lab8/.idea
+/prog/lab8/lab8.iml
+/prog/lab8/out
+/prog/lab8/database.config
+
 # for debug
 prog/lab5/debug
 prog/lab6/lab6-client/debug
 prog/lab6/lab6-server/debug
 prog/lab7/debug
+prog/lab8/debug
