@@ -3,7 +3,6 @@ package server.commands;
 import exceptions.IncorrectArgumentException;
 import server.connection_control.User;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 public class ClearCommand extends Command {

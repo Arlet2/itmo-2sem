@@ -4,7 +4,6 @@ import connect_utils.CommandInfo;
 import server.Logger;
 import server.connection_control.User;
 
-import java.io.IOException;
 import java.util.logging.Level;
 
 public class ExitCommand extends Command {

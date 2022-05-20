@@ -1,10 +1,12 @@
 package client.connection_control;
 
 import connect_utils.CommandInfo;
-import connect_utils.Request;
+import connect_utils.DataTransferObject;
 import data_classes.City;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
@@ -25,36 +27,24 @@ public class RequestController {
      * @throws IOException            if Request couldn't receive
      * @throws ClassNotFoundException if object couldn't deserialize
      */
-    public Request receiveRequest() throws IOException, ClassNotFoundException {
-        Request request = (Request) connectionController.processConnection();
-        if (request.getRequestCode() != Request.RequestCode.PART_OF_DATE)
-            return request;
-        ArrayList<Byte> bytes = new ArrayList<>();
-        while (request.getRequestCode() == Request.RequestCode.PART_OF_DATE) {
-            for (byte b : request.getMsgBytes()) {
-                bytes.add(b);
-            }
-            sendRequest(connectionController.getChannel(), new Request(Request.RequestCode.OK, ""));
-            request = (Request) connectionController.processConnection();
-        }
-        byte[] fbytes = new byte[bytes.size()];
-        for (int i = 0; i < fbytes.length; i++) {
-            fbytes[i] = bytes.get(i);
-        }
-        return new Request(request.getRequestCode(), new String(fbytes));
+    public DataTransferObject receiveRequest() throws IOException, ClassNotFoundException {
+        return connectionController.processConnection();
     }
 
     /**
      * Send request to server
      *
      * @param channel that connect with server
-     * @param request that need to send
+     * @param dataTransferObject that need to send
      * @throws IOException if request couldn't send
      */
-    public void sendRequest(SocketChannel channel, Request request) throws IOException {
-        connectionController.sendObject(channel, request);
+    public void sendRequest(SocketChannel channel, DataTransferObject dataTransferObject) throws IOException {
+        connectionController.sendObject(channel, dataTransferObject);
     }
 
+    public void sendOK(SocketChannel channel) throws IOException {
+        connectionController.sendObject(channel, new DataTransferObject(DataTransferObject.Code.OK, ""));
+    }
     /**
      * Send city object to server
      *
@@ -63,10 +53,16 @@ public class RequestController {
      * @throws IOException if City object couldn't send
      */
     public void sendCity(SocketChannel channel, City city) throws IOException {
-        connectionController.sendObject(channel, city);
+        DataTransferObject dto = new DataTransferObject(
+                DataTransferObject.Code.NOT_REQUEST, connectionController.convertObjectToBytes(city),
+                DataTransferObject.DataType.CITY);
+        connectionController.sendObject(channel, dto);
     }
 
     public ArrayList<CommandInfo> getCommandInfos() throws IOException, ClassNotFoundException {
-        return (ArrayList<CommandInfo>) connectionController.processConnection();
+        DataTransferObject dto = connectionController.processConnection();
+        ByteArrayInputStream byteStream = new ByteArrayInputStream(dto.getDataBytes());
+        ObjectInputStream objIn = new ObjectInputStream(byteStream);
+        return (ArrayList<CommandInfo>) objIn.readObject();
     }
 }

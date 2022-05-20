@@ -5,50 +5,67 @@ import java.io.Serializable;
 /**
  * Object that server always send/receive to/from client
  */
-public class Request implements Serializable {
+public class DataTransferObject implements Serializable {
 
     /**
      * code of this request
      */
-    private final RequestCode requestCode;
+    private final Code code;
 
+    /**
+     *
+     */
+    private final DataType dataType;
     /**
      * byte array of msg
      */
-    private final byte[] msgBytes;
+    private final byte[] dataBytes;
 
     /**
      * Create data object for sending
      *
-     * @param requestCode of this request
+     * @param code of this request
      * @param msg         of this request
      */
-    public Request(final RequestCode requestCode, final String msg) {
-        this.requestCode = requestCode;
-        msgBytes = msg.getBytes();
+    public DataTransferObject(final Code code, final String msg) {
+        this.code = code;
+        dataBytes = msg.getBytes();
+        dataType = DataType.MESSAGE;
     }
 
     /**
      * Create data object for sending
      *
-     * @param requestCode of this request
+     * @param code of this request
      * @param bytes       of message for this request
      */
-    public Request(final RequestCode requestCode, final byte[] bytes) {
-        this.requestCode = requestCode;
-        msgBytes = bytes;
+    public DataTransferObject(final Code code, final byte[] bytes, DataType dataType) {
+        this.code = code;
+        dataBytes = bytes;
+        this.dataType = dataType;
     }
 
     public String getMsg() {
-        return new String(msgBytes);
+        return new String(dataBytes);
     }
 
-    public RequestCode getRequestCode() {
-        return requestCode;
+    public Code getCode() {
+        return code;
     }
 
-    public byte[] getMsgBytes() {
-        return msgBytes;
+    public byte[] getDataBytes() {
+        return dataBytes;
+    }
+
+    public DataType getDataType() {
+        return dataType;
+    }
+
+    public enum DataType {
+        MESSAGE,
+        CITY,
+        CITIES_ARRAY,
+        COMMANDS_ARRAY
     }
 
     /**
@@ -60,12 +77,13 @@ public class Request implements Serializable {
      * OK - all arguments that need to check on server is ok OR server is ready to continue processing of command
      * PART_OF_DATE - if it not all data what sender was sent
      */
-    public enum RequestCode {
+    public enum Code {
         REPLY,
         COMMAND,
         ERROR,
         NEXT_REQUEST_CITY,
         OK,
-        PART_OF_DATE
+        PART_OF_DATE,
+        NOT_REQUEST
     }
 }

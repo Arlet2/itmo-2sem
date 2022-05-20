@@ -2569,3 +2569,5 @@ INFO: Отправлен ответ клиенту l.
 INFO: Отключение сервера...
 мая 15, 2022 1:50:33 PM server.commands.ProgramController stop
 INFO: Все полученные команды были исполнены.
+мая 20, 2022 11:54:34 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.

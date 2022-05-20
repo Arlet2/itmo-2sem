@@ -4,6 +4,8 @@ import connect_utils.CommandInfo;
 import data_classes.City;
 import data_classes.Climate;
 import exceptions.IncorrectArgumentException;
+import server.commands.Command;
+import server.commands.ProgramController;
 import server.connection_control.User;
 
 import java.io.IOException;
