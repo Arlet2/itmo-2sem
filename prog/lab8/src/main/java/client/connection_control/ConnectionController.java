@@ -1,6 +1,7 @@
 package client.connection_control;
 
 import client.commands.CommandController;
+import connect_utils.DataTransferObject;
 import exceptions.ConfigFileNotFoundException;
 import exceptions.ConnectionException;
 import exceptions.MissingArgumentException;
@@ -11,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import java.util.Arrays;
 
 /**
  * Control connection with server
@@ -74,7 +76,7 @@ public class ConnectionController {
      * @throws IOException            if object couldn't receive
      * @throws ClassNotFoundException if object couldn't deserialize
      */
-    protected Object processConnection() throws IOException, ClassNotFoundException {
+    protected DataTransferObject processConnection() throws IOException, ClassNotFoundException {
         selector.select();
         for (SelectionKey key : selector.selectedKeys()) {
             if (key.isReadable()) {
@@ -91,13 +93,12 @@ public class ConnectionController {
      * @param object  that need to send
      * @throws IOException if object couldn't send
      */
-    protected void sendObject(SocketChannel channel, Object object) throws IOException {
-        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-        ObjectOutputStream objOut = new ObjectOutputStream(byteOut);
-        objOut.writeObject(object);
-        objOut.flush();
-        channel.write(ByteBuffer.wrap(byteOut.toByteArray()));
-        byteOut.reset();
+    protected void sendObject(SocketChannel channel, DataTransferObject object) throws IOException {
+        channel.write(ByteBuffer.wrap(convertObjectToBytes(object)));
+    }
+
+    private DataTransferObject createObjectFromBytes(byte[] bytes) throws IOException, ClassNotFoundException {
+        return (DataTransferObject) new ObjectInputStream(new ByteArrayInputStream(bytes)).readObject();
     }
 
     /**
@@ -108,11 +109,29 @@ public class ConnectionController {
      * @throws IOException            if object couldn't receive
      * @throws ClassNotFoundException if object couldn't deserialize
      */
-    private Object receiveObject(SocketChannel channel) throws IOException, ClassNotFoundException {
-        ByteBuffer buff = ByteBuffer.allocate(4096);
-        channel.read(buff);
-        ObjectInputStream objIn = new ObjectInputStream(new ByteArrayInputStream(buff.array()));
-        return objIn.readObject();
+    private DataTransferObject receiveObject(SocketChannel channel) throws IOException, ClassNotFoundException {
+        final int byteSize = 2048;
+        ByteBuffer buffer = ByteBuffer.allocate(byteSize*2);
+        channel.read(buffer);
+        DataTransferObject mainObject = createObjectFromBytes(buffer.array());
+        if (mainObject.getCode() == DataTransferObject.Code.PART_OF_DATE) {
+            ByteBuffer dataBuffer = ByteBuffer.allocate(byteSize*2);
+            DataTransferObject dto = mainObject;
+            do {
+                if (dataBuffer.position()+dto.getDataBytes().length > dataBuffer.limit())
+                    dataBuffer = ByteBuffer.allocate(dataBuffer.limit()*2).put(dataBuffer.array());
+                dataBuffer.put(dto.getDataBytes());
+                requestController.sendOK(channel);
+                selector.select();
+                buffer.position(0);
+                channel.read(buffer);
+                dto = createObjectFromBytes(buffer.array());
+            } while (dto.getCode() == DataTransferObject.Code.PART_OF_DATE);
+            return new DataTransferObject(dto.getCode(), Arrays.copyOfRange(dataBuffer.array(), 0,
+                    dataBuffer.position()), dto.getDataType());
+        }
+        else
+            return mainObject;
     }
 
     /**
@@ -138,6 +157,14 @@ public class ConnectionController {
     public void disconnect() throws IOException {
         if (channel != null)
             channel.close();
+    }
+
+    protected byte[] convertObjectToBytes(Object object) throws IOException {
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteStream);
+        objectOutputStream.writeObject(object);
+        objectOutputStream.flush();
+        return byteStream.toByteArray();
     }
 
     public InetSocketAddress getAddress() {

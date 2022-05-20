@@ -36,13 +36,13 @@ public class ExecuteScriptCommand extends Command {
     public String execute(User user, ProgramController programController, String[] args)
             throws IOException, ClassNotFoundException {
         programController.getConnectionController().getRequestController().sendOK(user.getSocket());
-        Request request = programController.getConnectionController().getRequestController()
+        DataTransferObject dataTransferObject = programController.getConnectionController().getRequestController()
                 .receiveRequest(user.getSocket());
         Command command;
         String[] cArgs;
         String reply = null;
-        while (!request.getRequestCode().equals(Request.RequestCode.OK)) {
-            cArgs = request.getMsg().split(" ");
+        while (!dataTransferObject.getCode().equals(DataTransferObject.Code.OK)) {
+            cArgs = dataTransferObject.getMsg().split(" ");
             command = programController.searchCommand(cArgs[0]);
             if (command != null) {
                 if (command.getName().equals("execute_script"))
@@ -68,7 +68,7 @@ public class ExecuteScriptCommand extends Command {
                     programController.getConnectionController().getRequestController()
                             .sendReply(user.getSocket(), reply);
             }
-            request = programController.getConnectionController().getRequestController()
+            dataTransferObject = programController.getConnectionController().getRequestController()
                     .receiveRequest(user.getSocket());
         }
         recursionCounter = 0;

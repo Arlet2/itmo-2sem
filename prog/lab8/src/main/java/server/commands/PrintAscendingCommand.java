@@ -1,15 +1,18 @@
 package server.commands;
 
-import data_classes.City;
+import server.commands.Command;
+import server.commands.ProgramController;
 import server.connection_control.User;
 
-public class ShowCommand extends Command {
-    ShowCommand() {
-        super("show", "", "выводит коллекцию в консоль", null, null, false);
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class PrintAscendingCommand extends Command {
+    PrintAscendingCommand() {
+        super("print_ascending", "", "выводит элементы коллекции в порядке возрастания", null, null, false);
     }
 
     /**
-     * Print collection
+     * print sorted collection
      *
      * @param programController that uses for program
      * @param args              for command from console input (args[0] is program name)
@@ -20,10 +23,10 @@ public class ShowCommand extends Command {
             return "Коллекция пуста.\n";
         }
         StringBuilder data = new StringBuilder();
-        int counter = 1;
+        AtomicInteger counter = new AtomicInteger(1);
         programController.getDataController().readLock();
-        for (City i : programController.getDataController().getMap().values())
-            data.append("Город ").append(counter++).append("\n").append(i).append("\n");
+        programController.getDataController().getMap().values().stream().sorted().forEach(city ->
+                data.append("Город ").append(counter.getAndIncrement()).append("\n").append(city).append("\n"));
         programController.getDataController().readUnlock();
         return data.toString();
     }

@@ -131,23 +131,25 @@ public class ProgramController {
     }
 
     private String clientAuth(User user) {
-        Request request;
+        DataTransferObject dataTransferObject;
         try {
-            request = connectionController.getRequestController().receiveRequest(user.getSocket());
+            dataTransferObject = connectionController.getRequestController().receiveRequest(user.getSocket());
         } catch (IOException e) {
+            e.printStackTrace();
             user.disconnect();
             return null;
         } catch (ClassNotFoundException e) {
             Logger.getLogger().log(Level.WARNING, "Получен некорректный запрос от клиента.");
             return null;
         }
-        String[] args = request.getMsg().split(" ");
+        String[] args = dataTransferObject.getMsg().split(" ");
         if (authCommands.contains(searchCommand(args[0]))) {
             Future<String> result =
                     executors.submit(() -> {
                         try {
                             return invoke(user, searchCommand(args[0]), args);
                         } catch (IOException e) {
+                            e.printStackTrace();
                             user.disconnect();
                         } catch (IncorrectArgumentException e) {
                             Logger.getLogger().log(Level.INFO, "Ошибка авторизации: " + e.getMessage());
@@ -156,6 +158,7 @@ public class ProgramController {
                                     connectionController.getRequestController()
                                             .sendError(user.getSocket(), e.getMessage());
                                 } catch (IOException ex) {
+                                    ex.printStackTrace();
                                     user.disconnect();
                                 }
                             });
@@ -170,6 +173,7 @@ public class ProgramController {
                         connectionController.getRequestController().sendReply(user.getSocket(), result.get());
                         return args[1];
                     } catch (IOException e) {
+                        e.printStackTrace();
                         user.disconnect();
                     } catch (InterruptedException | ExecutionException ignored) {
 
@@ -188,6 +192,7 @@ public class ProgramController {
                                     + "для авторизации или регистрации.\n" +
                                     "Пример использования: login sadness 1234");
                 } catch (IOException ex) {
+                    ex.printStackTrace();
                     user.disconnect();
                 }
             });
@@ -202,16 +207,17 @@ public class ProgramController {
         if (user.isDisconnected())
             return;
         String[] input;
-        Request request;
+        DataTransferObject dataTransferObject;
         Command command;
         try {
-            request = connectionController.getRequestController().receiveRequest(user.getSocket());
-            if (!request.getRequestCode().equals(Request.RequestCode.COMMAND)) {
+            dataTransferObject = connectionController.getRequestController().receiveRequest(user.getSocket());
+            if (!dataTransferObject.getCode().equals(DataTransferObject.Code.COMMAND)) {
                 Logger.getLogger().log(Level.WARNING, "Получен некорректный запрос от клиента.");
                 listeners.execute(() -> listenRequests(user));
             }
-            input = request.getMsg().split(" ");
+            input = dataTransferObject.getMsg().split(" ");
         } catch (IOException e) {
+            e.printStackTrace();
             Logger.getLogger().log(Level.WARNING, "Ошибка получения запроса");
             user.disconnect();
             return;
@@ -233,6 +239,7 @@ public class ProgramController {
                                     .sendError(user.getSocket(),
                                             "получен некорректный аргумент команды - " + e.getMessage());
                         } catch (IOException ex) {
+                            ex.printStackTrace();
                             user.disconnect();
                         }
                     });
@@ -244,6 +251,7 @@ public class ProgramController {
                             connectionController.getRequestController()
                                     .sendError(user.getSocket(), "получена неизвестная серверу команда");
                         } catch (IOException ex) {
+                            ex.printStackTrace();
                             user.disconnect();
                         }
                     });
@@ -255,12 +263,14 @@ public class ProgramController {
                             connectionController.getRequestController()
                                     .sendError(user.getSocket(), "получены неопознанные данные от клиента");
                         } catch (IOException ex) {
+                            ex.printStackTrace();
                             user.disconnect();
                         }
                     });
 
                 }
             } catch (IOException e) {
+                e.printStackTrace();
                 user.disconnect();
             }
             return null;
@@ -278,6 +288,7 @@ public class ProgramController {
                     connectionController.getRequestController().sendReply(user.getSocket(), reply);
                     Logger.getLogger().log(Level.INFO, "Отправлен ответ клиенту " + user.getLogin() + ".");
                 } catch (IOException e) {
+                    e.printStackTrace();
                     user.disconnect();
                 }
             }

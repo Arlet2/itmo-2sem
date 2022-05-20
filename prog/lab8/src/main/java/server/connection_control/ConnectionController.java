@@ -1,9 +1,9 @@
 package server.connection_control;
 
+import connect_utils.DataTransferObject;
 import exceptions.ConfigFileNotFoundException;
-import server.Logger;
 import exceptions.MissingArgumentException;
-import connect_utils.Request;
+import server.Logger;
 import server.data_control.FilesController;
 
 import java.io.*;
@@ -73,49 +73,54 @@ public class ConnectionController {
      * @throws IOException            if receiving is failed
      * @throws ClassNotFoundException if object can't be serialized
      */
-    protected Object receiveObject(Socket socket) throws IOException, ClassNotFoundException {
-        return new ObjectInputStream(socket.getInputStream()).readObject();
-    }
-
-    /**
-     * Send request to client
-     * Data will be divided if data is more than buffer size
-     *
-     * @param request that was sent to client
-     * @throws IOException if sending is failed
-     */
-    protected void sendRequest(Socket socket, Request request) throws IOException {
-        final int byteSize = 2048; // 2048
-        if (request.getMsgBytes().length > byteSize) {
-            int parts = request.getMsg().getBytes().length / byteSize;
-            for (int partCount = 0; partCount < parts; partCount++) {
-                sendObject(socket, new Request(Request.RequestCode.PART_OF_DATE,
-                        Arrays.copyOfRange(request.getMsg().getBytes(), byteSize * partCount,
-                                (partCount + 1) * byteSize)));
-                requestController.receiveOK(socket);
-            }
-            if (request.getMsg().getBytes().length % byteSize != 0)
-                sendObject(socket, new Request(Request.RequestCode.PART_OF_DATE,
-                        Arrays.copyOfRange(request.getMsg().getBytes(),
-                                parts * byteSize, request.getMsgBytes().length)));
-            requestController.receiveOK(socket);
-            sendRequest(socket, new Request(request.getRequestCode(), ""));
-        } else
-            sendObject(socket, request);
+    protected DataTransferObject receiveObject(Socket socket) throws IOException, ClassNotFoundException {
+        return (DataTransferObject) new ObjectInputStream(socket.getInputStream()).readObject();
     }
 
     /**
      * Send data to client
      *
-     * @param object that need to send to client
      * @throws IOException if sending is failed
      */
-    protected void sendObject(Socket socket, Object object) throws IOException {
-        ObjectOutputStream objOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-        objOut.writeObject(object);
-        objOut.flush();
+    protected void sendObject(Socket socket, DataTransferObject dataTransferObject) throws IOException {
+        final int byteSize = 500;
+        byte[] bytesDto = convertObjectToBytes(dataTransferObject);
+        if (bytesDto.length > byteSize) {
+            int parts = dataTransferObject.getDataBytes().length/byteSize;
+            for(int i=0;i<parts;i++) {
+                socket.getOutputStream().write(convertObjectToBytes(
+                        new DataTransferObject(DataTransferObject.Code.PART_OF_DATE,
+                                Arrays.copyOfRange(dataTransferObject.getDataBytes(),
+                                        i*byteSize, (i+1)*byteSize),
+                                dataTransferObject.getDataType())
+                        ));
+                requestController.receiveOK(socket);
+            }
+            if (bytesDto.length % byteSize != 0) {
+                socket.getOutputStream().write(convertObjectToBytes(
+                        new DataTransferObject(DataTransferObject.Code.PART_OF_DATE,
+                                Arrays.copyOfRange(dataTransferObject.getDataBytes(),
+                                        parts*byteSize, dataTransferObject.getDataBytes().length),
+                                dataTransferObject.getDataType())
+                ));
+                requestController.receiveOK(socket);
+            }
+            socket.getOutputStream().write(convertObjectToBytes(
+                    new DataTransferObject(dataTransferObject.getCode(), null, dataTransferObject.getDataType())
+            ));
+        }
+        else {
+            socket.getOutputStream().write(bytesDto);
+        }
     }
 
+    protected byte[] convertObjectToBytes(Object object) throws IOException {
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        ObjectOutputStream objOut = new ObjectOutputStream(byteStream);
+        objOut.writeObject(object);
+        objOut.flush();
+        return byteStream.toByteArray();
+    }
     /**
      * Close connection with client
      */
