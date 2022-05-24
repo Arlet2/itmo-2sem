@@ -1,6 +1,5 @@
 package server.commands;
 
-import connect_utils.CommandInfo;
 import data_classes.City;
 import exceptions.IncorrectArgumentException;
 import server.connection_control.User;
@@ -12,8 +11,8 @@ public class ReplaceIfGreaterCommand extends Command {
 
     ReplaceIfGreaterCommand() {
         super("replace_if_greater", "id {element}", "заменяет значение по id, если новое значение больше старого",
-                CommandInfo.SendInfo.CITY_UPDATE,
-                new CommandInfo.ArgumentInfo[]{CommandInfo.ArgumentInfo.ID}, false);
+                Command.SendInfo.CITY_UPDATE,
+                new Command.ArgumentInfo[]{Command.ArgumentInfo.ID}, CommandType.CHANGE);
     }
 
     /**
@@ -24,6 +23,7 @@ public class ReplaceIfGreaterCommand extends Command {
      * @param args              id
      * @throws IncorrectArgumentException if id is incorrect
      */
+    @Deprecated
     @Override
     public String execute(User user, ProgramController programController, String[] args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
@@ -34,9 +34,9 @@ public class ReplaceIfGreaterCommand extends Command {
             if (!programController.getDataController().getDataBaseController().isOwner(user.getLogin(), id))
                 throw new IncorrectArgumentException("вы не владеете этим элементом. Вы не можете изменять его.");
 
-            programController.getConnectionController().getRequestController().sendOK(user.getSocket());
+            programController.getConnectionController().getRequestController().sendOK(user);
             City city = programController.getConnectionController().getRequestController()
-                    .receiveCity(user.getSocket());
+                    .receiveCity(user);
             city.setId(id);
             deleteNullValues(programController.getDataController().getMap().get(id), city);
             replaceCity(programController.getDataController().getMap().get(id), city);

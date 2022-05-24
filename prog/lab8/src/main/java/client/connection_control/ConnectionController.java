@@ -2,6 +2,7 @@ package client.connection_control;
 
 import client.commands.CommandController;
 import connect_utils.DataTransferObject;
+import connect_utils.Serializer;
 import exceptions.ConfigFileNotFoundException;
 import exceptions.ConnectionException;
 import exceptions.MissingArgumentException;
@@ -13,6 +14,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Arrays;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Control connection with server
@@ -38,6 +40,8 @@ public class ConnectionController {
      * Controller that controls all requests
      */
     private final RequestController requestController = new RequestController(this);
+
+    private final ReentrantLock connectionLock = new ReentrantLock();
 
     /**
      * Create connection controller for connect to server
@@ -80,7 +84,7 @@ public class ConnectionController {
         selector.select();
         for (SelectionKey key : selector.selectedKeys()) {
             if (key.isReadable()) {
-                return receiveObject(channel);
+                return receiveObject();
             }
         }
         return null;
@@ -89,12 +93,13 @@ public class ConnectionController {
     /**
      * Send object to server
      *
-     * @param channel where server is
      * @param object  that need to send
      * @throws IOException if object couldn't send
      */
-    protected void sendObject(SocketChannel channel, DataTransferObject object) throws IOException {
-        channel.write(ByteBuffer.wrap(convertObjectToBytes(object)));
+    protected void sendObject(DataTransferObject object) throws IOException {
+        connectionLock.lock();
+        channel.write(ByteBuffer.wrap(Serializer.convertObjectToBytes(object)));
+        connectionLock.unlock();
     }
 
     private DataTransferObject createObjectFromBytes(byte[] bytes) throws IOException, ClassNotFoundException {
@@ -104,13 +109,13 @@ public class ConnectionController {
     /**
      * Receive data object from server
      *
-     * @param channel from where object sent
      * @return Object that was sent
      * @throws IOException            if object couldn't receive
      * @throws ClassNotFoundException if object couldn't deserialize
      */
-    private DataTransferObject receiveObject(SocketChannel channel) throws IOException, ClassNotFoundException {
-        final int byteSize = 2048;
+    private DataTransferObject receiveObject() throws IOException, ClassNotFoundException {
+        connectionLock.lock();
+        final int byteSize = 4096;
         ByteBuffer buffer = ByteBuffer.allocate(byteSize*2);
         channel.read(buffer);
         DataTransferObject mainObject = createObjectFromBytes(buffer.array());
@@ -121,17 +126,22 @@ public class ConnectionController {
                 if (dataBuffer.position()+dto.getDataBytes().length > dataBuffer.limit())
                     dataBuffer = ByteBuffer.allocate(dataBuffer.limit()*2).put(dataBuffer.array());
                 dataBuffer.put(dto.getDataBytes());
-                requestController.sendOK(channel);
+                channel.write(ByteBuffer.wrap(Serializer.convertObjectToBytes(
+                        new DataTransferObject(DataTransferObject.Code.OK, "")
+                )));
                 selector.select();
                 buffer.position(0);
                 channel.read(buffer);
                 dto = createObjectFromBytes(buffer.array());
             } while (dto.getCode() == DataTransferObject.Code.PART_OF_DATE);
+            connectionLock.unlock();
             return new DataTransferObject(dto.getCode(), Arrays.copyOfRange(dataBuffer.array(), 0,
                     dataBuffer.position()), dto.getDataType());
         }
-        else
+        else {
+            connectionLock.unlock();
             return mainObject;
+        }
     }
 
     /**
@@ -159,20 +169,8 @@ public class ConnectionController {
             channel.close();
     }
 
-    protected byte[] convertObjectToBytes(Object object) throws IOException {
-        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteStream);
-        objectOutputStream.writeObject(object);
-        objectOutputStream.flush();
-        return byteStream.toByteArray();
-    }
-
     public InetSocketAddress getAddress() {
         return address;
-    }
-
-    public SocketChannel getChannel() {
-        return channel;
     }
 
     public RequestController getRequestController() {

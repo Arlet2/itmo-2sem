@@ -1,6 +1,5 @@
 package server.commands;
 
-import connect_utils.CommandInfo;
 import exceptions.IncorrectArgumentException;
 import server.connection_control.User;
 import server.data_control.PasswordManager;
@@ -11,8 +10,8 @@ import java.sql.SQLException;
 public class RegisterCommand extends Command {
     RegisterCommand() {
         super("register", "login password", "регистрирует нового пользователя в системе",
-                null, new CommandInfo.ArgumentInfo[]{CommandInfo.ArgumentInfo.STRING,
-                        CommandInfo.ArgumentInfo.STRING}, false);
+                null, new Command.ArgumentInfo[]{Command.ArgumentInfo.STRING,
+                        Command.ArgumentInfo.STRING}, CommandType.AUTH);
     }
 
     @Override

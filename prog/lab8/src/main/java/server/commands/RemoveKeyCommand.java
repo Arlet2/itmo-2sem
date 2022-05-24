@@ -1,6 +1,5 @@
 package server.commands;
 
-import connect_utils.CommandInfo;
 import exceptions.IncorrectArgumentException;
 import server.connection_control.User;
 
@@ -9,7 +8,7 @@ import java.sql.SQLException;
 public class RemoveKeyCommand extends Command {
     RemoveKeyCommand() {
         super("remove_key", "id", "удаляет элемент из коллекции с заданным ключом", null,
-                new CommandInfo.ArgumentInfo[]{CommandInfo.ArgumentInfo.ID}, false);
+                new Command.ArgumentInfo[]{Command.ArgumentInfo.ID}, CommandType.CHANGE);
     }
 
     /**

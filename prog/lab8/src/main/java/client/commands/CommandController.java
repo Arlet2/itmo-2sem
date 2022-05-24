@@ -1,10 +1,13 @@
 package client.commands;
 
 import client.data_control.ConsoleController;
+import client.data_control.DataController;
 import client.data_control.FileController;
 import client.connection_control.ConnectionController;
-import connect_utils.CommandInfo;
+import server.commands.Command;
 import connect_utils.DataTransferObject;
+import connect_utils.Serializer;
+import data_classes.City;
 import data_classes.Climate;
 import data_classes.Government;
 import exceptions.ConfigFileNotFoundException;
@@ -12,9 +15,9 @@ import exceptions.ConnectionException;
 import exceptions.IncorrectArgumentException;
 import exceptions.MissingArgumentException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -22,6 +25,11 @@ import java.util.Scanner;
  * controls execution of all commands
  */
 public class CommandController {
+    /**
+     * Constant of max value in history
+     */
+    public static final int MAX_COMMANDS_IN_HISTORY = 13;
+
     /**
      * controls user's interaction with console
      */
@@ -37,10 +45,16 @@ public class CommandController {
      */
     private final FileController fileController = new FileController(this);
 
+    private final DataController dataController = new DataController(this);
+
     /**
      * All info about commands that can send to server and execute
      */
-    private ArrayList<CommandInfo> allCommandsInfo;
+    private ArrayList<Command> allCommands;
+
+    private ArrayList<Command> history;
+
+    private volatile boolean isConnected;
 
     /**
      * Create scanner and read configuration for connection
@@ -74,7 +88,8 @@ public class CommandController {
             }
         }
         try {
-            allCommandsInfo = connectionController.getRequestController().getCommandInfos();
+            allCommands = new ArrayList<>(connectionController.getRequestController().getCommands());
+            dataController.updateMap(connectionController.getRequestController().getCities());
         } catch (IOException e) {
             throw new ConnectionException("Ошибка получения данных конфигурации сервера.");
         } catch (ClassNotFoundException e) {
@@ -82,7 +97,21 @@ public class CommandController {
         }
         System.out.println("Успешное соединение с сервером.");
         System.out.println("Авторизуйтесь для работы. Используйте help для помощи.");
-        listenConsole();
+        history = new ArrayList<>();
+        isConnected = true;
+        new Thread(this::listenConsole).start();
+        new Thread(() -> {
+            while (isConnected) {
+                try {
+                    processRequest();
+                } catch (IOException e) {
+                    System.out.println("Ошибка соединения с сервером");
+                    isConnected = false;
+                } catch (ClassNotFoundException e) {
+                    System.out.println("Получен неизвестный запрос от сервера");
+                }
+            }
+        }).start();
     }
 
     /**
@@ -92,8 +121,8 @@ public class CommandController {
         Scanner scanner = new Scanner(System.in);
         String input = "";
         String[] args;
-        CommandInfo command;
-        while (true) {
+        Command command;
+        while (isConnected) {
             System.out.print("$ ");
             try {
                 input = scanner.nextLine().replaceAll(" +", " ");
@@ -105,17 +134,10 @@ public class CommandController {
             if (isValidCommand(args)) { // проверить арги и имя команды
                 command = parseCommand(args[0]);
                 try {
-                    connectionController.getRequestController().sendRequest(connectionController.getChannel(),
-                            new DataTransferObject(DataTransferObject.Code.COMMAND, input));
-                } catch (IOException e) {
-                    System.out.println("Не удалось отправить команду на сервер.");
-                    break;
-                }
-                try {
-                    if (invoke(command, args))
-                        processRequest(connectionController.getRequestController().receiveRequest());
+                    invoke(command, input);
                 } catch (IOException e) {
                     System.out.println("Ошибка получения запроса от сервера");
+                    isConnected = false;
                 } catch (ClassNotFoundException e) {
                     System.out.println("Получен некорректный ответ от сервера.");
                 }
@@ -136,63 +158,35 @@ public class CommandController {
      * Send extra info to server (if it needs)
      *
      * @param command that need to execute
-     * @param args    of this command
+     * @param input   as args of this command
      * @return <b>true</b> if invoke is successfully done; <b>false</b> if execution has got troubles
      * @throws IOException            if request couldn't receive or send
      * @throws ClassNotFoundException if request couldn't deserialize
      */
-    public boolean invoke(CommandInfo command, String[] args) throws IOException, ClassNotFoundException {
+    public void invoke(Command command, String input) throws IOException, ClassNotFoundException {
+        addCommandToHistory(command);
+        connectionController.getRequestController().sendRequest(
+                new DataTransferObject(DataTransferObject.Code.COMMAND, input));
         if (command.getSendInfo() == null)
-            return true;
-        DataTransferObject dataTransferObject;
+            return;
         switch (command.getSendInfo()) {
-            // могут слать null!!!
             case CITY:
-                dataTransferObject = connectionController.getRequestController().receiveRequest();
-                if (!dataTransferObject.getCode().equals(DataTransferObject.Code.OK)) {
-                    processRequest(dataTransferObject);
-                    return false;
-                }
-                System.out.println("Данные id корректны. Продолжение ввода...");
-                connectionController.getRequestController().sendCity(connectionController.getChannel(),
+                connectionController.getRequestController().sendCity(
                         consoleController.createCityByUser(false));
                 break;
             case CITY_UPDATE:
-                dataTransferObject = connectionController.getRequestController().receiveRequest();
-                if (!dataTransferObject.getCode().equals(DataTransferObject.Code.OK)) {
-                    processRequest(dataTransferObject);
-                    return false;
-                }
-                connectionController.getRequestController().sendCity(connectionController.getChannel(),
-                        consoleController.createCityByUser(true));
-                break;
-            case EXIT:
-                exit();
+                connectionController.getRequestController().sendCity(consoleController.createCityByUser(true));
                 break;
             case COMMANDS:
-                try {
-                    DataTransferObject validDataTransferObject = connectionController.getRequestController().receiveRequest();
-                    if (!validDataTransferObject.getCode().equals(DataTransferObject.Code.OK)) {
-                        processRequest(validDataTransferObject);
-                        break;
-                    }
-                    ArrayList<CommandInfo> commandsInfo = fileController.readScriptFile(args[1]);
-                    ArrayList<String> strCommand = fileController.getStrCommand();
-                    for (int i = 0; i < commandsInfo.size(); i++) {
-                        connectionController.getRequestController().sendRequest(connectionController.getChannel(),
-                                new DataTransferObject(DataTransferObject.Code.COMMAND, strCommand.get(i)));
-                        invoke(commandsInfo.get(i), strCommand.get(i).split(" "));
-                        processRequest(connectionController.getRequestController().receiveRequest());
-                    }
-                } catch (FileNotFoundException e) {
-                    System.out.println("Файл скрипта не найден.");
-                } finally {
-                    connectionController.getRequestController().sendRequest(connectionController.getChannel(),
-                            new DataTransferObject(DataTransferObject.Code.OK, ""));
-                }
                 break;
         }
-        return true;
+    }
+
+    private void addCommandToHistory(Command command) {
+        if (history.size() == MAX_COMMANDS_IN_HISTORY) {
+            history.remove(0);
+        }
+        history.add(command);
     }
 
     /**
@@ -210,10 +204,9 @@ public class CommandController {
 
     /**
      * Print information using request code
-     *
-     * @param dataTransferObject from server
      */
-    public void processRequest(DataTransferObject dataTransferObject) {
+    public void processRequest() throws IOException, ClassNotFoundException {
+        DataTransferObject dataTransferObject = connectionController.getRequestController().receiveRequest();
         switch (dataTransferObject.getCode()) {
             case REPLY:
                 System.out.print(dataTransferObject.getMsg());
@@ -222,6 +215,19 @@ public class CommandController {
                 System.out.print("Ошибка запроса: " + dataTransferObject.getMsg());
                 break;
             case OK:
+                System.out.println("ОК");
+                break;
+            case NOT_REQUEST:
+                switch (dataTransferObject.getDataType()) {
+                    case CITIES_ARRAY:
+                        System.out.println("ОБНОВЛЕНИЕ!");
+                        dataController.updateMap(
+                                (Collection<City>) Serializer.convertBytesToObject(dataTransferObject.getDataBytes()));
+                        break;
+                    case COMMANDS_ARRAY:
+                        System.out.println("ДЕРЬМО!");
+                        break;
+                }
                 break;
             default:
                 System.out.println("Получен неожиданный ответ от сервера: "
@@ -236,7 +242,7 @@ public class CommandController {
      * @return <b>true</b> if args is correct else <b>false</b>
      */
     public boolean isValidCommand(String[] args) {
-        CommandInfo command = parseCommand(args[0]);
+        Command command = parseCommand(args[0]);
         if (command == null) {
             System.out.println("Неизвестная команда " + args[0] + ", используйте help для вывода списка команд.");
             return false;
@@ -253,7 +259,18 @@ public class CommandController {
                     continue;
                 switch (command.getArgInfo()[i]) {
                     case ID:
-                        CommandInfo.idValidator(args[i + 1]);
+                        City.idValidator(args[i + 1]);
+                        if (command.getSendInfo() == Command.SendInfo.CITY) {
+                            if (!dataController.isUniqueId(Long.parseLong(args[i + 1]))) {
+                                System.out.println("Такой id уже есть.");
+                                return false;
+                            }
+                        } else if (command.getSendInfo() == Command.SendInfo.CITY_UPDATE) {
+                            if (dataController.isUniqueId(Long.parseLong(args[i + 1]))) {
+                                System.out.println("Такого id нет");
+                                return false;
+                            }
+                        }
                         break;
                     case INT:
                         try {
@@ -317,8 +334,8 @@ public class CommandController {
      * @param name of command
      * @return CommandInfo
      */
-    public CommandInfo parseCommand(String name) {
-        for (CommandInfo command : allCommandsInfo) {
+    public Command parseCommand(String name) {
+        for (Command command : allCommands) {
             if (command.getName().equals(name.toLowerCase())) {
                 return command;
             }
@@ -332,5 +349,9 @@ public class CommandController {
 
     public FileController getFileController() {
         return fileController;
+    }
+
+    public DataController getDataController() {
+        return dataController;
     }
 }

@@ -1,5 +1,6 @@
 package server.commands;
 
+import client.commands.ExecuteScriptCommand;
 import exceptions.ConfigFileNotFoundException;
 import server.Logger;
 import server.connection_control.ConnectionController;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.concurrent.*;
 import java.util.logging.Level;
 
@@ -39,11 +41,6 @@ public class ProgramController {
     private final ArrayList<Command> allCommands = new ArrayList<>(16);
 
     /**
-     * collection of data about all commands that will send to user
-     */
-    private final ArrayList<CommandInfo> allCommandsInfo = new ArrayList<>(16);
-
-    /**
      *
      */
     private final ArrayList<Command> authCommands = new ArrayList<>(3);
@@ -52,6 +49,8 @@ public class ProgramController {
     private final ExecutorService executors = Executors.newFixedThreadPool(5);
     private final ForkJoinPool senders = new ForkJoinPool(3);
 
+    private final LinkedList<User> users;
+
     /**
      * Create program working class
      */
@@ -59,6 +58,7 @@ public class ProgramController {
         this.dataController = new DataController();
         connectionController = new ConnectionController();
         commandInit();
+        users = new LinkedList<>();
     }
 
     /**
@@ -80,20 +80,30 @@ public class ProgramController {
      */
     private void processClient() {
         Socket socket;
+        User user;
         try {
             socket = connectionController.connect();
-            connectionController.getRequestController().sendCommandList(socket, allCommandsInfo);
+            user = new User(socket, "hello");
+            connectionController.getRequestController().sendCommands(user, allCommands);
         } catch (IOException e) {
             Logger.getLogger().log(Level.WARNING, "Ошибка попытки соединения с клиентом.");
             return;
         } finally {
             listeners.execute(this::processClient);
         }
-        User user = new User(socket, null);
         while (user.getLogin() == null) {
             user.setLogin(clientAuth(user));
             if (user.isDisconnected())
                 return;
+        }
+        users.add(user);
+        try {
+            connectionController.getRequestController().sendCollection(user,
+                    dataController.getMap());
+        } catch (IOException e) {
+            e.printStackTrace();
+            user.disconnect();
+            return;
         }
         listenRequests(user);
     }
@@ -102,28 +112,24 @@ public class ProgramController {
      * Initialization commands to allCommands that can be used by user
      */
     private void commandInit() {
-        allCommands.add(new HelpCommand());
+        //allCommands.add(new HelpCommand());
         allCommands.add(new RegisterCommand());
         allCommands.add(new LoginCommand());
-        allCommands.add(new ExitCommand());
+        //allCommands.add(new ExitCommand());
 
-        allCommands.add(new InfoCommand());
-        allCommands.add(new ShowCommand());
+        //allCommands.add(new InfoCommand());
+        //allCommands.add(new ShowCommand());
         allCommands.add(new InsertCommand());
         allCommands.add(new UpdateCommand());
         allCommands.add(new RemoveKeyCommand());
         allCommands.add(new ClearCommand());
-        allCommands.add(new ExecuteScriptCommand());
-        allCommands.add(new HistoryCommand());
+        //allCommands.add(new ExecuteScriptCommand());
+        //allCommands.add(new HistoryCommand());
         allCommands.add(new ReplaceIfGreaterCommand());
         allCommands.add(new RemoveLowerKeyCommand());
-        allCommands.add(new FilterGreaterThanClimateCommand());
-        allCommands.add(new PrintAscendingCommand());
-        allCommands.add(new PrintFieldAscendingGovernment());
-        allCommands.forEach(command -> {
-            if (!command.isServerCommand())
-                allCommandsInfo.add(new CommandInfo(command.getName(), command.getSendInfo(), command.getArgInfo()));
-        });
+        //allCommands.add(new FilterGreaterThanClimateCommand());
+        //allCommands.add(new PrintAscendingCommand());
+        //allCommands.add(new PrintFieldAscendingGovernment());
         authCommands.add(allCommands.get(0));
         authCommands.add(allCommands.get(1));
         authCommands.add(allCommands.get(2));
@@ -133,7 +139,8 @@ public class ProgramController {
     private String clientAuth(User user) {
         DataTransferObject dataTransferObject;
         try {
-            dataTransferObject = connectionController.getRequestController().receiveRequest(user.getSocket());
+            dataTransferObject = connectionController.getRequestController().receiveRequest(user,
+                    DataTransferObject.Code.COMMAND);
         } catch (IOException e) {
             e.printStackTrace();
             user.disconnect();
@@ -156,7 +163,7 @@ public class ProgramController {
                             senders.execute(() -> {
                                 try {
                                     connectionController.getRequestController()
-                                            .sendError(user.getSocket(), e.getMessage());
+                                            .sendError(user, e.getMessage());
                                 } catch (IOException ex) {
                                     ex.printStackTrace();
                                     user.disconnect();
@@ -170,7 +177,7 @@ public class ProgramController {
             try {
                 return senders.submit(() -> {
                     try {
-                        connectionController.getRequestController().sendReply(user.getSocket(), result.get());
+                        connectionController.getRequestController().sendReply(user, result.get());
                         return args[1];
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -186,7 +193,7 @@ public class ProgramController {
         } else {
             senders.execute(() -> {
                 try {
-                    connectionController.getRequestController().sendError(user.getSocket(),
+                    connectionController.getRequestController().sendError(user,
                             "Доступ запрещен " +
                                     "неавторизованным пользователям.\nИспользуйте команды login или register "
                                     + "для авторизации или регистрации.\n" +
@@ -210,7 +217,8 @@ public class ProgramController {
         DataTransferObject dataTransferObject;
         Command command;
         try {
-            dataTransferObject = connectionController.getRequestController().receiveRequest(user.getSocket());
+            dataTransferObject = connectionController.getRequestController().receiveRequest(user,
+                    DataTransferObject.Code.COMMAND);
             if (!dataTransferObject.getCode().equals(DataTransferObject.Code.COMMAND)) {
                 Logger.getLogger().log(Level.WARNING, "Получен некорректный запрос от клиента.");
                 listeners.execute(() -> listenRequests(user));
@@ -236,7 +244,7 @@ public class ProgramController {
                     senders.execute(() -> {
                         try {
                             connectionController.getRequestController()
-                                    .sendError(user.getSocket(),
+                                    .sendError(user,
                                             "получен некорректный аргумент команды - " + e.getMessage());
                         } catch (IOException ex) {
                             ex.printStackTrace();
@@ -249,7 +257,7 @@ public class ProgramController {
                     senders.execute(() -> {
                         try {
                             connectionController.getRequestController()
-                                    .sendError(user.getSocket(), "получена неизвестная серверу команда");
+                                    .sendError(user, "получена неизвестная серверу команда");
                         } catch (IOException ex) {
                             ex.printStackTrace();
                             user.disconnect();
@@ -261,7 +269,7 @@ public class ProgramController {
                     senders.execute(() -> {
                         try {
                             connectionController.getRequestController()
-                                    .sendError(user.getSocket(), "получены неопознанные данные от клиента");
+                                    .sendError(user, "получены неопознанные данные от клиента");
                         } catch (IOException ex) {
                             ex.printStackTrace();
                             user.disconnect();
@@ -283,9 +291,10 @@ public class ProgramController {
             } catch (InterruptedException | ExecutionException ignored) {
 
             }
+            sendUpdate();
             if (reply != null) {
                 try {
-                    connectionController.getRequestController().sendReply(user.getSocket(), reply);
+                    connectionController.getRequestController().sendReply(user, reply);
                     Logger.getLogger().log(Level.INFO, "Отправлен ответ клиенту " + user.getLogin() + ".");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -294,6 +303,20 @@ public class ProgramController {
             }
             listeners.execute(() -> listenRequests(user));
         });
+    }
+
+    public void sendUpdate() {
+        users.removeIf(User::isDisconnected);
+        for (User user : users) {
+            try {
+                System.out.println(user.getLogin());
+                connectionController.getRequestController().sendCollection(user,
+                        dataController.getMap());
+            } catch (IOException e) {
+                e.printStackTrace();
+                user.disconnect();
+            }
+        }
     }
 
     /**
@@ -307,7 +330,6 @@ public class ProgramController {
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
         Logger.getLogger().log(Level.INFO, "Получена команда " + command.getName() + " от клиента " +
                 (user.getLogin() == null ? user.getAddress() : user.getLogin()));
-        user.addCommandToHistory(command);
         return command.execute(user, this, args);
     }
 

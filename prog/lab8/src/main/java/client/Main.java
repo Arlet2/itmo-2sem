@@ -1,9 +1,11 @@
 package client;
 
-import client.commands.CommandController;
-import exceptions.ConfigFileNotFoundException;
-import exceptions.ConnectionException;
-import exceptions.MissingArgumentException;
+import client.ui.AuthUI;
+import client.ui.MainWindowUI;
+
+import javax.swing.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Main {
     /**
@@ -12,6 +14,11 @@ public class Main {
      * @param args do not use
      */
     public static void main(String[] args) {
+        Locale.setDefault(Locale.ENGLISH);
+        MainWindowUI window = new MainWindowUI();
+        window.createFrame();
+        //window.changeLocale(null);
+        /*
         CommandController cc;
         try {
             cc = new CommandController();
@@ -27,5 +34,6 @@ public class Main {
         } catch (ConnectionException e) {
             System.out.println(e.getMessage());
         }
+         */
     }
 }

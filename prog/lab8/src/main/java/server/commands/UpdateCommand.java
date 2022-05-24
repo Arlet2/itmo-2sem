@@ -2,7 +2,6 @@ package server.commands;
 
 import data_classes.City;
 import exceptions.IncorrectArgumentException;
-import connect_utils.CommandInfo;
 import server.connection_control.User;
 
 import java.io.IOException;
@@ -11,8 +10,8 @@ import java.sql.SQLException;
 public class UpdateCommand extends Command {
     UpdateCommand() {
         super("update", "id {element}", "обновляет значение элемента коллекции с определенным id",
-                CommandInfo.SendInfo.CITY_UPDATE,
-                new CommandInfo.ArgumentInfo[]{CommandInfo.ArgumentInfo.ID}, false);
+                Command.SendInfo.CITY_UPDATE,
+                new Command.ArgumentInfo[]{Command.ArgumentInfo.ID}, CommandType.CHANGE);
     }
 
     /**
@@ -22,6 +21,7 @@ public class UpdateCommand extends Command {
      * @param args              id
      * @throws IncorrectArgumentException if id is incorrect
      */
+    @Deprecated
     @Override
     public String execute(User user, ProgramController programController, String[] args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
@@ -31,11 +31,8 @@ public class UpdateCommand extends Command {
         try {
             if (!programController.getDataController().getDataBaseController().isOwner(user.getLogin(), id))
                 throw new IncorrectArgumentException("вы не владеете этим объектом. Вы не можете его изменять.");
-
-            programController.getConnectionController().getRequestController()
-                    .sendOK(user.getSocket());
             City city = programController.getConnectionController().getRequestController()
-                    .receiveCity(user.getSocket());
+                    .receiveCity(user);
             if (city == null)
                 throw new IncorrectArgumentException("город не был создан");
             city.setId(id);

@@ -1,6 +1,5 @@
 package server.commands;
 
-import connect_utils.CommandInfo;
 import exceptions.IncorrectArgumentException;
 import server.connection_control.User;
 import server.data_control.PasswordManager;
@@ -14,8 +13,7 @@ public class LoginCommand extends Command {
      */
     LoginCommand() {
         super("login", "username password", "выполняет авторизацию пользователя", null,
-                new CommandInfo.ArgumentInfo[]{CommandInfo.ArgumentInfo.STRING, CommandInfo.ArgumentInfo.STRING},
-                false);
+                new Command.ArgumentInfo[]{Command.ArgumentInfo.STRING, Command.ArgumentInfo.STRING}, CommandType.AUTH);
     }
 
     @Override

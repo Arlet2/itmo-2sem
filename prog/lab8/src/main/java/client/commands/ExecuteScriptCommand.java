@@ -1,7 +1,9 @@
-package server.commands;
+package client.commands;
 
 import connect_utils.*;
 import exceptions.IncorrectArgumentException;
+import server.commands.Command;
+import server.commands.ProgramController;
 import server.connection_control.User;
 
 import java.io.IOException;
@@ -18,8 +20,8 @@ public class ExecuteScriptCommand extends Command {
     public final static int RECURSION_INTERRUPT = 10;
 
     ExecuteScriptCommand() {
-        super("execute_script", "file_name", "исполняет скрипт из указанного файла", CommandInfo.SendInfo.COMMANDS,
-                new CommandInfo.ArgumentInfo[]{CommandInfo.ArgumentInfo.STRING}, false);
+        super("execute_script", "file_name", "исполняет скрипт из указанного файла", SendInfo.COMMANDS,
+                new ArgumentInfo[]{ArgumentInfo.STRING}, CommandType.CHANGE);
     }
 
     /**
@@ -35,14 +37,15 @@ public class ExecuteScriptCommand extends Command {
     @Override
     public String execute(User user, ProgramController programController, String[] args)
             throws IOException, ClassNotFoundException {
+        /*
         programController.getConnectionController().getRequestController().sendOK(user.getSocket());
-        DataTransferObject dataTransferObject = programController.getConnectionController().getRequestController()
+        Request request = programController.getConnectionController().getRequestController()
                 .receiveRequest(user.getSocket());
         Command command;
         String[] cArgs;
         String reply = null;
-        while (!dataTransferObject.getCode().equals(DataTransferObject.Code.OK)) {
-            cArgs = dataTransferObject.getMsg().split(" ");
+        while (!request.getRequestCode().equals(Request.RequestCode.OK)) {
+            cArgs = request.getMsg().split(" ");
             command = programController.searchCommand(cArgs[0]);
             if (command != null) {
                 if (command.getName().equals("execute_script"))
@@ -68,13 +71,16 @@ public class ExecuteScriptCommand extends Command {
                     programController.getConnectionController().getRequestController()
                             .sendReply(user.getSocket(), reply);
             }
-            dataTransferObject = programController.getConnectionController().getRequestController()
+            request = programController.getConnectionController().getRequestController()
                     .receiveRequest(user.getSocket());
         }
         recursionCounter = 0;
         programController.getConnectionController().getRequestController()
                 .sendOK(user.getSocket());
+         */
         return null;
+
+
     }
 
 

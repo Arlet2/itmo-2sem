@@ -1,6 +1,5 @@
 package server.commands;
 
-import connect_utils.CommandInfo;
 import data_classes.City;
 import exceptions.IncorrectArgumentException;
 import server.connection_control.User;
@@ -11,7 +10,7 @@ import java.sql.SQLException;
 public class RemoveLowerKeyCommand extends Command {
     RemoveLowerKeyCommand() {
         super("remove_lower_key", "id", "удаляет все элементы из коллекции, у которых id меньше заданного", null,
-                new CommandInfo.ArgumentInfo[]{CommandInfo.ArgumentInfo.ID}, false);
+                new Command.ArgumentInfo[]{Command.ArgumentInfo.ID}, CommandType.CHANGE);
     }
 
     /**

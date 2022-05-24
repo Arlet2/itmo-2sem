@@ -272,9 +272,9 @@ public class DataBaseController {
         PreparedStatement ps1 = connection.prepareStatement("DELETE FROM humans * WHERE id=?");
         ps = connection.prepareStatement("DELETE FROM coordinates * WHERE id=?");
         while (resultSet.next()) {
-            ps.setLong(1, resultSet.getLong("id"));
+            ps.setLong(1, resultSet.getLong(1));
             ps.execute();
-            ps1.setLong(1, resultSet.getLong("id"));
+            ps1.setLong(1, resultSet.getLong(1));
             ps1.execute();
         }
     }

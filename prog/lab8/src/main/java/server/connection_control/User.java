@@ -1,19 +1,17 @@
 package server.connection_control;
 
+import connect_utils.DataTransferObject;
 import server.Logger;
 import server.commands.Command;
 
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Class that store login, history of command and socket of user
  */
 public class User {
-    /**
-     * Constant of max value in history
-     */
-    public static final int MAX_COMMANDS_IN_HISTORY = 13;
 
     /**
      * User's history of command
@@ -34,6 +32,8 @@ public class User {
      * Connection status
      */
     private volatile boolean isConnected;
+
+    private final LinkedList<DataTransferObject> requests = new LinkedList<>();
 
     /**
      * Create user
@@ -64,18 +64,6 @@ public class User {
      */
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    /**
-     * Add new command to history
-     *
-     * @param command that need to add
-     */
-    public void addCommandToHistory(Command command) {
-        if (history.size() == MAX_COMMANDS_IN_HISTORY) {
-            history.remove(0);
-        }
-        history.add(command);
     }
 
     /**
@@ -113,4 +101,19 @@ public class User {
     public String getAddress() {
         return socket.getInetAddress().getHostAddress();
     }
+
+    public DataTransferObject searchAndDeleteRequestByCode(DataTransferObject.Code code) {
+        for (DataTransferObject dto: requests) {
+            if (dto.getCode() == code) {
+                requests.remove(dto);
+                return dto;
+            }
+        }
+        return null;
+    }
+
+    public void addDataTransferObject(DataTransferObject dto) {
+        requests.add(dto);
+    }
+
 }

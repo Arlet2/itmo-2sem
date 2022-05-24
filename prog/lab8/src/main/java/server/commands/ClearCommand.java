@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class ClearCommand extends Command {
     ClearCommand() {
-        super("clear", "", "очищает элементы коллекции", null, null, false);
+        super("clear", "", "очищает элементы коллекции", null, null, CommandType.CHANGE);
     }
 
     /**

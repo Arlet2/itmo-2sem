@@ -1,14 +1,12 @@
 package client.connection_control;
 
-import connect_utils.CommandInfo;
+import server.commands.Command;
 import connect_utils.DataTransferObject;
+import connect_utils.Serializer;
 import data_classes.City;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Class uses for control all requests
@@ -34,35 +32,36 @@ public class RequestController {
     /**
      * Send request to server
      *
-     * @param channel that connect with server
      * @param dataTransferObject that need to send
      * @throws IOException if request couldn't send
      */
-    public void sendRequest(SocketChannel channel, DataTransferObject dataTransferObject) throws IOException {
-        connectionController.sendObject(channel, dataTransferObject);
+    public void sendRequest(DataTransferObject dataTransferObject) throws IOException {
+        connectionController.sendObject(dataTransferObject);
     }
 
-    public void sendOK(SocketChannel channel) throws IOException {
-        connectionController.sendObject(channel, new DataTransferObject(DataTransferObject.Code.OK, ""));
+    public void sendOK() throws IOException {
+        connectionController.sendObject(new DataTransferObject(DataTransferObject.Code.OK, ""));
     }
     /**
      * Send city object to server
      *
-     * @param channel that connect with server
      * @param city    that need to send
      * @throws IOException if City object couldn't send
      */
-    public void sendCity(SocketChannel channel, City city) throws IOException {
+    public void sendCity(City city) throws IOException {
         DataTransferObject dto = new DataTransferObject(
-                DataTransferObject.Code.NOT_REQUEST, connectionController.convertObjectToBytes(city),
+                DataTransferObject.Code.NOT_REQUEST, Serializer.convertObjectToBytes(city),
                 DataTransferObject.DataType.CITY);
-        connectionController.sendObject(channel, dto);
+        connectionController.sendObject(dto);
     }
 
-    public ArrayList<CommandInfo> getCommandInfos() throws IOException, ClassNotFoundException {
-        DataTransferObject dto = connectionController.processConnection();
-        ByteArrayInputStream byteStream = new ByteArrayInputStream(dto.getDataBytes());
-        ObjectInputStream objIn = new ObjectInputStream(byteStream);
-        return (ArrayList<CommandInfo>) objIn.readObject();
+    public Collection<Command> getCommands() throws IOException, ClassNotFoundException {
+        return (Collection<Command>) Serializer.convertBytesToObject(connectionController.processConnection()
+                .getDataBytes());
+    }
+
+    public Collection<City> getCities() throws IOException, ClassNotFoundException {
+        return (Collection<City>) Serializer.convertBytesToObject(connectionController.processConnection()
+                .getDataBytes());
     }
 }

@@ -1,7 +1,7 @@
 package client.data_control;
 
 import client.commands.CommandController;
-import connect_utils.CommandInfo;
+import server.commands.Command;
 import exceptions.ConfigFileNotFoundException;
 import exceptions.MissingArgumentException;
 
@@ -37,9 +37,9 @@ public class FileController {
      * @return ArrayList of CommandInfo from script
      * @throws FileNotFoundException if script file not found
      */
-    public ArrayList<CommandInfo> readScriptFile(String path) throws FileNotFoundException {
+    public ArrayList<Command> readScriptFile(String path) throws FileNotFoundException {
         strCommand = new ArrayList<>();
-        ArrayList<CommandInfo> commandsInfo = new ArrayList<>();
+        ArrayList<Command> commandsInfo = new ArrayList<>();
         BufferedReader buffIn = new BufferedReader(new InputStreamReader(new FileInputStream(path)));
         buffIn.lines().forEach(string -> {
             String[] args;

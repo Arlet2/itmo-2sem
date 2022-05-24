@@ -1,14 +1,56 @@
 package server.commands;
 
-import connect_utils.CommandInfo;
-import data_classes.Coordinates;
 import data_classes.City;
+import data_classes.Coordinates;
+
+import java.io.Serializable;
 
 /**
  * abstract class for all commands
  * <p>Use executable interface</p>
  */
-public abstract class Command implements Executable {
+public abstract class Command implements Serializable, Executable {
+    public enum CommandType {
+        AUTH,
+        CHANGE,
+        INFO,
+        EXIT,
+        SCRIPT
+    }
+    /**
+     * Types of argument for command
+     */
+    public enum ArgumentInfo {
+        ID,
+        FLOAT,
+        INT,
+        STRING,
+        CLIMATE,
+        GOVERNMENT
+    }
+
+    /**
+     * Types of send info from client
+     * city - client need to send city object
+     * city_update - client need to send updating city object
+     * commands - client need to send new commands
+     * exit - client can interrupt program with this command
+     */
+    public enum SendInfo {
+        CITY,
+        CITY_UPDATE,
+        COMMANDS
+    }
+    /**
+     * Information that client need to send to server when command is executing
+     */
+    private SendInfo sendInfo;
+
+    /**
+     * Arguments that client need to check before he sends ones to server
+     */
+    private ArgumentInfo[] argInfo;
+
     /**
      * name of this command for usage
      */
@@ -24,21 +66,14 @@ public abstract class Command implements Executable {
      */
     private final String signature;
 
-    /**
-     * Information that client need to send to server when command is executing
-     */
-    private final CommandInfo.SendInfo sendInfo;
+    private final CommandType type;
 
-    /**
-     * Arguments that client need to check before he sends ones to server
-     */
-    private final CommandInfo.ArgumentInfo[] argInfo;
-
-    /**
-     * true if it's command that can use only from server console without client
-     */
-    private final boolean isServerCommand;
-
+    protected Command(final String name, final String signature, final String description, CommandType type) {
+        this.name = name;
+        this.signature = signature;
+        this.description = description;
+        this.type = type;
+    }
     /**
      * Create new command that can execute on server
      *
@@ -47,16 +82,12 @@ public abstract class Command implements Executable {
      * @param description     of this command (for help)
      * @param sendInfo        of this command (for client)
      * @param argInfo         of this command (for client)
-     * @param isServerCommand if true client can't use it
      */
-    public Command(final String name, final String signature, final String description, CommandInfo.SendInfo sendInfo,
-            CommandInfo.ArgumentInfo[] argInfo, boolean isServerCommand) {
-        this.name = name;
-        this.signature = signature;
-        this.description = description;
+    protected Command(final String name, final String signature, final String description, SendInfo sendInfo,
+                                 ArgumentInfo[] argInfo, CommandType type) {
+        this(name, signature, description, type);
         this.sendInfo = sendInfo;
         this.argInfo = argInfo;
-        this.isServerCommand = isServerCommand;
     }
 
     /**
@@ -103,15 +134,15 @@ public abstract class Command implements Executable {
         return description;
     }
 
-    public CommandInfo.SendInfo getSendInfo() {
+    public CommandType getType() {
+        return type;
+    }
+
+    public SendInfo getSendInfo() {
         return sendInfo;
     }
 
-    public CommandInfo.ArgumentInfo[] getArgInfo() {
+    public ArgumentInfo[] getArgInfo() {
         return argInfo;
-    }
-
-    public boolean isServerCommand() {
-        return isServerCommand;
     }
 }
