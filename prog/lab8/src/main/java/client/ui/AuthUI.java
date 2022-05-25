@@ -8,6 +8,7 @@ public class AuthUI extends AbstractWindow {
     private JButton switchAuthButton;
     private JTextField loginField;
     private JPasswordField passwordField;
+    private JPasswordField repeatPasswordField;
     private JButton authButton;
     public AuthUI() {
         super("auth");
@@ -26,42 +27,53 @@ public class AuthUI extends AbstractWindow {
         mainFrame.setMinimumSize(new Dimension(sizeWidth, sizeHeight));
 
         JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        mainPanel.add(switchLanguageBox);
+        JPanel switchPanel = new JPanel();
+        mainPanel.add(switchPanel);
+
+        switchPanel.add(switchLanguageBox);
 
         switchAuthButton = new JButton(getString((
                 isLoginPanel?"to_register_change_button_name":"to_login_change_button_name")));
-        mainPanel.add(switchAuthButton);
+        switchPanel.add(switchAuthButton);
 
-        JPanel authPanel = new JPanel(new FlowLayout());
+        JPanel loginPanel = new JPanel(new FlowLayout());
+        mainPanel.add(loginPanel);
 
         JLabel loginLabel = new JLabel();
         loginLabel.setText(getString("login_label"));
-        authPanel.add(loginLabel);
+        loginPanel.add(loginLabel);
 
         loginField = new JTextField(10);
-        authPanel.add(loginField);
+        loginPanel.add(loginField);
+
+        JPanel passwordPanel = new JPanel();
+        mainPanel.add(passwordPanel);
+
 
         JLabel passwordLabel = new JLabel(getString("password_label"));
-        authPanel.add(passwordLabel);
+        passwordPanel.add(passwordLabel);
 
         passwordField = new JPasswordField(10);
-        authPanel.add(passwordField);
+        passwordPanel.add(passwordField);
 
-        JPasswordField repeatPasswordField = null;
+        JPanel repeatPasswordPanel = new JPanel();
+        mainPanel.add(repeatPasswordPanel);
+
+        repeatPasswordField = new JPasswordField(10);
         if(!isLoginPanel) {
             JLabel repeatPasswordLabel = new JLabel(getString("repeat_password_label"));
-            authPanel.add(repeatPasswordLabel);
-
-            repeatPasswordField = new JPasswordField(10);
-            authPanel.add(repeatPasswordField);
+            repeatPasswordPanel.add(repeatPasswordLabel);
+            repeatPasswordPanel.add(repeatPasswordField);
         }
+
+        JPanel buttonPanel = new JPanel();
+        mainPanel.add(buttonPanel);
 
         authButton = new JButton(
                 getString(isLoginPanel?"login_button_name":"register_button_name"));
-        authPanel.add(authButton);
-
-        mainPanel.add(authPanel);
+        buttonPanel.add(authButton);
 
         mainFrame.add(mainPanel);
     }
@@ -72,13 +84,17 @@ public class AuthUI extends AbstractWindow {
             recreateFrame();
         });
         authButton.addActionListener(e -> {
+            String password = new String(passwordField.getPassword());
             if(isLoginPanel) {
                 System.out.println("CHECK LOGIN");
             }
             else {
-                System.out.println("REGISTER");
+                String repeatedPassword = new String(repeatPasswordField.getPassword());
+                if (!password.equals(repeatedPassword)) {
+                    JOptionPane.showMessageDialog(mainFrame, getString("passwords_not_equal", "errors"),
+                            getString("error_name_dialog", "errors"), JOptionPane.ERROR_MESSAGE);
+                }
             }
-            mainFrame.dispose();
         });
     }
 }

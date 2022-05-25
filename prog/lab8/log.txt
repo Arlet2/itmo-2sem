@@ -3953,3 +3953,5 @@ INFO: Принято подключение от клиента /127.0.0.1:7845.
 INFO: Принято подключение от клиента /127.0.0.1:7845.
 мая 23, 2022 12:51:18 AM server.connection_control.ConnectionController connect
 INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 24, 2022 11:28:24 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.

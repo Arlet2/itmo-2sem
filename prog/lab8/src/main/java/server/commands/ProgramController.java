@@ -1,6 +1,5 @@
 package server.commands;
 
-import client.commands.ExecuteScriptCommand;
 import exceptions.ConfigFileNotFoundException;
 import server.Logger;
 import server.connection_control.ConnectionController;

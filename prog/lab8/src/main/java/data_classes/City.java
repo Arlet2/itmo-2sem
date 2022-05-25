@@ -76,6 +76,8 @@ public class City implements Comparable<City>, Serializable {
      */
     private final Human governor = new Human(); //Поле не может быть null
 
+    private String owner;
+
     public City() {
 
     }
@@ -325,6 +327,10 @@ public class City implements Comparable<City>, Serializable {
      */
     public Human getGovernor() {
         return governor;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     /**

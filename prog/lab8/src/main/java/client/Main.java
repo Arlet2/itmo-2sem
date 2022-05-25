@@ -1,6 +1,7 @@
 package client;
 
 import client.ui.AuthUI;
+import client.ui.ErrorDialog;
 import client.ui.MainWindowUI;
 
 import javax.swing.*;
@@ -15,8 +16,10 @@ public class Main {
      */
     public static void main(String[] args) {
         Locale.setDefault(Locale.ENGLISH);
-        MainWindowUI window = new MainWindowUI();
-        window.createFrame();
+        AuthUI authUI = new AuthUI();
+        authUI.createFrame();
+        //MainWindowUI window = new MainWindowUI();
+        //window.createFrame();
         //window.changeLocale(null);
         /*
         CommandController cc;
