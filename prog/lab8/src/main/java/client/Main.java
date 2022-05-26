@@ -18,7 +18,8 @@ public class Main {
         Locale.setDefault(Locale.ENGLISH);
         try {
             AppController appController = new AppController();
-            appController.startWork();
+            //appController.startWork();
+            appController.getUiController().createMainWindow("test");
         } catch (MissingArgumentException | ConfigFileNotFoundException | ConnectionException  e) {
             UIController.showErrorDialog(e.getMessage());
         }

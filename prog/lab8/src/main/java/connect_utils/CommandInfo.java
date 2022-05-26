@@ -5,6 +5,10 @@ import java.io.Serializable;
 public class CommandInfo implements Serializable {
     private final String name;
     private final byte[] args;
+    public CommandInfo(String name) {
+        this.name = name;
+        args = new byte[0];
+    }
     public CommandInfo(String name, byte[] args) {
         this.name = name;
         this.args = args;

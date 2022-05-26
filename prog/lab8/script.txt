@@ -1,4 +1,4 @@
 help
-help
 info
+history
 insert 67

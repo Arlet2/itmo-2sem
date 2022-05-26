@@ -1,6 +1,7 @@
 package client.data_control;
 
 import client.AppController;
+import connect_utils.CommandInfo;
 import server.commands.Command;
 import exceptions.ConfigFileNotFoundException;
 import exceptions.MissingArgumentException;
@@ -37,22 +38,15 @@ public class FileController {
      * @return ArrayList of CommandInfo from script
      * @throws FileNotFoundException if script file not found
      */
-    public ArrayList<Command> readScriptFile(String path) throws FileNotFoundException {
-        /*
+    public ArrayList<String> readScriptFile(String path) throws FileNotFoundException {
         strCommand = new ArrayList<>();
-        ArrayList<Command> commandsInfo = new ArrayList<>();
+        ArrayList<String> commandsInfo = new ArrayList<>();
         BufferedReader buffIn = new BufferedReader(new InputStreamReader(new FileInputStream(path)));
         buffIn.lines().forEach(string -> {
-            String[] args;
             String s = string.replaceAll(" +", " ");
-            args = s.split(" ");
-            if (appController.isValidCommand(args)) {
-                commandsInfo.add(appController.parseCommand(args[0]));
-                strCommand.add(string);
-            }
+            commandsInfo.add(s.split(" ")[0]);
         });
-        */
-        return null;
+        return commandsInfo;
     }
 
     /**

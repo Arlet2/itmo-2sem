@@ -31,7 +31,7 @@ public class Coordinates implements Serializable {
      */
     public void setX(final float x) throws IncorrectValueException {
         if (x <= -407)
-            throw new IncorrectValueException("Значение координаты X должно быть больше -407");
+            throw new IncorrectValueException("x_check");
         this.x = x;
     }
 
@@ -43,7 +43,7 @@ public class Coordinates implements Serializable {
      */
     public void setY(final Integer y) throws NullValueException {
         if (y == null)
-            throw new NullValueException();
+            throw new NullValueException("y_is_not_null");
         this.y = y;
     }
 

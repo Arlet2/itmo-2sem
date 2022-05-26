@@ -39,7 +39,7 @@ public class AppController {
 
     private final UIController uiController = new UIController(this);
 
-    private ArrayList<CommandInfo> history;
+    private ArrayList<CommandInfo> history = new ArrayList<>();
 
     private volatile boolean isConnected;
 
@@ -139,6 +139,10 @@ public class AppController {
 
         }
         System.exit(0);
+    }
+
+    public ArrayList<CommandInfo> getHistory() {
+        return history;
     }
 
     public ConnectionController getConnectionController() {

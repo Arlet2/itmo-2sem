@@ -4327,3 +4327,15 @@ INFO: Принято подключение от клиента /127.0.0.1:7845.
 WARNING: Ошибка получения запроса
 мая 26, 2022 3:11:05 AM server.Logger logDisconnect
 WARNING: Потеряно соединение с клиентом e3
+мая 26, 2022 11:16:38 AM server.Main main
+WARNING: Не был найден файл конфигурации базы данных database.config.
+мая 26, 2022 11:17:07 AM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 26, 2022 11:18:26 AM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 26, 2022 11:21:52 AM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 26, 2022 11:29:13 AM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 26, 2022 11:33:06 AM server.Main main
+WARNING: Ошибка подключения к базе данных.

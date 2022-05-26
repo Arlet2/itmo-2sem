@@ -31,10 +31,10 @@ public class RequestController {
     }
 
     public void sendCommand(CommandInfo command) throws IOException {
+        connectionController.getAppController().addCommandToHistory(command);
         connectionController.sendObject(new DataTransferObject(DataTransferObject.Code.COMMAND,
                         Serializer.convertObjectToBytes(command),
                         DataTransferObject.DataType.MESSAGE));
-        connectionController.getAppController().addCommandToHistory(command);
     }
 
     public void sendLogin(String login, String password) throws IOException {

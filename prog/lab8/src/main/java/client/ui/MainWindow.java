@@ -1,9 +1,13 @@
 package client.ui;
 
+import client.data_control.FileController;
 import connect_utils.CommandInfo;
 import connect_utils.Serializer;
 import data_classes.City;
 import data_classes.Climate;
+import exceptions.EmptyValueException;
+import exceptions.IncorrectValueException;
+import exceptions.NullValueException;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -12,12 +16,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.channels.NotYetConnectedException;
 import java.text.NumberFormat;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
 import java.util.*;
 
@@ -27,18 +35,18 @@ public class MainWindow extends AbstractWindow {
     private JTextField climateFilterField;
     private JTextField filterField;
     private JComboBox<String> filterSwitcher;
-    private final JTextField idField = new JTextField(10);
-    private final JTextField nameField = new JTextField(10);
-    private final JTextField coordinateXField = new JTextField(10);
-    private final JTextField coordinateYField = new JTextField(10);
-    private final JTextField areaField = new JTextField(10);
-    private final JTextField populationField = new JTextField(10);
-    private final JTextField metersAboveSeaLevelField = new JTextField(10);
-    private final JTextField establishmentDateField = new JTextField(10);
-    private final JTextField climateField = new JTextField(10);
-    private final JTextField governmentField = new JTextField(10);
-    private final JTextField governorAgeField = new JTextField(10);
-    private final JTextField governorBirthdayField = new JTextField(10);
+    private final JTextField idField = new JTextField();
+    private final JTextField nameField = new JTextField();
+    private final JTextField coordinateXField = new JTextField();
+    private final JTextField coordinateYField = new JTextField();
+    private final JTextField areaField = new JTextField();
+    private final JTextField populationField = new JTextField();
+    private final JTextField metersAboveSeaLevelField = new JTextField();
+    private final JTextField establishmentDateField = new JTextField();
+    private final JTextField climateField = new JTextField();
+    private final JTextField governmentField = new JTextField();
+    private final JTextField governorAgeField = new JTextField();
+    private final JTextField governorBirthdayField = new JTextField();
 
     private JButton insertButton;
     private JButton updateButton;
@@ -92,7 +100,7 @@ public class MainWindow extends AbstractWindow {
             int column = -1;
             if (filterSwitcher.getSelectedItem() != null) {
                 for (Headers header : Headers.values()) {
-                    if (((String) filterSwitcher.getSelectedItem()).equals(getString(header.key))) {
+                    if (filterSwitcher.getSelectedItem().equals(getString(header.key))) {
                         column = header.ordinal();
                         break;
                     }
@@ -104,39 +112,246 @@ public class MainWindow extends AbstractWindow {
             updateFilter(column, filterField.getText());
         });
         insertButton.addActionListener(e -> {
-            try {
-                uiController.getAppController().getConnectionController().getRequestController()
-                        .sendCommand(new CommandInfo("insert", Serializer.convertObjectToBytes(new City())));
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                UIController.showErrorDialog("server_is_unavailable");
-            }
+            insertAction();
         });
         updateButton.addActionListener(e -> {
-
+            updateAction();
         });
         removeKeyButton.addActionListener(e -> {
-
+            removeKeyAction();
         });
         removeLowerKeyButton.addActionListener(e -> {
-
+            removeLowerKeyAction();
         });
         replaceIfGreaterButton.addActionListener(e -> {
-
+            replaceIfGreaterAction();
         });
         clearButton.addActionListener(e -> {
-
+            clearAction();
         });
         historyButton.addActionListener(e -> {
-
+            historyAction();
         });
         executeScriptButton.addActionListener(e -> {
-
+            String path = UIController.showInputDialog(getString("execute_script_input"),
+                    getString("execute_script_window_name"));
+            if (path == null || path.equals("")) {
+                UIController.showErrorDialog("incorrect_path");
+            }
+            ArrayList<String> commands;
+            try {
+                commands = uiController.getAppController().getFileController().readScriptFile(path);
+            } catch (FileNotFoundException ex) {
+                UIController.showErrorDialog("script_file_not_found");
+                return;
+            }
+            ArrayList<String> unknownCommands = new ArrayList<>();
+            for (String s : commands) {
+                switch (s) {
+                    case "insert":
+                        insertAction();
+                        break;
+                    case "update":
+                        updateAction();
+                        break;
+                    case "remove_key":
+                        removeKeyAction();
+                        break;
+                    case "remove_lower_key":
+                        removeLowerKeyAction();
+                        break;
+                    case "replace_if_greater":
+                        replaceIfGreaterAction();
+                        break;
+                    case "clear":
+                        clearAction();
+                        break;
+                    case "history":
+                        historyAction();
+                        break;
+                    default:
+                        unknownCommands.add(s);
+                        break;
+                }
+            }
+            if (!unknownCommands.isEmpty()) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = 0; i < unknownCommands.size(); i++)
+                    stringBuilder.append(i + 1).append(") ").append(unknownCommands.get(i)).append("\n");
+                UIController.showCustomErrorDialog(getString("unknown_commands", "errors")+"\n"+stringBuilder);
+            } else
+                UIController.showInfoDialog("execute_script_success");
+            uiController.getAppController().addCommandToHistory(new CommandInfo("execute_script"));
         });
     }
 
-    private City cityCreator() {
-        return null;
+    private void historyAction() {
+        StringBuilder msg = new StringBuilder();
+        if (uiController.getAppController().getHistory().isEmpty())
+            UIController.showInfoDialog(getString("history_is_empty"),
+                    getString("history_window_name"));
+        else {
+            for (int i = 0; i < uiController.getAppController().getHistory().size(); i++)
+                msg.append(i + 1).append(") ")
+                        .append(getString(uiController.getAppController().getHistory().get(i)
+                                .getName() + "_button_name"))
+                        .append("\n");
+            UIController.showInfoDialog(msg.toString(), getString("history_window_name"));
+        }
+        uiController.getAppController().addCommandToHistory(new CommandInfo("history"));
+    }
+
+    private void insertAction() {
+        try {
+            uiController.getAppController().getConnectionController().getRequestController()
+                    .sendCommand(new CommandInfo("insert", Serializer.convertObjectToBytes(cityCreator())));
+        } catch (IOException | NotYetConnectedException ex) {
+            ex.printStackTrace();
+            UIController.showErrorDialog("server_is_unavailable");
+        } catch (IncorrectValueException | NullValueException | DateTimeParseException | EmptyValueException ex) {
+            ex.printStackTrace();
+            UIController.showErrorDialog(ex.getMessage());
+        }
+    }
+
+    private void updateAction() {
+        try {
+            uiController.getAppController().getConnectionController().getRequestController()
+                    .sendCommand(new CommandInfo("update", Serializer.convertObjectToBytes(cityCreator())));
+        } catch (IOException | NotYetConnectedException ex) {
+            ex.printStackTrace();
+            UIController.showErrorDialog("server_is_unavailable");
+        } catch (IncorrectValueException | NullValueException | DateTimeParseException | EmptyValueException ex) {
+            ex.printStackTrace();
+            UIController.showErrorDialog(ex.getMessage());
+        }
+    }
+
+    private void removeKeyAction() {
+        try {
+            long id;
+            try {
+                id = Long.parseLong(idField.getText());
+            } catch (IncorrectValueException ex) {
+                UIController.showErrorDialog(ex.getMessage());
+                return;
+            }
+            uiController.getAppController().getConnectionController().getRequestController()
+                    .sendCommand(new CommandInfo("remove_key", Serializer.convertObjectToBytes(
+                            new String[]{"", id + ""}
+                    )));
+        } catch (IOException | NotYetConnectedException ex) {
+            ex.printStackTrace();
+            UIController.showErrorDialog("server_is_unavailable");
+        }
+    }
+
+    private void removeLowerKeyAction() {
+        try {
+            long id;
+            try {
+                id = Long.parseLong(idField.getText());
+            } catch (IncorrectValueException ex) {
+                UIController.showErrorDialog(ex.getMessage());
+                return;
+            }
+            uiController.getAppController().getConnectionController().getRequestController()
+                    .sendCommand(new CommandInfo("remove_lower_key", Serializer.convertObjectToBytes(
+                            new String[]{"", id + ""}
+                    )));
+        } catch (IOException | NotYetConnectedException ex) {
+            ex.printStackTrace();
+            UIController.showErrorDialog("server_is_unavailable");
+        }
+    }
+
+    private void replaceIfGreaterAction() {
+        try {
+            uiController.getAppController().getConnectionController().getRequestController()
+                    .sendCommand(new CommandInfo("replace_if_greater", Serializer.convertObjectToBytes(cityCreator())));
+        } catch (IOException | NotYetConnectedException ex) {
+            ex.printStackTrace();
+            UIController.showErrorDialog("server_is_unavailable");
+        } catch (IncorrectValueException | NullValueException | DateTimeParseException | EmptyValueException ex) {
+            ex.printStackTrace();
+            UIController.showErrorDialog(ex.getMessage());
+        }
+    }
+
+    private void clearAction() {
+        try {
+            uiController.getAppController().getConnectionController().getRequestController()
+                    .sendCommand(new CommandInfo("clear", new byte[0]));
+        } catch (IOException | NotYetConnectedException ex) {
+            ex.printStackTrace();
+            UIController.showErrorDialog("server_is_unavailable");
+        }
+    }
+
+    private City cityCreator() throws IncorrectValueException, NullValueException,
+            EmptyValueException {
+        City city = new City();
+        try {
+            city.setId(Long.parseLong(idField.getText().replaceAll("[\\s.,]", "")));
+        } catch (NumberFormatException e) {
+            throw new IncorrectValueException("id_is_integer");
+        }
+        city.setName(nameField.getText());
+        try {
+            city.getCoordinates().setX(Float.parseFloat(coordinateXField.getText()
+                    .replaceAll("\\s", "")));
+        } catch (NumberFormatException e) {
+            throw new IncorrectValueException("x_is_float");
+        }
+        try {
+            city.getCoordinates().setY(Integer.parseInt(coordinateYField.getText()
+                    .replaceAll("\\s,.", "")));
+        } catch (NumberFormatException e) {
+            throw new IncorrectValueException("y_is_integer");
+        }
+        city.setCreationDate(ZonedDateTime.now());
+        try {
+            city.setArea(Long.parseLong(areaField.getText().replaceAll("[\\s.,]", "")));
+        } catch (NumberFormatException e) {
+            throw new IncorrectValueException("area_is_integer");
+        }
+        try {
+            city.setPopulation(Integer.parseInt(populationField.getText()
+                    .replaceAll("\\s,.", "")));
+        } catch (NumberFormatException e) {
+            throw new IncorrectValueException("population_is_integer");
+        }
+        try {
+            city.setMetersAboveSeaLevel(Long.parseLong(metersAboveSeaLevelField.getText()
+                    .replaceAll("[\\s.,]", "")));
+        } catch (NumberFormatException e) {
+            throw new IncorrectValueException("meters_above_sea_level_integer");
+        }
+        try {
+            city.setEstablishmentDate(LocalDate.parse(establishmentDateField.getText(),
+                    DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
+                            .withLocale(Locale.getDefault())));
+        } catch (DateTimeParseException e) {
+            e.printStackTrace();
+            throw new IncorrectValueException("incorrect_establishment_date");
+        }
+        city.setClimate(climateField.getText().toUpperCase());
+        city.setGovernment(governmentField.getText().toUpperCase());
+        try {
+            city.getGovernor().setAge(Long.parseLong(governorAgeField.getText().replaceAll("[\\s.,]", "")));
+        } catch (NumberFormatException e) {
+            throw new IncorrectValueException("age_is_integer");
+        }
+        try {
+            city.getGovernor().setBirthday(LocalDateTime.parse(
+                    governorBirthdayField.getText(),
+                    DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
+                            .withLocale(Locale.getDefault())));
+        } catch (DateTimeParseException e) {
+            throw new IncorrectValueException("incorrect_birthday");
+        }
+        System.out.println(city);
+        return city;
     }
 
     private JPanel createMapTab() {
@@ -282,6 +497,14 @@ public class MainWindow extends AbstractWindow {
     }
 
     private void updateTableData() {
+        City city = new City();
+        city.setId(1L);
+        city.setEstablishmentDate(LocalDate.now());
+        city.getCoordinates().setY(1);
+        city.setMetersAboveSeaLevel(2L);
+        city.getGovernor().setAge(1L);
+        city.getGovernor().setBirthday(LocalDateTime.now());
+        cities.add(city);
         Object[][] values = new Object[cities.size()][14];
         for (int i = 0; i < cities.size(); i++) {
             values[i][0] = NumberFormat.getInstance(Locale.getDefault())
@@ -300,13 +523,13 @@ public class MainWindow extends AbstractWindow {
             values[i][7] = NumberFormat.getInstance(Locale.getDefault())
                     .format(cities.get(i).getMetersAboveSeaLevel());
             values[i][8] = cities.get(i).getEstablishmentDate().format(DateTimeFormatter
-                    .ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.getDefault()));
+                    .ofLocalizedDate(FormatStyle.SHORT).withLocale(Locale.getDefault()));
             values[i][9] = cities.get(i).getClimateString();
             values[i][10] = cities.get(i).getGovernmentString();
             values[i][11] = NumberFormat.getInstance(Locale.getDefault())
                     .format(cities.get(i).getGovernor().getAge().longValue());
             values[i][12] = cities.get(i).getGovernor().getBirthday()
-                    .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(Locale.getDefault()));
+                    .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.getDefault()));
             values[i][13] = cities.get(i).getOwner();
         }
         Object[] headers = new Object[Headers.values().length];
@@ -333,29 +556,29 @@ public class MainWindow extends AbstractWindow {
                 if (rowIndex == -1)
                     return;
                 ;
-                idField.setText((String)table.getModel()
+                idField.setText((String) table.getModel()
                         .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 0));
-                nameField.setText((String)table.getModel()
+                nameField.setText((String) table.getModel()
                         .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 1));
-                coordinateXField.setText((String)table.getModel()
+                coordinateXField.setText((String) table.getModel()
                         .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 2));
-                coordinateYField.setText((String)table.getModel()
+                coordinateYField.setText((String) table.getModel()
                         .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 3));
-                areaField.setText((String)table.getModel()
+                areaField.setText((String) table.getModel()
                         .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 5));
-                populationField.setText((String)table.getModel()
+                populationField.setText((String) table.getModel()
                         .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 6));
-                metersAboveSeaLevelField.setText((String)table.getModel()
+                metersAboveSeaLevelField.setText((String) table.getModel()
                         .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 7));
-                establishmentDateField.setText((String)table.getModel()
+                establishmentDateField.setText((String) table.getModel()
                         .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 8));
-                climateField.setText((String)table.getModel()
-                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex),9));
-                governmentField.setText((String)table.getModel()
+                climateField.setText((String) table.getModel()
+                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 9));
+                governmentField.setText((String) table.getModel()
                         .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 10));
-                governorAgeField.setText((String)table.getModel()
+                governorAgeField.setText((String) table.getModel()
                         .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 11));
-                governorBirthdayField.setText((String)table.getModel()
+                governorBirthdayField.setText((String) table.getModel()
                         .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 12));
             }
         });
@@ -406,7 +629,7 @@ public class MainWindow extends AbstractWindow {
         rowSorter.setComparator(0, Comparator.comparingLong(o -> (Long.parseLong(((String) o)
                 .replaceAll("[,.\\s]", "")))));
         rowSorter.setComparator(2, Comparator.comparingDouble(o -> (Float.parseFloat(((String) o)
-                .replaceAll("\\s","")))));
+                .replaceAll("\\s", "")))));
         rowSorter.setComparator(3, Comparator.comparingInt(o -> (Integer.parseInt(((String) o)
                 .replaceAll("\\s,.", "")))));
         rowSorter.setComparator(5, Comparator.comparingLong(o -> (Long.parseLong(((String) o)

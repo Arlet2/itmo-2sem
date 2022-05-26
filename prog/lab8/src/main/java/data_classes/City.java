@@ -110,9 +110,9 @@ public class City implements Comparable<City>, Serializable {
      */
     public void setId(final Long id) throws NullValueException, IncorrectValueException {
         if (id == null)
-            throw new NullValueException();
+            throw new NullValueException("id_not_null");
         if (id <= 0)
-            throw new IncorrectValueException("значение ID должно быть больше 0");
+            throw new IncorrectValueException("id_is_greater_zero");
         this.id = id;
     }
 
@@ -130,11 +130,9 @@ public class City implements Comparable<City>, Serializable {
      * @throws NullValueException  if name is null
      * @throws EmptyValueException if name is empty
      */
-    public void setName(final String name) throws NullValueException, EmptyValueException {
-        if (name == null)
-            throw new NullValueException();
-        if (name.equals(""))
-            throw new EmptyValueException("имя");
+    public void setName(final String name) throws EmptyValueException {
+        if (name == null || name.equals(""))
+            throw new EmptyValueException("name_not_empty");
         this.name = name;
     }
 
@@ -161,7 +159,7 @@ public class City implements Comparable<City>, Serializable {
      */
     public void setCreationDate(final java.time.ZonedDateTime creationDate) throws NullValueException {
         if (creationDate == null)
-            throw new NullValueException();
+            throw new NullValueException("creation_date_not_null");
         this.creationDate = creationDate;
     }
 
@@ -180,7 +178,7 @@ public class City implements Comparable<City>, Serializable {
      */
     public void setArea(final long area) throws IncorrectValueException {
         if (area <= 0)
-            throw new IncorrectValueException("значение площади должно быть больше 0");
+            throw new IncorrectValueException("area_greater_than_zero");
         this.area = area;
     }
 
@@ -199,7 +197,7 @@ public class City implements Comparable<City>, Serializable {
      */
     public void setPopulation(final int population) throws IncorrectValueException {
         if (population <= 0)
-            throw new IncorrectValueException("значение числа жителей должно быть больше 0");
+            throw new IncorrectValueException("population_greater_than_zero");
         this.population = population;
     }
 
