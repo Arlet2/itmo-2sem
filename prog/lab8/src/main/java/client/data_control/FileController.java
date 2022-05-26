@@ -1,6 +1,6 @@
 package client.data_control;
 
-import client.commands.CommandController;
+import client.AppController;
 import server.commands.Command;
 import exceptions.ConfigFileNotFoundException;
 import exceptions.MissingArgumentException;
@@ -19,15 +19,15 @@ public class FileController {
     /**
      * Current program controller
      */
-    private final CommandController commandController;
+    private final AppController appController;
 
     /**
      * LAST from reading script file commands with args as string
      */
     private ArrayList<String> strCommand;
 
-    public FileController(CommandController commandController) {
-        this.commandController = commandController;
+    public FileController(AppController appController) {
+        this.appController = appController;
     }
 
     /**
@@ -38,6 +38,7 @@ public class FileController {
      * @throws FileNotFoundException if script file not found
      */
     public ArrayList<Command> readScriptFile(String path) throws FileNotFoundException {
+        /*
         strCommand = new ArrayList<>();
         ArrayList<Command> commandsInfo = new ArrayList<>();
         BufferedReader buffIn = new BufferedReader(new InputStreamReader(new FileInputStream(path)));
@@ -45,12 +46,13 @@ public class FileController {
             String[] args;
             String s = string.replaceAll(" +", " ");
             args = s.split(" ");
-            if (commandController.isValidCommand(args)) {
-                commandsInfo.add(commandController.parseCommand(args[0]));
+            if (appController.isValidCommand(args)) {
+                commandsInfo.add(appController.parseCommand(args[0]));
                 strCommand.add(string);
             }
         });
-        return commandsInfo;
+        */
+        return null;
     }
 
     /**
@@ -64,10 +66,7 @@ public class FileController {
         try {
             scanner = new Scanner(new FileInputStream("config.excalibbur"));
         } catch (FileNotFoundException e) {
-            throw new ConfigFileNotFoundException("Не найден файл конфигурации. " +
-                    "Создайте файл конфигурации config.excalibbur\n" +
-                    "И добавьте в него строки \"address: localhost\" (допускается обычный ip, сервера)" +
-                    " и \"port: 1234\" (порт сервера)");
+            throw new ConfigFileNotFoundException("configuration_file_not_found");
         }
         StringBuilder s = new StringBuilder();
         int port;
@@ -80,16 +79,13 @@ public class FileController {
         if (matcher.find())
             port = Integer.parseInt(s.substring(matcher.start(), matcher.end()));
         else
-            throw new MissingArgumentException("в файле конфигурации не был найден порт. " +
-                    "Добавьте в файл строку типа \"port: 1234\"");
+            throw new MissingArgumentException("port_not_found");
         matcher = Pattern.compile("(?<=address:)[\\w\\d.]+|(?<=address:\\s)[\\w\\d.]+|(?<=address:\\s{2})[\\w\\d.]+",
                 Pattern.CASE_INSENSITIVE).matcher(s.toString());
         if (matcher.find())
             address = s.substring(matcher.start(), matcher.end());
         else
-            throw new MissingArgumentException("в файле конфигурации не был найден адрес сервера. " +
-                    "Добавьте в файл строку типа\n" +
-                    "\"address: localhost\", \"address: 192.65.3.5\"");
+            throw new MissingArgumentException("address_not_found");
         return new InetSocketAddress(address, port);
     }
 

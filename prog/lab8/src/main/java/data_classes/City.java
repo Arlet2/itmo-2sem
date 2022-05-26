@@ -333,6 +333,10 @@ public class City implements Comparable<City>, Serializable {
         this.owner = owner;
     }
 
+    public String getOwner() {
+        return owner;
+    }
+
     /**
      * Transform date to string (human viewable)
      *

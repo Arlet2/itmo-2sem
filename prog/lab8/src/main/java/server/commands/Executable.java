@@ -21,6 +21,6 @@ public interface Executable {
      * @throws IOException                if connection is closed
      * @throws ClassNotFoundException     if receiving information is not expected
      */
-    String execute(User user, ProgramController programController, String[] args) throws IncorrectArgumentException,
+    String execute(User user, ProgramController programController, Object args) throws IncorrectArgumentException,
             IOException, ClassNotFoundException;
 }

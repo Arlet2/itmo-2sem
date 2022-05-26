@@ -1,5 +1,6 @@
 package connect_utils;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -29,8 +30,15 @@ public class DataTransferObject implements Serializable {
      */
     public DataTransferObject(final Code code, final String msg) {
         this.code = code;
-        dataBytes = msg.getBytes();
         dataType = DataType.MESSAGE;
+        byte[] bytes;
+        try {
+            bytes = Serializer.convertObjectToBytes(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+            bytes = new byte[0];
+        }
+        dataBytes = bytes;
     }
 
     /**
@@ -64,8 +72,7 @@ public class DataTransferObject implements Serializable {
     public enum DataType {
         MESSAGE,
         CITY,
-        CITIES_ARRAY,
-        COMMANDS_ARRAY
+        CITIES_ARRAY
     }
 
     /**
@@ -81,9 +88,7 @@ public class DataTransferObject implements Serializable {
         REPLY,
         COMMAND,
         ERROR,
-        NEXT_REQUEST_CITY,
         OK,
-        PART_OF_DATE,
-        NOT_REQUEST
+        PART_OF_DATE
     }
 }

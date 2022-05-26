@@ -1,17 +1,19 @@
 package client.ui;
 
+import exceptions.ConnectionException;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class AuthUI extends AbstractWindow {
+public class AuthWindow extends AbstractWindow {
     private boolean isLoginPanel = true;
     private JButton switchAuthButton;
     private JTextField loginField;
     private JPasswordField passwordField;
     private JPasswordField repeatPasswordField;
     private JButton authButton;
-    public AuthUI() {
-        super("auth");
+    public AuthWindow(UIController uiController) {
+        super("auth", uiController);
     }
 
 
@@ -85,16 +87,24 @@ public class AuthUI extends AbstractWindow {
         });
         authButton.addActionListener(e -> {
             String password = new String(passwordField.getPassword());
-            if(isLoginPanel) {
-                System.out.println("CHECK LOGIN");
-            }
-            else {
+            if(!isLoginPanel) {
                 String repeatedPassword = new String(repeatPasswordField.getPassword());
                 if (!password.equals(repeatedPassword)) {
-                    JOptionPane.showMessageDialog(mainFrame, getString("passwords_not_equal", "errors"),
-                            getString("error_name_dialog", "errors"), JOptionPane.ERROR_MESSAGE);
+                    UIController.showErrorDialog("passwords_not_equal");
+                    return;
                 }
             }
+            try {
+                if (uiController.getAppController().connect(loginField.getText(),
+                        new String(passwordField.getPassword()), isLoginPanel)) {
+                    mainFrame.dispose();
+                    uiController.createMainWindow(loginField.getText());
+                }
+            } catch (ConnectionException ex) {
+                ex.printStackTrace();
+                UIController.showErrorDialog(ex.getMessage());
+            }
+
         });
     }
 }

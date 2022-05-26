@@ -12,25 +12,23 @@ public class LoginCommand extends Command {
      * Create new command that can execute on server
      */
     LoginCommand() {
-        super("login", "username password", "выполняет авторизацию пользователя", null,
+        super("login", null,
                 new Command.ArgumentInfo[]{Command.ArgumentInfo.STRING, Command.ArgumentInfo.STRING}, CommandType.AUTH);
     }
 
     @Override
-    public String execute(User user, ProgramController programController, String[] args)
+    public String execute(User user, ProgramController programController, Object args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
-        if (user.getLogin() != null)
-            return "Вы уже авторизованы.\n" +
-                    "Для смены пользователя нужно переподключение.\n";
+        String[] strArgs = (String[]) args;
         try {
-            if (!PasswordManager.checkPasswords(args[2],
-                    programController.getDataController().getDataBaseController().getUserSalt(args[1]),
-                    programController.getDataController().getDataBaseController().getUserPassword(args[1])))
-                throw new IncorrectArgumentException("неверный пароль пользователя");
+            if (!PasswordManager.checkPasswords(strArgs[2],
+                    programController.getDataController().getDataBaseController().getUserSalt(strArgs[1]),
+                    programController.getDataController().getDataBaseController().getUserPassword(strArgs[1])))
+                throw new IncorrectArgumentException("wrong_password");
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new IncorrectArgumentException("пользователь не найден.");
+            throw new IncorrectArgumentException("login_not_exist");
         }
-        return "Вы были успешно авторизованы.\n";
+        return "auth_success";
     }
 }

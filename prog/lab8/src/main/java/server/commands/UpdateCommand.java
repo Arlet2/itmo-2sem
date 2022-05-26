@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class UpdateCommand extends Command {
     UpdateCommand() {
-        super("update", "id {element}", "обновляет значение элемента коллекции с определенным id",
+        super("update",
                 Command.SendInfo.CITY_UPDATE,
                 new Command.ArgumentInfo[]{Command.ArgumentInfo.ID}, CommandType.CHANGE);
     }
@@ -23,26 +23,22 @@ public class UpdateCommand extends Command {
      */
     @Deprecated
     @Override
-    public String execute(User user, ProgramController programController, String[] args)
+    public String execute(User user, ProgramController programController, Object args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
-        Long id = Long.parseLong(args[1]);
+        City city = (City) args;
+        long id = city.getId();
         if (programController.getDataController().isUniqueId(id))
-            throw new IncorrectArgumentException("элемента с таким id не существует");
+            throw new IncorrectArgumentException("id_not_exist");
         try {
             if (!programController.getDataController().getDataBaseController().isOwner(user.getLogin(), id))
-                throw new IncorrectArgumentException("вы не владеете этим объектом. Вы не можете его изменять.");
-            City city = programController.getConnectionController().getRequestController()
-                    .receiveCity(user);
-            if (city == null)
-                throw new IncorrectArgumentException("город не был создан");
-            city.setId(id);
+                throw new IncorrectArgumentException("not_owner");
             deleteNullValues(programController.getDataController().getMap().get(id), city);
             programController.getDataController().updateCity(city);
             programController.getDataController().updateModificationTime();
-            return "Элемент с id " + id + " был обновлён.\n";
+            return "collection_modified";
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new IncorrectArgumentException("не удалось обновить элемент в базе данных");
+            throw new IncorrectArgumentException("update_failed");
         }
     }
 }

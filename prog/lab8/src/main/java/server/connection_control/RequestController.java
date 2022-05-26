@@ -62,23 +62,11 @@ public class RequestController {
      * @throws IOException if server couldn't send this request
      */
     public void sendError(User user, String msg) throws IOException {
-        connectionController.sendObject(user, new DataTransferObject(DataTransferObject.Code.ERROR, msg + "\n"));
-    }
-
-    /**
-     * Send list of command that user can use on server
-     *
-     * @param list of commands
-     * @throws IOException if connection is closed
-     */
-    public void sendCommands(User user, Collection<Command> list) throws IOException {
-        DataTransferObject dto = new DataTransferObject(DataTransferObject.Code.NOT_REQUEST,
-                Serializer.convertObjectToBytes(list), DataTransferObject.DataType.COMMANDS_ARRAY);
-        connectionController.sendObject(user, dto);
+        connectionController.sendObject(user, new DataTransferObject(DataTransferObject.Code.ERROR, msg));
     }
 
     public void sendCollection(User user, HashMap<Long, City> cities) throws IOException {
-        DataTransferObject dto = new DataTransferObject(DataTransferObject.Code.NOT_REQUEST,
+        DataTransferObject dto = new DataTransferObject(DataTransferObject.Code.COMMAND,
                 Serializer.convertObjectToBytes(
                         new ArrayList<>(cities.values())), DataTransferObject.DataType.CITIES_ARRAY);
         connectionController.sendObject(user, dto);
@@ -104,7 +92,7 @@ public class RequestController {
      * @throws ClassNotFoundException if receiving information is not city
      */
     public City receiveCity(User user) throws IOException, ClassNotFoundException {
-        DataTransferObject dto = connectionController.receiveObject(user, DataTransferObject.Code.NOT_REQUEST);
+        DataTransferObject dto = connectionController.receiveObject(user, DataTransferObject.Code.COMMAND);
         ByteInputStream byteStream = new ByteInputStream();
         byteStream.setBuf(dto.getDataBytes());
         ObjectInputStream objIn = new ObjectInputStream(byteStream);

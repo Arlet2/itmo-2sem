@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class RemoveLowerKeyCommand extends Command {
     RemoveLowerKeyCommand() {
-        super("remove_lower_key", "id", "удаляет все элементы из коллекции, у которых id меньше заданного", null,
+        super("remove_lower_key", null,
                 new Command.ArgumentInfo[]{Command.ArgumentInfo.ID}, CommandType.CHANGE);
     }
 
@@ -22,9 +22,10 @@ public class RemoveLowerKeyCommand extends Command {
      * @throws IncorrectArgumentException if id is incorrect
      */
     @Override
-    public String execute(User user, ProgramController programController, String[] args)
+    public String execute(User user, ProgramController programController, Object args)
             throws IncorrectArgumentException {
-        long id = Long.parseLong(args[1]);
+        String[] strArgs = (String[]) args;
+        long id = Long.parseLong(strArgs[1]);
         boolean isMapModified = false;
         for (City city : programController.getDataController().getMap().values()) {
             if (city.getId() < id) {
@@ -41,8 +42,8 @@ public class RemoveLowerKeyCommand extends Command {
         }
         if (isMapModified) {
             programController.getDataController().updateModificationTime();
-            return "Коллекция была изменена.\n";
+            return "collection_modified";
         }
-        return "Коллекция осталась без изменений.\n";
+        return "collection_not_modified";
     }
 }

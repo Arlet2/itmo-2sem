@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class RemoveKeyCommand extends Command {
     RemoveKeyCommand() {
-        super("remove_key", "id", "удаляет элемент из коллекции с заданным ключом", null,
+        super("remove_key", null,
                 new Command.ArgumentInfo[]{Command.ArgumentInfo.ID}, CommandType.CHANGE);
     }
 
@@ -20,20 +20,21 @@ public class RemoveKeyCommand extends Command {
      * @throws IncorrectArgumentException if id is incorrect
      */
     @Override
-    public String execute(User user, ProgramController programController, String[] args)
+    public String execute(User user, ProgramController programController, Object args)
             throws IncorrectArgumentException {
-        long id = Long.parseLong(args[1]);
+        String[] strArgs = (String[]) args;
+        long id = Long.parseLong(strArgs[1]);
         if (programController.getDataController().isUniqueId(id))
-            throw new IncorrectArgumentException("элемента с таким id не существует");
+            throw new IncorrectArgumentException("id_not_exist");
         try {
             if (!programController.getDataController().getDataBaseController().isOwner(user.getLogin(), id))
-                return "Вы не владеете этим объектом и не можете его удалить.\n";
+                return "not_owner";
             programController.getDataController().removeCity(id);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new IncorrectArgumentException("не удалось удалить элемент из базы данных");
+            throw new IncorrectArgumentException("remove_data_failed");
         }
         programController.getDataController().updateModificationTime();
-        return "Элемент с id " + id + " был удалён.\n";
+        return "remove_success";
     }
 }

@@ -3,36 +3,38 @@ package client.ui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 public abstract class AbstractWindow {
     private ResourceBundle resourceBundle;
-    private Locale currentLocale;
     protected Dimension screenSize;
     protected JFrame mainFrame;
     protected JComboBox<String> switchLanguageBox;
     protected Languages language;
     private final String resourcesName;
+    protected final UIController uiController;
 
-    public AbstractWindow(String resourcesName) {
+    public AbstractWindow(String resourcesName, UIController uiController) {
+        this.uiController = uiController;
         this.resourcesName = resourcesName;
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         resourceBundle = ResourceBundle.getBundle(resourcesName, Locale.getDefault());
         language = getLanguage(Locale.getDefault());
-        currentLocale = language.getLocale();
     }
 
     public void changeLocale(Locale newLocale) {
         if (newLocale == null || newLocale.getLanguage().equals("en")) {
             resourceBundle = ResourceBundle.getBundle(resourcesName, Locale.ROOT);
             language = Languages.EN;
-            currentLocale = language.getLocale();
+            Locale.setDefault(language.getLocale());
         }
         else {
             resourceBundle = ResourceBundle.getBundle(resourcesName, newLocale);
             language = getLanguage(newLocale);
-            currentLocale = language.getLocale();
+            Locale.setDefault(language.getLocale());
         }
         recreateFrame();
     }
@@ -87,8 +89,8 @@ public abstract class AbstractWindow {
         return ResourceBundle.getBundle(resourcesName).getString(key);
     }
 
-    public Locale getCurrentLocale() {
-        return currentLocale;
+    public UIController getUiController() {
+        return uiController;
     }
 
     public enum Languages {

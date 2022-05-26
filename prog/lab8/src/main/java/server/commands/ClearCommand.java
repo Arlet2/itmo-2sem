@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class ClearCommand extends Command {
     ClearCommand() {
-        super("clear", "", "очищает элементы коллекции", null, null, CommandType.CHANGE);
+        super("clear", CommandType.CHANGE);
     }
 
     /**
@@ -20,7 +20,7 @@ public class ClearCommand extends Command {
      * @throws IncorrectArgumentException if database return error
      */
     @Override
-    public String execute(User user, ProgramController programController, String[] args)
+    public String execute(User user, ProgramController programController, Object args)
             throws IncorrectArgumentException {
         try {
             programController.getDataController().clearMap(user.getLogin());
@@ -29,6 +29,6 @@ public class ClearCommand extends Command {
             throw new IncorrectArgumentException("не удалось удалить данные из базы данных");
         }
         programController.getDataController().updateModificationTime();
-        return "Коллекция успешно очищена от ваших объектов.\n";
+        return "clear_success";
     }
 }

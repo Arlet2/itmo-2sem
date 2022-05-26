@@ -1,5 +1,7 @@
 package client.ui;
 
+import connect_utils.CommandInfo;
+import connect_utils.Serializer;
 import data_classes.City;
 import data_classes.Climate;
 
@@ -8,19 +10,19 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Ellipse2D;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Vector;
+import java.util.*;
 
-public class MainWindowUI extends AbstractWindow {
-    private ArrayList<City> cities;
+public class MainWindow extends AbstractWindow {
+    private ArrayList<City> cities = new ArrayList<>();
     private TableRowSorter<TableModel> tableSorter;
     private JTextField climateFilterField;
     private JTextField filterField;
@@ -47,10 +49,13 @@ public class MainWindowUI extends AbstractWindow {
     private JButton executeScriptButton;
     private JButton historyButton;
 
-    private JTable table;
+    private final JTable table = new JTable();
 
-    public MainWindowUI() {
-        super("main");
+    public final String login;
+
+    public MainWindow(UIController uiController, String login) {
+        super("main", uiController);
+        this.login = login;
     }
 
     @Override
@@ -58,6 +63,13 @@ public class MainWindowUI extends AbstractWindow {
         int sizeWidth = 5 * screenSize.width / 6;
         int sizeHeight = 5 * screenSize.height / 6;
         mainFrame = new JFrame(getString("window_name"));
+        mainFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                uiController.getAppController().exit();
+            }
+        });
         mainFrame.setBounds((screenSize.width - sizeWidth) / 2, (screenSize.height - sizeHeight) / 2,
                 sizeWidth, sizeHeight);
         mainFrame.setMinimumSize(new Dimension(sizeWidth, sizeHeight));
@@ -92,7 +104,13 @@ public class MainWindowUI extends AbstractWindow {
             updateFilter(column, filterField.getText());
         });
         insertButton.addActionListener(e -> {
-
+            try {
+                uiController.getAppController().getConnectionController().getRequestController()
+                        .sendCommand(new CommandInfo("insert", Serializer.convertObjectToBytes(new City())));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                UIController.showErrorDialog("server_is_unavailable");
+            }
         });
         updateButton.addActionListener(e -> {
 
@@ -109,23 +127,32 @@ public class MainWindowUI extends AbstractWindow {
         clearButton.addActionListener(e -> {
 
         });
+        historyButton.addActionListener(e -> {
+
+        });
+        executeScriptButton.addActionListener(e -> {
+
+        });
     }
 
+    private City cityCreator() {
+        return null;
+    }
 
     private JPanel createMapTab() {
-        readCityCollection();
+        updateMapData();
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setMinimumSize(mainFrame.getMinimumSize());
         int sh = 0;
-        for (City city: cities) {
+        for (City city : cities) {
             CityPainting cityPainting = new CityPainting(city);
-            cityPainting.setBounds((int)city.getCoordinates().getX(), city.getCoordinates().getY(),
-                    (int)city.getArea()*100, (int)city.getArea()*100);
-            cityPainting.setMaximumSize(new Dimension((int)city.getArea(), (int)city.getArea()));
+            cityPainting.setBounds((int) city.getCoordinates().getX(), city.getCoordinates().getY(),
+                    (int) city.getArea() * 100, (int) city.getArea() * 100);
+            cityPainting.setMaximumSize(new Dimension((int) city.getArea(), (int) city.getArea()));
             cityPainting.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    System.out.println("LOX "+city.getId());
+                    System.out.println("LOX " + city.getId());
                 }
             });
             mainPanel.add(cityPainting);
@@ -134,10 +161,15 @@ public class MainWindowUI extends AbstractWindow {
         return mainPanel;
     }
 
+    private void updateMapData() {
+
+    }
+
     private JPanel createTableTab() {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setMinimumSize(mainFrame.getSize());
-        JScrollPane scrollTablePane = new JScrollPane(createTable());
+        updateTableData();
+        JScrollPane scrollTablePane = new JScrollPane(table);
         mainPanel.add(scrollTablePane);
 
         JPanel rightPanel = new JPanel();
@@ -148,7 +180,7 @@ public class MainWindowUI extends AbstractWindow {
         toolPanel.setLayout(new BoxLayout(toolPanel, BoxLayout.Y_AXIS));
         rightPanel.add(toolPanel);
 
-        JLabel currentUserLabel = new JLabel(getString("current_user_label")+": "+ "sad");
+        JLabel currentUserLabel = new JLabel(getString("current_user_label") + ": " + login);
         toolPanel.add(currentUserLabel);
 
         toolPanel.add(switchLanguageBox);
@@ -169,7 +201,7 @@ public class MainWindowUI extends AbstractWindow {
         filterPanel.add(allFilterLabel);
 
         filterSwitcher = new JComboBox<>();
-        for(Headers header : Headers.values())
+        for (Headers header : Headers.values())
             filterSwitcher.addItem(getString(header.key));
         filterPanel.add(filterSwitcher);
 
@@ -207,7 +239,7 @@ public class MainWindowUI extends AbstractWindow {
         creatorPanel.add(createFieldPanel(Headers.CLIMATE.key, climateField));
         creatorPanel.add(createFieldPanel(Headers.GOVERNMENT.key, governmentField));
         creatorPanel.add(createFieldPanel(Headers.GOVERNOR_AGE.key, governorAgeField));
-        creatorPanel.add(createFieldPanel(Headers.GOVERNOR_BIRTHDAY.key,  governorBirthdayField));
+        creatorPanel.add(createFieldPanel(Headers.GOVERNOR_BIRTHDAY.key, governorBirthdayField));
 
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
@@ -243,39 +275,44 @@ public class MainWindowUI extends AbstractWindow {
         return panel;
     }
 
-    private JTable createTable() {
-        readCityCollection();
-        Object[][] values = new Object[cities.size()][13];
+    public void refreshCitiesData(Collection<City> newCities) {
+        cities = new ArrayList<>(newCities);
+        updateTableData();
+        updateMapData();
+    }
+
+    private void updateTableData() {
+        Object[][] values = new Object[cities.size()][14];
         for (int i = 0; i < cities.size(); i++) {
-            values[i][0] = NumberFormat.getInstance(getCurrentLocale())
+            values[i][0] = NumberFormat.getInstance(Locale.getDefault())
                     .format(cities.get(i).getId());
             values[i][1] = cities.get(i).getName();
-            values[i][2] = NumberFormat.getInstance(getCurrentLocale())
+            values[i][2] = NumberFormat.getInstance(Locale.getDefault())
                     .format(cities.get(i).getCoordinates().getX());
-            values[i][3] = NumberFormat.getInstance(getCurrentLocale())
+            values[i][3] = NumberFormat.getInstance(Locale.getDefault())
                     .format(cities.get(i).getCoordinates().getY());
             values[i][4] = cities.get(i).getCreationDate()
-                    .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL).withLocale(getCurrentLocale()));
-            values[i][5] = NumberFormat.getInstance(getCurrentLocale())
+                    .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL).withLocale(Locale.getDefault()));
+            values[i][5] = NumberFormat.getInstance(Locale.getDefault())
                     .format(cities.get(i).getArea());
-            values[i][6] = NumberFormat.getInstance(getCurrentLocale())
+            values[i][6] = NumberFormat.getInstance(Locale.getDefault())
                     .format(cities.get(i).getPopulation());
-            values[i][7] = NumberFormat.getInstance(getCurrentLocale())
+            values[i][7] = NumberFormat.getInstance(Locale.getDefault())
                     .format(cities.get(i).getMetersAboveSeaLevel());
             values[i][8] = cities.get(i).getEstablishmentDate().format(DateTimeFormatter
-                    .ofLocalizedDate(FormatStyle.MEDIUM).withLocale(getCurrentLocale()));
+                    .ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.getDefault()));
             values[i][9] = cities.get(i).getClimateString();
             values[i][10] = cities.get(i).getGovernmentString();
-            values[i][11] = NumberFormat.getInstance(getCurrentLocale())
+            values[i][11] = NumberFormat.getInstance(Locale.getDefault())
                     .format(cities.get(i).getGovernor().getAge().longValue());
             values[i][12] = cities.get(i).getGovernor().getBirthday()
-                    .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(getCurrentLocale()));
+                    .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(Locale.getDefault()));
+            values[i][13] = cities.get(i).getOwner();
         }
         Object[] headers = new Object[Headers.values().length];
-        for(Headers header : Headers.values()) {
+        for (Headers header : Headers.values()) {
             headers[header.ordinal()] = getString(header.key);
         }
-
         DefaultTableModel model = new DefaultTableModel() {
             @Override
             public void setDataVector(Vector dataVector, Vector columnIdentifiers) {
@@ -287,8 +324,41 @@ public class MainWindowUI extends AbstractWindow {
                 return false;
             }
         };
+        table.setModel(model);
         model.setDataVector(values, headers);
-        table = new JTable(model);
+        table.getTableHeader().setReorderingAllowed(false);
+        table.getSelectionModel().addListSelectionListener(x -> {
+            if (x.getValueIsAdjusting()) {
+                int rowIndex = table.getSelectedRow();
+                if (rowIndex == -1)
+                    return;
+                ;
+                idField.setText((String)table.getModel()
+                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 0));
+                nameField.setText((String)table.getModel()
+                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 1));
+                coordinateXField.setText((String)table.getModel()
+                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 2));
+                coordinateYField.setText((String)table.getModel()
+                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 3));
+                areaField.setText((String)table.getModel()
+                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 5));
+                populationField.setText((String)table.getModel()
+                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 6));
+                metersAboveSeaLevelField.setText((String)table.getModel()
+                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 7));
+                establishmentDateField.setText((String)table.getModel()
+                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 8));
+                climateField.setText((String)table.getModel()
+                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex),9));
+                governmentField.setText((String)table.getModel()
+                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 10));
+                governorAgeField.setText((String)table.getModel()
+                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 11));
+                governorBirthdayField.setText((String)table.getModel()
+                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 12));
+            }
+        });
         table.setAutoCreateRowSorter(true);
 
         tableSorter = createRowSorter(table.getModel());
@@ -298,26 +368,8 @@ public class MainWindowUI extends AbstractWindow {
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         table.setDefaultRenderer(Object.class, centerRenderer);
 
-        table.getTableHeader().setReorderingAllowed(false);
         table.setRowSelectionAllowed(true);
-        table.getSelectionModel().addListSelectionListener(x -> {
-            if (x.getValueIsAdjusting()) {
-                int rowIndex = table.getSelectedRow();
-                idField.setText((String)table.getModel().getValueAt(rowIndex, 0));
-                nameField.setText((String)table.getModel().getValueAt(rowIndex, 1));
-                coordinateXField.setText((String)table.getModel().getValueAt(rowIndex, 2));
-                coordinateYField.setText((String)table.getModel().getValueAt(rowIndex, 3));
-                areaField.setText((String)table.getModel().getValueAt(rowIndex, 5));
-                populationField.setText((String)table.getModel().getValueAt(rowIndex, 6));
-                metersAboveSeaLevelField.setText((String)table.getModel().getValueAt(rowIndex, 7));
-                establishmentDateField.setText((String)table.getModel().getValueAt(rowIndex, 8));
-                climateField.setText((String)table.getModel().getValueAt(rowIndex,9));
-                governmentField.setText((String)table.getModel().getValueAt(rowIndex, 10));
-                governorAgeField.setText((String)table.getModel().getValueAt(rowIndex, 11));
-                governorBirthdayField.setText((String)table.getModel().getValueAt(rowIndex, 12));
-            }
-        });
-        return table;
+        table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     private void updateFilter(int columnIndex, String value) {
@@ -330,8 +382,7 @@ public class MainWindowUI extends AbstractWindow {
             currentClimate = Climate.valueOf(climate.toUpperCase());
         } catch (IllegalArgumentException e) {
             if (!climate.equals("")) {
-                JOptionPane.showMessageDialog(mainFrame, getString("not_valid_climate", "errors"),
-                        getString("error_name_dialog", "errors"), JOptionPane.ERROR_MESSAGE);
+                UIController.showErrorDialog("not_valid_climate");
             }
             currentClimate = null;
         }
@@ -352,46 +403,24 @@ public class MainWindowUI extends AbstractWindow {
     private TableRowSorter<TableModel> createRowSorter(TableModel tableModel) {
         TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(tableModel);
 
-        rowSorter.setComparator(0, Comparator.comparingLong(o -> (Long.parseLong((String) o))));
-        rowSorter.setComparator(2, Comparator.comparingDouble(o -> (Float.parseFloat((String) o))));
-        rowSorter.setComparator(3, Comparator.comparingInt(o -> (Integer.parseInt((String) o))));
-        rowSorter.setComparator(5, Comparator.comparingLong(o -> (Long.parseLong((String) o))));
-        rowSorter.setComparator(6, Comparator.comparingInt(o -> Integer.parseInt((String) o)));
-        rowSorter.setComparator(7, Comparator.comparingLong(o -> Long.parseLong((String) o)));
-        rowSorter.setComparator(11, Comparator.comparingLong(o -> Long.parseLong((String) o)));
+        rowSorter.setComparator(0, Comparator.comparingLong(o -> (Long.parseLong(((String) o)
+                .replaceAll("[,.\\s]", "")))));
+        rowSorter.setComparator(2, Comparator.comparingDouble(o -> (Float.parseFloat(((String) o)
+                .replaceAll("\\s","")))));
+        rowSorter.setComparator(3, Comparator.comparingInt(o -> (Integer.parseInt(((String) o)
+                .replaceAll("\\s,.", "")))));
+        rowSorter.setComparator(5, Comparator.comparingLong(o -> (Long.parseLong(((String) o)
+                .replaceAll("\\s,.", "")))));
+        rowSorter.setComparator(6, Comparator.comparingInt(o -> (Integer.parseInt(((String) o)
+                .replaceAll("\\s,.", "")))));
+        rowSorter.setComparator(7, Comparator.comparingLong(o -> (Long.parseLong(((String) o)
+                .replaceAll("\\s,.", "")))));
+        rowSorter.setComparator(11, Comparator.comparingLong(o -> (Long.parseLong(((String) o)
+                .replaceAll("\\s,.", "")))));
 
         return rowSorter;
     }
 
-    private void readCityCollection() {
-        cities = new ArrayList<>();
-        City city;
-        for (int i = 0; i < 5; i++) {
-            city = new City();
-            city.setId(i + 1L);
-            city.setName("abc");
-            if (i == 0)
-                city.getCoordinates().setX(50);
-            else if (i==1)
-                city.getCoordinates().setX(45);
-            else if (i==2)
-                city.getCoordinates().setX(23);
-            city.getCoordinates().setY(2);
-            city.setCreationDate(ZonedDateTime.now());
-            city.setArea(i + 9L);
-            city.setPopulation(4);
-            city.setClimate(Climate.values()[Math.abs(2 - i)]);
-            city.setMetersAboveSeaLevel(2L);
-            city.setEstablishmentDate(LocalDate.now());
-            city.getGovernor().setAge(1L);
-            city.getGovernor().setBirthday(LocalDateTime.now());
-            cities.add(city);
-            System.out.println(city.getId());
-        }
-        cities.get(0).setName("abcd");
-        cities.get(1).setName("A");
-        cities.get(3).setName("ab");
-    }
     enum Headers {
         ID("id_column_name"),
         NAME("name_column_name"),
@@ -409,6 +438,7 @@ public class MainWindowUI extends AbstractWindow {
         OWNER("owner_column_name");
 
         final String key;
+
         Headers(String key) {
             this.key = key;
         }

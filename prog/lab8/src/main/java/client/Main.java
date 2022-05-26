@@ -1,12 +1,12 @@
 package client;
 
-import client.ui.AuthUI;
-import client.ui.ErrorDialog;
-import client.ui.MainWindowUI;
+import client.ui.AuthWindow;
+import client.ui.UIController;
+import exceptions.ConfigFileNotFoundException;
+import exceptions.ConnectionException;
+import exceptions.MissingArgumentException;
 
-import javax.swing.*;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class Main {
     /**
@@ -16,8 +16,12 @@ public class Main {
      */
     public static void main(String[] args) {
         Locale.setDefault(Locale.ENGLISH);
-        AuthUI authUI = new AuthUI();
-        authUI.createFrame();
+        try {
+            AppController appController = new AppController();
+            appController.startWork();
+        } catch (MissingArgumentException | ConfigFileNotFoundException | ConnectionException  e) {
+            UIController.showErrorDialog(e.getMessage());
+        }
         //MainWindowUI window = new MainWindowUI();
         //window.createFrame();
         //window.changeLocale(null);

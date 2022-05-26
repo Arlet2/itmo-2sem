@@ -1,5 +1,6 @@
 package client.connection_control;
 
+import connect_utils.CommandInfo;
 import server.commands.Command;
 import connect_utils.DataTransferObject;
 import connect_utils.Serializer;
@@ -29,19 +30,27 @@ public class RequestController {
         return connectionController.processConnection();
     }
 
-    /**
-     * Send request to server
-     *
-     * @param dataTransferObject that need to send
-     * @throws IOException if request couldn't send
-     */
-    public void sendRequest(DataTransferObject dataTransferObject) throws IOException {
-        connectionController.sendObject(dataTransferObject);
+    public void sendCommand(CommandInfo command) throws IOException {
+        connectionController.sendObject(new DataTransferObject(DataTransferObject.Code.COMMAND,
+                        Serializer.convertObjectToBytes(command),
+                        DataTransferObject.DataType.MESSAGE));
+        connectionController.getAppController().addCommandToHistory(command);
+    }
+
+    public void sendLogin(String login, String password) throws IOException {
+        String[] args = {"", login, password};
+        sendCommand(new CommandInfo("login", Serializer.convertObjectToBytes(args)));
+    }
+
+    public void sendRegister(String login, String password) throws IOException {
+        String[] args = {"", login, password};
+        sendCommand(new CommandInfo("register", Serializer.convertObjectToBytes(args)));
     }
 
     public void sendOK() throws IOException {
         connectionController.sendObject(new DataTransferObject(DataTransferObject.Code.OK, ""));
     }
+
     /**
      * Send city object to server
      *
@@ -50,14 +59,9 @@ public class RequestController {
      */
     public void sendCity(City city) throws IOException {
         DataTransferObject dto = new DataTransferObject(
-                DataTransferObject.Code.NOT_REQUEST, Serializer.convertObjectToBytes(city),
+                DataTransferObject.Code.COMMAND, Serializer.convertObjectToBytes(city),
                 DataTransferObject.DataType.CITY);
         connectionController.sendObject(dto);
-    }
-
-    public Collection<Command> getCommands() throws IOException, ClassNotFoundException {
-        return (Collection<Command>) Serializer.convertBytesToObject(connectionController.processConnection()
-                .getDataBytes());
     }
 
     public Collection<City> getCities() throws IOException, ClassNotFoundException {

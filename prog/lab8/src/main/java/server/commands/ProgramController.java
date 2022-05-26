@@ -39,11 +39,6 @@ public class ProgramController {
      */
     private final ArrayList<Command> allCommands = new ArrayList<>(16);
 
-    /**
-     *
-     */
-    private final ArrayList<Command> authCommands = new ArrayList<>(3);
-
     private final ExecutorService listeners = Executors.newCachedThreadPool();
     private final ExecutorService executors = Executors.newFixedThreadPool(5);
     private final ForkJoinPool senders = new ForkJoinPool(3);
@@ -82,21 +77,46 @@ public class ProgramController {
         User user;
         try {
             socket = connectionController.connect();
-            user = new User(socket, "hello");
-            connectionController.getRequestController().sendCommands(user, allCommands);
-        } catch (IOException e) {
+            user = new User(socket, null);
+            CommandInfo authData = (CommandInfo) Serializer.convertBytesToObject(
+                    connectionController.getRequestController()
+                            .receiveRequest(user, DataTransferObject.Code.COMMAND).getDataBytes());
+            try {
+                String[] args = (String[]) Serializer.convertBytesToObject(authData.getArgs());
+                String reply;
+                if (authData.getName().equals("login"))
+                    reply = new LoginCommand().execute(user, this, args);
+                else if (authData.getName().equals("register"))
+                    reply = new RegisterCommand().execute(user, this, args);
+                else
+                    throw new IOException();
+                senders.execute(() -> {
+                    try {
+                        connectionController.getRequestController().sendReply(user, reply);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        user.disconnect();
+                    }
+                });
+                user.setLogin(args[1]);
+            } catch (IncorrectArgumentException e) {
+                senders.execute(()-> {
+                    try {
+                        connectionController.getRequestController().sendError(user, e.getMessage());
+                    } catch (IOException ex) {
+                        user.disconnect();
+                    }
+                });
+            }
+        } catch (IOException | ClassNotFoundException e) {
             Logger.getLogger().log(Level.WARNING, "Ошибка попытки соединения с клиентом.");
             return;
         } finally {
             listeners.execute(this::processClient);
         }
-        while (user.getLogin() == null) {
-            user.setLogin(clientAuth(user));
-            if (user.isDisconnected())
-                return;
-        }
         users.add(user);
         try {
+            connectionController.getRequestController().receiveOK(user);
             connectionController.getRequestController().sendCollection(user,
                     dataController.getMap());
         } catch (IOException e) {
@@ -129,81 +149,6 @@ public class ProgramController {
         //allCommands.add(new FilterGreaterThanClimateCommand());
         //allCommands.add(new PrintAscendingCommand());
         //allCommands.add(new PrintFieldAscendingGovernment());
-        authCommands.add(allCommands.get(0));
-        authCommands.add(allCommands.get(1));
-        authCommands.add(allCommands.get(2));
-        authCommands.add(allCommands.get(3));
-    }
-
-    private String clientAuth(User user) {
-        DataTransferObject dataTransferObject;
-        try {
-            dataTransferObject = connectionController.getRequestController().receiveRequest(user,
-                    DataTransferObject.Code.COMMAND);
-        } catch (IOException e) {
-            e.printStackTrace();
-            user.disconnect();
-            return null;
-        } catch (ClassNotFoundException e) {
-            Logger.getLogger().log(Level.WARNING, "Получен некорректный запрос от клиента.");
-            return null;
-        }
-        String[] args = dataTransferObject.getMsg().split(" ");
-        if (authCommands.contains(searchCommand(args[0]))) {
-            Future<String> result =
-                    executors.submit(() -> {
-                        try {
-                            return invoke(user, searchCommand(args[0]), args);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            user.disconnect();
-                        } catch (IncorrectArgumentException e) {
-                            Logger.getLogger().log(Level.INFO, "Ошибка авторизации: " + e.getMessage());
-                            senders.execute(() -> {
-                                try {
-                                    connectionController.getRequestController()
-                                            .sendError(user, e.getMessage());
-                                } catch (IOException ex) {
-                                    ex.printStackTrace();
-                                    user.disconnect();
-                                }
-                            });
-                        } catch (ClassNotFoundException e) {
-                            Logger.getLogger().log(Level.WARNING, "Ошибка получения запроса от клиента");
-                        }
-                        return null;
-                    });
-            try {
-                return senders.submit(() -> {
-                    try {
-                        connectionController.getRequestController().sendReply(user, result.get());
-                        return args[1];
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        user.disconnect();
-                    } catch (InterruptedException | ExecutionException ignored) {
-
-                    }
-                    return null;
-                }).get();
-            } catch (InterruptedException | ExecutionException ignored) {
-
-            }
-        } else {
-            senders.execute(() -> {
-                try {
-                    connectionController.getRequestController().sendError(user,
-                            "Доступ запрещен " +
-                                    "неавторизованным пользователям.\nИспользуйте команды login или register "
-                                    + "для авторизации или регистрации.\n" +
-                                    "Пример использования: login sadness 1234");
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                    user.disconnect();
-                }
-            });
-        }
-        return null;
     }
 
     /**
@@ -212,7 +157,6 @@ public class ProgramController {
     private void listenRequests(User user) {
         if (user.isDisconnected())
             return;
-        String[] input;
         DataTransferObject dataTransferObject;
         Command command;
         try {
@@ -222,7 +166,6 @@ public class ProgramController {
                 Logger.getLogger().log(Level.WARNING, "Получен некорректный запрос от клиента.");
                 listeners.execute(() -> listenRequests(user));
             }
-            input = dataTransferObject.getMsg().split(" ");
         } catch (IOException e) {
             e.printStackTrace();
             Logger.getLogger().log(Level.WARNING, "Ошибка получения запроса");
@@ -233,11 +176,17 @@ public class ProgramController {
             listeners.execute(() -> listenRequests(user));
             return;
         }
-        command = searchCommand(input[0].toLowerCase());
+        try {
+            command = searchCommand(
+                    ((CommandInfo)Serializer.convertBytesToObject(dataTransferObject.getDataBytes())).getName());
+        } catch (IOException | ClassNotFoundException e) {
+            user.disconnect();
+            return;
+        }
         Future<String> futureReply = executors.submit(() -> {
             try {
                 try {
-                    return invoke(user, command, input);
+                    return invoke(user, command, Serializer.convertBytesToObject(dataTransferObject.getDataBytes()));
                 } catch (IncorrectArgumentException e) {
                     Logger.getLogger().log(Level.WARNING, "Некорректный аргумент: " + e.getMessage());
                     senders.execute(() -> {
@@ -325,7 +274,7 @@ public class ProgramController {
      * @param args    for this command
      * @throws IncorrectArgumentException if requiring args is incorrect
      */
-    protected String invoke(User user, final Command command, final String[] args)
+    protected String invoke(User user, final Command command, final Object args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
         Logger.getLogger().log(Level.INFO, "Получена команда " + command.getName() + " от клиента " +
                 (user.getLogin() == null ? user.getAddress() : user.getLogin()));
@@ -373,9 +322,5 @@ public class ProgramController {
 
     public ArrayList<Command> getAllCommands() {
         return allCommands;
-    }
-
-    public ArrayList<Command> getAuthCommands() {
-        return authCommands;
     }
 }

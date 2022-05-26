@@ -9,26 +9,24 @@ import java.sql.SQLException;
 
 public class RegisterCommand extends Command {
     RegisterCommand() {
-        super("register", "login password", "регистрирует нового пользователя в системе",
+        super("register",
                 null, new Command.ArgumentInfo[]{Command.ArgumentInfo.STRING,
                         Command.ArgumentInfo.STRING}, CommandType.AUTH);
     }
 
     @Override
-    public String execute(User user, ProgramController programController, String[] args)
+    public String execute(User user, ProgramController programController, Object args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
+        String[] strArgs = (String[]) args;
         String password;
         String salt = PasswordManager.generateSalt();
         try {
-            password = PasswordManager.createHash(args[2] + salt);
-            programController.getDataController().createUser(args[1], password, salt);
+            password = PasswordManager.createHash(strArgs[2] + salt);
+            programController.getDataController().createUser(strArgs[1], password, salt);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new IncorrectArgumentException("Пользователь с таким логином уже существует.");
+            throw new IncorrectArgumentException("login_exist");
         }
-        if (user.getLogin() != null)
-            return "Был зарегистрирован новый пользователь.\n" +
-                    "Ваш логин остался без изменения. Для смены пользователя переподключитесь.\n";
-        return "Вы были успешно зарегистрированы и авторизованы.\n";
+        return "auth_success";
     }
 }

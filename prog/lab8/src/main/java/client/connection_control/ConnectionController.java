@@ -1,6 +1,6 @@
 package client.connection_control;
 
-import client.commands.CommandController;
+import client.AppController;
 import connect_utils.DataTransferObject;
 import connect_utils.Serializer;
 import exceptions.ConfigFileNotFoundException;
@@ -20,6 +20,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * Control connection with server
  */
 public class ConnectionController {
+
+    private AppController appController;
 
     /**
      * Current channel with server
@@ -49,14 +51,15 @@ public class ConnectionController {
      * @param controller current program controller
      * @throws MissingArgumentException if config file haven't got address and port
      */
-    public ConnectionController(CommandController controller) throws MissingArgumentException,
+    public ConnectionController(AppController controller) throws MissingArgumentException,
             ConfigFileNotFoundException, ConnectionException {
+        this.appController = controller;
         address = controller.getFileController().readConfig();
         try {
             selector = Selector.open();
             openChannel();
         } catch (IOException e) {
-            throw new ConnectionException("Ошибка создания подключения");
+            throw new ConnectionException("create_connect_failed");
         }
     }
 
@@ -175,5 +178,9 @@ public class ConnectionController {
 
     public RequestController getRequestController() {
         return requestController;
+    }
+
+    public AppController getAppController() {
+        return appController;
     }
 }

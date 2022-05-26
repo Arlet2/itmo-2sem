@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class InsertCommand extends Command {
     InsertCommand() {
-        super("insert", "id {element}", "добавляет элемент с определенным id", Command.SendInfo.CITY,
+        super("insert", Command.SendInfo.CITY,
                 new Command.ArgumentInfo[]{Command.ArgumentInfo.ID}, CommandType.CHANGE);
     }
 
@@ -22,23 +22,18 @@ public class InsertCommand extends Command {
      * @throws IncorrectArgumentException if id is incorrect
      */
     @Override
-    @Deprecated
-    public String execute(User user, ProgramController programController, String[] args)
+    public String execute(User user, ProgramController programController, Object args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
-        Long id = Long.parseLong(args[1]);
-        if (!programController.getDataController().isUniqueId(id))
-            throw new IncorrectArgumentException("элемент с таким id уже существует в коллекции");
-        City city = programController.getConnectionController().getRequestController().receiveCity(user);
-        if (city == null)
-            throw new IncorrectArgumentException("город не был создан");
-        city.setId(id);
+        City city = (City) args;
+        if (!programController.getDataController().isUniqueId(city.getId()))
+            throw new IncorrectArgumentException("not_unique_id");
         try {
             programController.getDataController().addCity(city, user.getLogin());
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new IncorrectArgumentException("элемент с таким id уже существует в коллекции");
+            throw new IncorrectArgumentException("not_unique_id");
         }
         programController.getDataController().updateModificationTime();
-        return "Город был добавлен в коллекцию.\n";
+        return "insert_success";
     }
 }

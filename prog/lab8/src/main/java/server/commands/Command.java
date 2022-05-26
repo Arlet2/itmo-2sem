@@ -56,36 +56,22 @@ public abstract class Command implements Serializable, Executable {
      */
     private final String name;
 
-    /**
-     * description of this command (uses for help command)
-     */
-    private final String description;
-
-    /**
-     * signature of this command (uses for help command)
-     */
-    private final String signature;
-
     private final CommandType type;
 
-    protected Command(final String name, final String signature, final String description, CommandType type) {
+    protected Command(final String name, CommandType type) {
         this.name = name;
-        this.signature = signature;
-        this.description = description;
         this.type = type;
     }
     /**
      * Create new command that can execute on server
      *
      * @param name            of this command
-     * @param signature       that show arguments of this command (for help)
-     * @param description     of this command (for help)
      * @param sendInfo        of this command (for client)
      * @param argInfo         of this command (for client)
      */
-    protected Command(final String name, final String signature, final String description, SendInfo sendInfo,
+    protected Command(final String name, SendInfo sendInfo,
                                  ArgumentInfo[] argInfo, CommandType type) {
-        this(name, signature, description, type);
+        this(name, type);
         this.sendInfo = sendInfo;
         this.argInfo = argInfo;
     }
@@ -124,14 +110,6 @@ public abstract class Command implements Serializable, Executable {
 
     public String getName() {
         return name;
-    }
-
-    public String getSignature() {
-        return signature;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public CommandType getType() {

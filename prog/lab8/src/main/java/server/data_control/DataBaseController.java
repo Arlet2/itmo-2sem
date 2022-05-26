@@ -77,6 +77,8 @@ public class DataBaseController {
             city.getGovernor().setAge(resultPs.getLong("age"));
             city.getGovernor().setBirthday(LocalDateTime.parse(resultPs.getString("birthday")));
 
+            city.setOwner(results.getString("owner"));
+
             cities.add(city);
         }
 

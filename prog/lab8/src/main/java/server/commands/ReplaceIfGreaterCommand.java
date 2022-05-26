@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class ReplaceIfGreaterCommand extends Command {
 
     ReplaceIfGreaterCommand() {
-        super("replace_if_greater", "id {element}", "заменяет значение по id, если новое значение больше старого",
+        super("replace_if_greater",
                 Command.SendInfo.CITY_UPDATE,
                 new Command.ArgumentInfo[]{Command.ArgumentInfo.ID}, CommandType.CHANGE);
     }
@@ -23,30 +23,28 @@ public class ReplaceIfGreaterCommand extends Command {
      * @param args              id
      * @throws IncorrectArgumentException if id is incorrect
      */
-    @Deprecated
     @Override
-    public String execute(User user, ProgramController programController, String[] args)
+    public String execute(User user, ProgramController programController, Object args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
-        long id = Long.parseLong(args[1]);
+        City city = (City) args;
+        long id = city.getId();
         if (programController.getDataController().isUniqueId(id))
-            throw new IncorrectArgumentException("элемента с данным id не существует");
+            throw new IncorrectArgumentException("id_not_exist");
         try {
             if (!programController.getDataController().getDataBaseController().isOwner(user.getLogin(), id))
-                throw new IncorrectArgumentException("вы не владеете этим элементом. Вы не можете изменять его.");
+                throw new IncorrectArgumentException("not_owner");
 
             programController.getConnectionController().getRequestController().sendOK(user);
-            City city = programController.getConnectionController().getRequestController()
-                    .receiveCity(user);
-            city.setId(id);
+
             deleteNullValues(programController.getDataController().getMap().get(id), city);
             replaceCity(programController.getDataController().getMap().get(id), city);
             programController.getDataController().updateCity(city);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new IncorrectArgumentException("не удалось обновить элемент в базе данных");
+            throw new IncorrectArgumentException("update_failed");
         }
         programController.getDataController().updateModificationTime();
-        return "Значение элемента с id " + id + " было обновлено.\n";
+        return "collection_modified";
 
     }
 
