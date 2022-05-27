@@ -84,18 +84,4 @@ public class RequestController {
         return connectionController.receiveObject(user, expectedCode);
     }
 
-    /**
-     * Get city from client
-     *
-     * @return city that was received
-     * @throws IOException            if connection was closed
-     * @throws ClassNotFoundException if receiving information is not city
-     */
-    public City receiveCity(User user) throws IOException, ClassNotFoundException {
-        DataTransferObject dto = connectionController.receiveObject(user, DataTransferObject.Code.COMMAND);
-        ByteInputStream byteStream = new ByteInputStream();
-        byteStream.setBuf(dto.getDataBytes());
-        ObjectInputStream objIn = new ObjectInputStream(byteStream);
-        return (City) objIn.readObject();
-    }
 }

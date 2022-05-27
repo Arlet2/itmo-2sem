@@ -105,6 +105,12 @@ public class ConnectionController {
      * @throws IOException if sending is failed
      */
     protected void sendObject(User user, DataTransferObject dataTransferObject) throws IOException {
+        /*try {
+            Thread.sleep(5000);
+        } catch (InterruptedException ignored) {
+
+        }
+        //*/
         final int byteSize = 4096;
         byte[] bytesDto = Serializer.convertObjectToBytes(dataTransferObject);
         if (bytesDto.length > byteSize) {

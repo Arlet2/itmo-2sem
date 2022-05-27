@@ -36,7 +36,7 @@ public class UIController {
 
     public static void showInfoDialog(String messageKey) {
         JOptionPane.showMessageDialog(null, getString("servers_replies", messageKey),
-                getString("servers_replies", "reply_name_dialog"), JOptionPane.ERROR_MESSAGE);
+                getString("servers_replies", "reply_name_dialog"), JOptionPane.INFORMATION_MESSAGE);
     }
     public static void showInfoDialog(String message, String windowName) {
         JOptionPane.showMessageDialog(null, message, windowName, JOptionPane.INFORMATION_MESSAGE);

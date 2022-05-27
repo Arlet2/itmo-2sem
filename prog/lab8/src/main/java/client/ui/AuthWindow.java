@@ -94,17 +94,21 @@ public class AuthWindow extends AbstractWindow {
                     return;
                 }
             }
-            try {
-                if (uiController.getAppController().connect(loginField.getText(),
-                        new String(passwordField.getPassword()), isLoginPanel)) {
-                    mainFrame.dispose();
-                    uiController.createMainWindow(loginField.getText());
+            String login = loginField.getText();
+            Thread connectionThread = new Thread(() -> {
+                try {
+                    if (uiController.getAppController().connect(loginField.getText(),
+                            new String(passwordField.getPassword()), isLoginPanel)) {
+                        mainFrame.dispose();
+                        uiController.createMainWindow(login);
+                    }
+                } catch (ConnectionException ex) {
+                    ex.printStackTrace();
+                    UIController.showErrorDialog(ex.getMessage());
                 }
-            } catch (ConnectionException ex) {
-                ex.printStackTrace();
-                UIController.showErrorDialog(ex.getMessage());
-            }
-
+            });
+            connectionThread.setDaemon(true);
+            connectionThread.start();
         });
     }
 }

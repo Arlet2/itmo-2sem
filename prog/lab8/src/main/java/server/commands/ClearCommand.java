@@ -1,12 +1,13 @@
 package server.commands;
 
 import exceptions.IncorrectArgumentException;
+import server.ProgramController;
 import server.connection_control.User;
 
 import java.sql.SQLException;
 
 public class ClearCommand extends Command {
-    ClearCommand() {
+    public ClearCommand() {
         super("clear", CommandType.CHANGE);
     }
 
@@ -26,9 +27,8 @@ public class ClearCommand extends Command {
             programController.getDataController().clearMap(user.getLogin());
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new IncorrectArgumentException("не удалось удалить данные из базы данных");
+            throw new IncorrectArgumentException("clearing_data_failed");
         }
-        programController.getDataController().updateModificationTime();
         return "clear_success";
     }
 }

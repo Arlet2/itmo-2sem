@@ -265,7 +265,7 @@ public class DataBaseController {
      * @throws SQLException if something got wrong with database
      */
     protected void clearAll(String login) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement("SELECT FROM cities * WHERE owner=?");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM cities * WHERE owner=?");
         ps.setString(1, login);
         ResultSet resultSet = ps.executeQuery();
         ps = connection.prepareStatement("DELETE FROM cities * WHERE owner=?");

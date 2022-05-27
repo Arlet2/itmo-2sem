@@ -1,12 +1,13 @@
 package server.commands;
 
 import exceptions.IncorrectArgumentException;
+import server.ProgramController;
 import server.connection_control.User;
 
 import java.sql.SQLException;
 
 public class RemoveKeyCommand extends Command {
-    RemoveKeyCommand() {
+    public RemoveKeyCommand() {
         super("remove_key", null,
                 new Command.ArgumentInfo[]{Command.ArgumentInfo.ID}, CommandType.CHANGE);
     }
@@ -28,13 +29,12 @@ public class RemoveKeyCommand extends Command {
             throw new IncorrectArgumentException("id_not_exist");
         try {
             if (!programController.getDataController().getDataBaseController().isOwner(user.getLogin(), id))
-                return "not_owner";
+                throw new IncorrectArgumentException("not_owner");
             programController.getDataController().removeCity(id);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IncorrectArgumentException("remove_data_failed");
         }
-        programController.getDataController().updateModificationTime();
         return "remove_success";
     }
 }

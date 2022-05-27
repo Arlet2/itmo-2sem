@@ -14,11 +14,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class DataController {
 
     /**
-     * Last time when collection was modified
-     */
-    private LocalDateTime modificationTime;
-
-    /**
      * Program's collection
      */
     private final HashMap<Long, City> map;
@@ -132,36 +127,12 @@ public class DataController {
     }
 
     /**
-     * Create lock for read collection
-     */
-    public void readLock() {
-        mapLock.readLock().lock();
-    }
-
-    /**
-     * Unlock previous lock for reading collection
-     */
-    public void readUnlock() {
-        mapLock.readLock().unlock();
-    }
-
-    /**
      * Get collection
      *
      * @return hashmap
      */
     public HashMap<Long, City> getMap() {
         return map;
-    }
-
-    /**
-     * Update time of collection modification
-     * <p>Set time from LocalDateTime.now()</p>
-     */
-    public void updateModificationTime() {
-        mapLock.writeLock().lock();
-        modificationTime = LocalDateTime.now();
-        mapLock.writeLock().unlock();
     }
 
     /**
@@ -183,12 +154,6 @@ public class DataController {
         return map.isEmpty();
     }
 
-    /**
-     * Get modification time
-     */
-    public LocalDateTime getModificationTime() {
-        return modificationTime;
-    }
 
     /**
      * Get database controller

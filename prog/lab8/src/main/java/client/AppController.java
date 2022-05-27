@@ -15,6 +15,8 @@ import exceptions.MissingArgumentException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * controls execution of all commands
@@ -42,6 +44,8 @@ public class AppController {
     private ArrayList<CommandInfo> history = new ArrayList<>();
 
     private volatile boolean isConnected;
+
+    private ExecutorService listeners = Executors.newFixedThreadPool(3);
 
     /**
      * Create scanner and read configuration for connection
@@ -77,7 +81,6 @@ public class AppController {
                 throw new ConnectionException((String) Serializer.convertBytesToObject(
                         dataTransferObject.getDataBytes()));
             connectionController.getRequestController().sendOK();
-            //dataController.updateMap(connectionController.getRequestController().getCities());
         } catch (IOException e) {
             e.printStackTrace();
             throw new ConnectionException("configuration_data_loading_failed");
@@ -85,33 +88,34 @@ public class AppController {
             throw new ConnectionException("strange_request");
         }
         isConnected = true;
-        new Thread(() -> {
-            while (isConnected) {
-                try {
-                    listenRequests();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    UIController.showErrorDialog("connection_is_closed");
-                    isConnected = false;
-                } catch (ClassNotFoundException e) {
-                    UIController.showErrorDialog("strange_request");
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+        listeners.execute(this::listenerAction);
         return true;
+    }
+
+    private void listenerAction() {
+        try {
+            listenRequests();
+        } catch (IOException e) {
+            e.printStackTrace();
+            UIController.showErrorDialog("connection_is_closed");
+            isConnected = false;
+        } catch (ClassNotFoundException e) {
+            UIController.showErrorDialog("strange_request");
+            e.printStackTrace();
+        }
     }
 
     private void listenRequests() throws IOException, ClassNotFoundException {
         DataTransferObject dto = connectionController.getRequestController().receiveRequest();
+        listeners.execute(this::listenerAction);
         switch (dto.getCode()) {
             case ERROR:
                 String error = (String) Serializer.convertBytesToObject(dto.getDataBytes());
-                UIController.showErrorDialog(UIController.getString("errors", error));
+                UIController.showErrorDialog(error);
                 break;
             case REPLY:
                 String reply = (String) Serializer.convertBytesToObject(dto.getDataBytes());
-                UIController.showInfoDialog(UIController.getString("replies", reply));
+                UIController.showInfoDialog(reply);
                 break;
             case COMMAND:
                 dataController.updateMap((Collection<City>) Serializer.convertBytesToObject(dto.getDataBytes()));
@@ -122,6 +126,8 @@ public class AppController {
     }
 
     public void addCommandToHistory(CommandInfo command) {
+        if (command.getName().equals("login") || command.getName().equals("register"))
+            return;
         if (history.size() == MAX_COMMANDS_IN_HISTORY) {
             history.remove(0);
         }

@@ -2,13 +2,14 @@ package server.commands;
 
 import data_classes.City;
 import exceptions.IncorrectArgumentException;
+import server.ProgramController;
 import server.connection_control.User;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class UpdateCommand extends Command {
-    UpdateCommand() {
+    public UpdateCommand() {
         super("update",
                 Command.SendInfo.CITY_UPDATE,
                 new Command.ArgumentInfo[]{Command.ArgumentInfo.ID}, CommandType.CHANGE);
@@ -33,8 +34,8 @@ public class UpdateCommand extends Command {
             if (!programController.getDataController().getDataBaseController().isOwner(user.getLogin(), id))
                 throw new IncorrectArgumentException("not_owner");
             deleteNullValues(programController.getDataController().getMap().get(id), city);
+            city.setOwner(user.getLogin());
             programController.getDataController().updateCity(city);
-            programController.getDataController().updateModificationTime();
             return "collection_modified";
         } catch (SQLException e) {
             e.printStackTrace();

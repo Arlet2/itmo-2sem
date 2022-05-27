@@ -1,4 +1,3 @@
-help
-info
+insert
+insert
 history
-insert 67

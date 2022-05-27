@@ -1,6 +1,6 @@
 package client.ui;
 
-import client.data_control.FileController;
+import client.ui.custom_graphics.CityPainting;
 import connect_utils.CommandInfo;
 import connect_utils.Serializer;
 import data_classes.City;
@@ -20,7 +20,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.channels.NotYetConnectedException;
 import java.text.NumberFormat;
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -87,6 +86,7 @@ public class MainWindow extends AbstractWindow {
 
         tabs.addTab(getString("table_tab_name"), createTableTab());
         tabs.addTab(getString("map_tab_name"), createMapTab());
+        tabs.setSelectedIndex(1);
         mainPanel.add(tabs);
         mainFrame.add(mainPanel);
     }
@@ -178,7 +178,7 @@ public class MainWindow extends AbstractWindow {
                 StringBuilder stringBuilder = new StringBuilder();
                 for (int i = 0; i < unknownCommands.size(); i++)
                     stringBuilder.append(i + 1).append(") ").append(unknownCommands.get(i)).append("\n");
-                UIController.showCustomErrorDialog(getString("unknown_commands", "errors")+"\n"+stringBuilder);
+                UIController.showCustomErrorDialog(getString("unknown_commands", "errors") + "\n" + stringBuilder);
             } else
                 UIController.showInfoDialog("execute_script_success");
             uiController.getAppController().addCommandToHistory(new CommandInfo("execute_script"));
@@ -194,8 +194,7 @@ public class MainWindow extends AbstractWindow {
             for (int i = 0; i < uiController.getAppController().getHistory().size(); i++)
                 msg.append(i + 1).append(") ")
                         .append(getString(uiController.getAppController().getHistory().get(i)
-                                .getName() + "_button_name"))
-                        .append("\n");
+                                .getName() + "_button_name")).append("\n");
             UIController.showInfoDialog(msg.toString(), getString("history_window_name"));
         }
         uiController.getAppController().addCommandToHistory(new CommandInfo("history"));
@@ -231,11 +230,16 @@ public class MainWindow extends AbstractWindow {
         try {
             long id;
             try {
-                id = Long.parseLong(idField.getText());
-            } catch (IncorrectValueException ex) {
-                UIController.showErrorDialog(ex.getMessage());
+                id = Long.parseLong(idField.getText().replaceAll("[,.\\s]", ""));
+                if (id <= 0) {
+                    UIController.showErrorDialog("id_is_greater_zero");
+                    return;
+                }
+            } catch (NumberFormatException ex) {
+                UIController.showErrorDialog("id_is_integer");
                 return;
             }
+
             uiController.getAppController().getConnectionController().getRequestController()
                     .sendCommand(new CommandInfo("remove_key", Serializer.convertObjectToBytes(
                             new String[]{"", id + ""}
@@ -250,9 +254,13 @@ public class MainWindow extends AbstractWindow {
         try {
             long id;
             try {
-                id = Long.parseLong(idField.getText());
-            } catch (IncorrectValueException ex) {
-                UIController.showErrorDialog(ex.getMessage());
+                id = Long.parseLong(idField.getText().replaceAll("[,.\\s]", ""));
+                if (id <= 0) {
+                    UIController.showErrorDialog("id_is_greater_zero");
+                    return;
+                }
+            } catch (NumberFormatException ex) {
+                UIController.showErrorDialog("id_is_integer");
                 return;
             }
             uiController.getAppController().getConnectionController().getRequestController()
@@ -281,7 +289,7 @@ public class MainWindow extends AbstractWindow {
     private void clearAction() {
         try {
             uiController.getAppController().getConnectionController().getRequestController()
-                    .sendCommand(new CommandInfo("clear", new byte[0]));
+                    .sendCommand(new CommandInfo("clear", Serializer.convertObjectToBytes("")));
         } catch (IOException | NotYetConnectedException ex) {
             ex.printStackTrace();
             UIController.showErrorDialog("server_is_unavailable");
@@ -350,12 +358,12 @@ public class MainWindow extends AbstractWindow {
         } catch (DateTimeParseException e) {
             throw new IncorrectValueException("incorrect_birthday");
         }
-        System.out.println(city);
         return city;
     }
 
     private JPanel createMapTab() {
         updateMapData();
+        /*
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setMinimumSize(mainFrame.getMinimumSize());
         int sh = 0;
@@ -373,7 +381,8 @@ public class MainWindow extends AbstractWindow {
             mainPanel.add(cityPainting);
             sh++;
         }
-        return mainPanel;
+         */
+        return null;
     }
 
     private void updateMapData() {
@@ -497,14 +506,6 @@ public class MainWindow extends AbstractWindow {
     }
 
     private void updateTableData() {
-        City city = new City();
-        city.setId(1L);
-        city.setEstablishmentDate(LocalDate.now());
-        city.getCoordinates().setY(1);
-        city.setMetersAboveSeaLevel(2L);
-        city.getGovernor().setAge(1L);
-        city.getGovernor().setBirthday(LocalDateTime.now());
-        cities.add(city);
         Object[][] values = new Object[cities.size()][14];
         for (int i = 0; i < cities.size(); i++) {
             values[i][0] = NumberFormat.getInstance(Locale.getDefault())

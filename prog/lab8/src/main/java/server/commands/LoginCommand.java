@@ -1,6 +1,7 @@
 package server.commands;
 
 import exceptions.IncorrectArgumentException;
+import server.ProgramController;
 import server.connection_control.User;
 import server.data_control.PasswordManager;
 
@@ -11,7 +12,7 @@ public class LoginCommand extends Command {
     /**
      * Create new command that can execute on server
      */
-    LoginCommand() {
+    public LoginCommand() {
         super("login", null,
                 new Command.ArgumentInfo[]{Command.ArgumentInfo.STRING, Command.ArgumentInfo.STRING}, CommandType.AUTH);
     }

@@ -2,6 +2,7 @@ package server.commands;
 
 import data_classes.City;
 import exceptions.IncorrectArgumentException;
+import server.ProgramController;
 import server.connection_control.User;
 
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.sql.SQLException;
 
 public class ReplaceIfGreaterCommand extends Command {
 
-    ReplaceIfGreaterCommand() {
+    public ReplaceIfGreaterCommand() {
         super("replace_if_greater",
                 Command.SendInfo.CITY_UPDATE,
                 new Command.ArgumentInfo[]{Command.ArgumentInfo.ID}, CommandType.CHANGE);
@@ -33,17 +34,15 @@ public class ReplaceIfGreaterCommand extends Command {
         try {
             if (!programController.getDataController().getDataBaseController().isOwner(user.getLogin(), id))
                 throw new IncorrectArgumentException("not_owner");
-
-            programController.getConnectionController().getRequestController().sendOK(user);
-
             deleteNullValues(programController.getDataController().getMap().get(id), city);
             replaceCity(programController.getDataController().getMap().get(id), city);
+            city.setOwner(user.getLogin());
             programController.getDataController().updateCity(city);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IncorrectArgumentException("update_failed");
         }
-        programController.getDataController().updateModificationTime();
+        System.out.println("123");
         return "collection_modified";
 
     }

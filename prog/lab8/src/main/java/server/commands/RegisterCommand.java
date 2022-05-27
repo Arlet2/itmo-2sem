@@ -1,6 +1,7 @@
 package server.commands;
 
 import exceptions.IncorrectArgumentException;
+import server.ProgramController;
 import server.connection_control.User;
 import server.data_control.PasswordManager;
 
@@ -8,7 +9,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class RegisterCommand extends Command {
-    RegisterCommand() {
+    public RegisterCommand() {
         super("register",
                 null, new Command.ArgumentInfo[]{Command.ArgumentInfo.STRING,
                         Command.ArgumentInfo.STRING}, CommandType.AUTH);

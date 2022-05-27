@@ -2,11 +2,15 @@ package server;
 
 import exceptions.ConfigFileNotFoundException;
 import exceptions.MissingArgumentException;
-import server.commands.ProgramController;
+import server.data_control.DataBaseController;
 
 import java.io.*;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.Level;
 
 public class Main {
@@ -15,28 +19,7 @@ public class Main {
      *
      * @param args is not using
      */
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        /*
-        ArrayList<String> list = new ArrayList<>();
-        list.add("123");
-        list.add("DataTransferObject.Code.OK");
-        list.add("DataTransferObject.Code.COMMAND");
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        new ObjectOutputStream(stream).writeObject(list);
-        DataTransferObject dto = new DataTransferObject(DataTransferObject.Code.REPLY, stream.toByteArray(),
-                DataTransferObject.DataType.CITY);
-        stream = new ByteArrayOutputStream();
-        new ObjectOutputStream(stream).writeObject(dto);
-
-        ByteBuffer buffer = ByteBuffer.wrap(stream.toByteArray());
-        ByteArrayInputStream stream1 = new ByteArrayInputStream(buffer.array());
-        dto = (DataTransferObject) new ObjectInputStream(stream1).readObject();
-        ArrayList<String> list1 =
-                (ArrayList<String>) new ObjectInputStream(new ByteArrayInputStream(dto.getDataBytes()))
-                        .readObject();
-        for(String code: list1)
-            System.out.println(code);
-        */
+    public static void main(String[] args) {
         Logger.createLogger();
         final ProgramController programController;
         try {

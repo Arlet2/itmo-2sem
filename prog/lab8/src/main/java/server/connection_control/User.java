@@ -14,11 +14,6 @@ import java.util.LinkedList;
 public class User {
 
     /**
-     * User's history of command
-     */
-    private final ArrayList<Command> history = new ArrayList<>();
-
-    /**
      * Socket of this user
      */
     private final Socket socket;
@@ -64,15 +59,6 @@ public class User {
      */
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    /**
-     * Return history of command
-     *
-     * @return array list of commands
-     */
-    public ArrayList<Command> getHistory() {
-        return history;
     }
 
     /**

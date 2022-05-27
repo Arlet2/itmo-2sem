@@ -2,13 +2,15 @@ package server.commands;
 
 import data_classes.City;
 import exceptions.IncorrectArgumentException;
+import server.ProgramController;
 import server.connection_control.User;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 
 public class RemoveLowerKeyCommand extends Command {
-    RemoveLowerKeyCommand() {
+    public RemoveLowerKeyCommand() {
         super("remove_lower_key", null,
                 new Command.ArgumentInfo[]{Command.ArgumentInfo.ID}, CommandType.CHANGE);
     }
@@ -27,23 +29,30 @@ public class RemoveLowerKeyCommand extends Command {
         String[] strArgs = (String[]) args;
         long id = Long.parseLong(strArgs[1]);
         boolean isMapModified = false;
+        ArrayList<Long> deleteId = new ArrayList<>();
         for (City city : programController.getDataController().getMap().values()) {
+            System.out.println(city.getId()+" "+id+" : "+programController.getDataController().getMap().size());
             if (city.getId() < id) {
                 try {
                     if (!programController.getDataController().getDataBaseController()
                             .isOwner(user.getLogin(), city.getId()))
                         continue;
-                    programController.getDataController().removeCity(city.getId());
-                    isMapModified = true;
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+                deleteId.add(city.getId());
             }
         }
-        if (isMapModified) {
-            programController.getDataController().updateModificationTime();
-            return "collection_modified";
+        for (long dId: deleteId) {
+            try {
+                programController.getDataController().removeCity(dId);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            isMapModified = true;
         }
+        if (isMapModified)
+            return "collection_modified";
         return "collection_not_modified";
     }
 }

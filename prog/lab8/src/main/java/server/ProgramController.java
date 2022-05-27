@@ -1,7 +1,8 @@
-package server.commands;
+package server;
 
 import exceptions.ConfigFileNotFoundException;
 import server.Logger;
+import server.commands.*;
 import server.connection_control.ConnectionController;
 import connect_utils.*;
 import server.connection_control.User;
@@ -117,6 +118,11 @@ public class ProgramController {
         users.add(user);
         try {
             connectionController.getRequestController().receiveOK(user);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignored) {
+
+            }
             connectionController.getRequestController().sendCollection(user,
                     dataController.getMap());
         } catch (IOException e) {
@@ -131,24 +137,14 @@ public class ProgramController {
      * Initialization commands to allCommands that can be used by user
      */
     private void commandInit() {
-        //allCommands.add(new HelpCommand());
         allCommands.add(new RegisterCommand());
         allCommands.add(new LoginCommand());
-        //allCommands.add(new ExitCommand());
-
-        //allCommands.add(new InfoCommand());
-        //allCommands.add(new ShowCommand());
         allCommands.add(new InsertCommand());
         allCommands.add(new UpdateCommand());
         allCommands.add(new RemoveKeyCommand());
         allCommands.add(new ClearCommand());
-        //allCommands.add(new ExecuteScriptCommand());
-        //allCommands.add(new HistoryCommand());
         allCommands.add(new ReplaceIfGreaterCommand());
         allCommands.add(new RemoveLowerKeyCommand());
-        //allCommands.add(new FilterGreaterThanClimateCommand());
-        //allCommands.add(new PrintAscendingCommand());
-        //allCommands.add(new PrintFieldAscendingGovernment());
     }
 
     /**
@@ -159,6 +155,7 @@ public class ProgramController {
             return;
         DataTransferObject dataTransferObject;
         Command command;
+        CommandInfo commandInfo;
         try {
             dataTransferObject = connectionController.getRequestController().receiveRequest(user,
                     DataTransferObject.Code.COMMAND);
@@ -177,8 +174,8 @@ public class ProgramController {
             return;
         }
         try {
-            command = searchCommand(
-                    ((CommandInfo)Serializer.convertBytesToObject(dataTransferObject.getDataBytes())).getName());
+            commandInfo = (CommandInfo)Serializer.convertBytesToObject(dataTransferObject.getDataBytes());
+            command = searchCommand(commandInfo.getName());
         } catch (IOException | ClassNotFoundException e) {
             user.disconnect();
             return;
@@ -186,14 +183,14 @@ public class ProgramController {
         Future<String> futureReply = executors.submit(() -> {
             try {
                 try {
-                    return invoke(user, command, Serializer.convertBytesToObject(dataTransferObject.getDataBytes()));
+                    return invoke(user, command, Serializer.convertBytesToObject(
+                            commandInfo.getArgs()));
                 } catch (IncorrectArgumentException e) {
                     Logger.getLogger().log(Level.WARNING, "Некорректный аргумент: " + e.getMessage());
                     senders.execute(() -> {
                         try {
                             connectionController.getRequestController()
-                                    .sendError(user,
-                                            "получен некорректный аргумент команды - " + e.getMessage());
+                                    .sendError(user, e.getMessage());
                         } catch (IOException ex) {
                             ex.printStackTrace();
                             user.disconnect();
@@ -231,7 +228,6 @@ public class ProgramController {
             }
             return null;
         });
-
         senders.execute(() -> {
             String reply = null;
             try {
@@ -257,9 +253,9 @@ public class ProgramController {
         users.removeIf(User::isDisconnected);
         for (User user : users) {
             try {
-                System.out.println(user.getLogin());
                 connectionController.getRequestController().sendCollection(user,
                         dataController.getMap());
+                Logger.getLogger().log(Level.INFO, "Отправлено обновление "+user.getLogin());
             } catch (IOException e) {
                 e.printStackTrace();
                 user.disconnect();
@@ -320,7 +316,4 @@ public class ProgramController {
         return connectionController;
     }
 
-    public ArrayList<Command> getAllCommands() {
-        return allCommands;
-    }
 }

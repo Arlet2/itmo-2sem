@@ -368,7 +368,8 @@ public class City implements Comparable<City>, Serializable {
                 "establishmentDate: " + establishmentDate + "\n" +
                 "climate: " + (climate != null ? climate : "-") + "\n" +
                 "government: " + (government != null ? government : "-") + "\n" +
-                "governor:\n" + governor + "\n";
+                "governor:\n" + governor + "\n"+
+                "owner: "+owner+"\n";
     }
 
     @Override

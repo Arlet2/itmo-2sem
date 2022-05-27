@@ -2,13 +2,14 @@ package server.commands;
 
 import data_classes.City;
 import exceptions.IncorrectArgumentException;
+import server.ProgramController;
 import server.connection_control.User;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class InsertCommand extends Command {
-    InsertCommand() {
+    public InsertCommand() {
         super("insert", Command.SendInfo.CITY,
                 new Command.ArgumentInfo[]{Command.ArgumentInfo.ID}, CommandType.CHANGE);
     }
@@ -25,6 +26,7 @@ public class InsertCommand extends Command {
     public String execute(User user, ProgramController programController, Object args)
             throws IncorrectArgumentException, IOException, ClassNotFoundException {
         City city = (City) args;
+        city.setOwner(user.getLogin());
         if (!programController.getDataController().isUniqueId(city.getId()))
             throw new IncorrectArgumentException("not_unique_id");
         try {
@@ -33,7 +35,6 @@ public class InsertCommand extends Command {
             e.printStackTrace();
             throw new IncorrectArgumentException("not_unique_id");
         }
-        programController.getDataController().updateModificationTime();
         return "insert_success";
     }
 }
