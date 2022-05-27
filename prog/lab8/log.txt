@@ -5233,3 +5233,17 @@ INFO: Принято подключение от клиента /127.0.0.1:7845.
 WARNING: Ошибка получения запроса
 мая 28, 2022 12:18:31 AM server.Logger logDisconnect
 WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 1:49:55 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 1:49:57 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 1:50:41 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 1:50:41 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 1:56:52 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 1:56:57 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 1:56:57 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
