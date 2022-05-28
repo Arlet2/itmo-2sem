@@ -5247,3 +5247,473 @@ INFO: Принято подключение от клиента /127.0.0.1:7845.
 WARNING: Ошибка получения запроса
 мая 28, 2022 1:56:57 AM server.Logger logDisconnect
 WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 5:05:37 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 5:05:44 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:06:39 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:06:43 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 5:06:43 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 5:07:08 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 5:07:14 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:07:36 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 5:07:36 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 5:08:49 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 5:08:59 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:09:20 AM server.ProgramController invoke
+INFO: Получена команда update от клиента e3
+мая 28, 2022 5:09:20 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:09:20 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту e3.
+мая 28, 2022 5:09:37 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:09:50 AM server.ProgramController invoke
+INFO: Получена команда update от клиента hello
+мая 28, 2022 5:09:50 AM server.ProgramController lambda$listenRequests$7
+WARNING: Некорректный аргумент: not_owner
+мая 28, 2022 5:09:50 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:09:50 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление hello
+мая 28, 2022 5:09:59 AM server.ProgramController invoke
+INFO: Получена команда update от клиента hello
+мая 28, 2022 5:09:59 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:09:59 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление hello
+мая 28, 2022 5:09:59 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту hello.
+мая 28, 2022 5:10:53 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 5:10:53 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом hello
+мая 28, 2022 5:13:10 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 5:13:10 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 5:17:10 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 5:17:15 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:18:11 AM server.ProgramController invoke
+INFO: Получена команда insert от клиента e3
+мая 28, 2022 5:18:11 AM server.ProgramController lambda$listenRequests$7
+WARNING: Некорректный аргумент: not_unique_id
+мая 28, 2022 5:18:11 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:18:28 AM server.ProgramController invoke
+INFO: Получена команда insert от клиента e3
+мая 28, 2022 5:20:57 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 5:21:03 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:21:27 AM server.ProgramController invoke
+INFO: Получена команда insert от клиента e3
+мая 28, 2022 5:21:27 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:21:27 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту e3.
+мая 28, 2022 5:21:35 AM server.ProgramController invoke
+INFO: Получена команда insert от клиента e3
+мая 28, 2022 5:21:35 AM server.ProgramController lambda$listenRequests$7
+WARNING: Некорректный аргумент: not_unique_id
+мая 28, 2022 5:21:35 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:21:40 AM server.ProgramController invoke
+INFO: Получена команда insert от клиента e3
+мая 28, 2022 5:21:40 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:21:40 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту e3.
+мая 28, 2022 5:21:51 AM server.ProgramController invoke
+INFO: Получена команда insert от клиента e3
+мая 28, 2022 5:21:51 AM server.ProgramController lambda$listenRequests$7
+WARNING: Некорректный аргумент: not_unique_id
+мая 28, 2022 5:21:51 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:21:59 AM server.ProgramController invoke
+INFO: Получена команда update от клиента e3
+мая 28, 2022 5:21:59 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:21:59 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту e3.
+мая 28, 2022 5:22:18 AM server.ProgramController invoke
+INFO: Получена команда update от клиента e3
+мая 28, 2022 5:22:18 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:22:18 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту e3.
+мая 28, 2022 5:22:33 AM server.ProgramController invoke
+INFO: Получена команда update от клиента e3
+мая 28, 2022 5:22:33 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:22:33 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту e3.
+мая 28, 2022 5:22:44 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:22:52 AM server.ProgramController invoke
+INFO: Получена команда insert от клиента hello
+мая 28, 2022 5:22:52 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:22:52 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление hello
+мая 28, 2022 5:22:52 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту hello.
+мая 28, 2022 5:23:45 AM server.ProgramController invoke
+INFO: Получена команда insert от клиента hello
+мая 28, 2022 5:23:45 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:23:45 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление hello
+мая 28, 2022 5:23:45 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту hello.
+мая 28, 2022 5:23:58 AM server.ProgramController invoke
+INFO: Получена команда update от клиента hello
+мая 28, 2022 5:23:58 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:23:58 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление hello
+мая 28, 2022 5:23:58 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту hello.
+мая 28, 2022 5:24:32 AM server.ProgramController invoke
+INFO: Получена команда remove_key от клиента hello
+мая 28, 2022 5:24:32 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:24:32 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление hello
+мая 28, 2022 5:24:32 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту hello.
+мая 28, 2022 5:24:37 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 5:24:37 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом hello
+мая 28, 2022 5:24:39 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 5:24:39 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 5:25:23 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 5:25:24 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:25:46 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 5:25:53 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:26:08 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:26:23 AM server.ProgramController invoke
+INFO: Получена команда insert от клиента hello
+мая 28, 2022 5:26:23 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:26:23 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление hello
+мая 28, 2022 5:26:23 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту hello.
+мая 28, 2022 5:26:34 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 5:26:34 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом hello
+мая 28, 2022 5:26:35 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 5:26:35 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 5:27:38 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 5:27:40 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:27:54 AM server.ProgramController invoke
+INFO: Получена команда insert от клиента e3
+мая 28, 2022 5:27:54 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:27:54 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту e3.
+мая 28, 2022 5:31:18 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 5:31:31 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 5:31:37 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:31:46 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 5:31:46 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 5:31:53 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:32:27 AM server.ProgramController invoke
+INFO: Получена команда insert от клиента e3
+мая 28, 2022 5:32:27 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:32:27 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту e3.
+мая 28, 2022 5:33:04 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 5:33:04 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 5:36:07 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:36:32 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 5:36:32 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 5:36:40 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:36:43 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 5:36:43 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 5:39:11 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:39:25 AM server.ProgramController invoke
+INFO: Получена команда insert от клиента e3
+мая 28, 2022 5:39:25 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:39:25 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту e3.
+мая 28, 2022 5:39:40 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:39:59 AM server.ProgramController invoke
+INFO: Получена команда insert от клиента hello
+мая 28, 2022 5:39:59 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 5:39:59 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление hello
+мая 28, 2022 5:39:59 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту hello.
+мая 28, 2022 5:40:15 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 5:40:15 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 5:40:16 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 5:40:16 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом hello
+мая 28, 2022 5:49:00 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 5:49:01 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:54:16 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 5:54:38 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:55:40 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 5:55:41 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 5:55:54 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 5:55:54 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:11:06 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 6:11:13 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:12:07 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 6:12:13 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:12:27 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:12:27 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:12:59 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:13:05 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:13:05 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:14:29 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:15:45 AM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 6:15:46 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:20:09 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:20:09 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:20:18 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:20:38 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:20:38 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:20:59 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:21:09 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:21:09 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:31:14 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:31:28 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:31:28 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:32:00 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:32:11 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:32:11 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:32:44 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:33:10 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:33:10 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:33:16 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:33:29 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:33:29 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:40:09 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:40:34 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:40:34 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:40:40 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:40:53 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:40:53 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:41:10 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:41:24 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:41:24 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:42:15 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:42:25 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:42:25 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:42:44 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:42:51 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:42:51 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:44:14 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:44:27 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:44:27 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:49:56 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:50:07 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:50:07 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:51:18 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:51:30 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:51:30 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:51:37 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:51:40 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:51:40 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:51:52 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:52:09 AM server.ProgramController invoke
+INFO: Получена команда update от клиента e3
+мая 28, 2022 6:52:09 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 6:52:09 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту e3.
+мая 28, 2022 6:52:49 AM server.ProgramController invoke
+INFO: Получена команда update от клиента e3
+мая 28, 2022 6:52:49 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 6:52:49 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту e3.
+мая 28, 2022 6:53:00 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:53:00 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 6:53:07 AM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 6:53:17 AM server.ProgramController invoke
+INFO: Получена команда update от клиента e3
+мая 28, 2022 6:53:17 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 6:53:17 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту e3.
+мая 28, 2022 6:53:40 AM server.ProgramController invoke
+INFO: Получена команда update от клиента e3
+мая 28, 2022 6:53:40 AM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 6:53:40 AM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту e3.
+мая 28, 2022 6:53:57 AM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 6:53:57 AM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 3:22:38 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 28, 2022 3:22:52 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 3:22:59 PM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 3:22:59 PM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 3:33:42 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 3:34:00 PM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 3:34:00 PM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 3:34:14 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 3:34:18 PM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 3:34:18 PM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 3:39:20 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 3:39:29 PM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 3:39:29 PM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 3:39:46 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 3:39:56 PM server.ProgramController invoke
+INFO: Получена команда update от клиента e3
+мая 28, 2022 3:39:56 PM server.ProgramController sendUpdate
+INFO: Отправлено обновление e3
+мая 28, 2022 3:39:56 PM server.ProgramController lambda$listenRequests$9
+INFO: Отправлен ответ клиенту e3.
+мая 28, 2022 3:40:11 PM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 3:40:11 PM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 3:40:43 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 3:40:54 PM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 3:40:54 PM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3
+мая 28, 2022 3:41:01 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 28, 2022 3:51:08 PM server.ProgramController listenRequests
+WARNING: Ошибка получения запроса
+мая 28, 2022 3:51:08 PM server.Logger logDisconnect
+WARNING: Потеряно соединение с клиентом e3

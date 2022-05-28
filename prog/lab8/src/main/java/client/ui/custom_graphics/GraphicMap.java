@@ -1,89 +1,145 @@
 package client.ui.custom_graphics;
 
+import client.ui.MainWindow;
+import data_classes.City;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class GraphicMap extends JPanel {
-    public static final float ZOOM_COEFFICIENT = 0.1f;
-    public static final float MOTION_COEFFICIENT = 1f;
+    public static final float ZOOM_COEFFICIENT = 0.5f;
+    public static final float MOTION_COEFFICIENT = 3f;
     private float zoom = 1;
     private int mapX = 0;
     private int mapY = 0;
-    public GraphicMap(Component parent) {
+    private int zoomCounter = 0;
+    private final MainWindow window;
+    private final HashMap<String, Color> ownersColors;
+
+    public GraphicMap(MainWindow window) {
         super(null);
-        setBounds(mapX, mapY, parent.getWidth(), parent.getHeight());
+        this.window = window;
+        ownersColors = new HashMap<>();
+        setBounds(mapX, mapY, window.getFrameWidth(), window.getFrameHeight());
         setListeners();
         setBorder(BorderFactory.createBevelBorder(1));
     }
 
-    private void updateComponents() {
-        for (Component component: getComponents()) {
+    public void addColorToCollection(String owner, Color color) {
+        ownersColors.put(owner, color);
+    }
+
+    public Color getColorByOwner(String owner) {
+        return ownersColors.get(owner);
+    }
+
+    public boolean isThisColorOnCollection(Color color) {
+        for (Color collectionColor : ownersColors.values()) {
+            if (collectionColor == color)
+                return true;
+        }
+        return false;
+    }
+
+    public void loadCities(Collection<City> cities, Collection<Long> cityToAdd) {
+        mapX = 0;
+        mapY = 0;
+        zoomCounter = 0;
+        for (Component component : getComponents()) {
+            if (component.getClass() == CityPainting.class) {
+                remove(component);
+            }
+        }
+        cities = cities.stream().sorted(Comparator.comparingLong(City::getArea))
+                .collect(Collectors.toList());
+        boolean isAppend;
+        for (City city : cities) {
+            isAppend = false;
+            for (long id : cityToAdd) {
+                if (id == city.getId()) {
+                    add(new CityPainting(this, city, true));
+                    isAppend = true;
+                    break;
+                }
+            }
+            if (!isAppend)
+                add(new CityPainting(this, city, false));
+        }
+    }
+
+    private void repaintComponents() {
+        for (Component component : getComponents()) {
             if (component.getClass() == CityPainting.class)
-                ((CityPainting) component).resize();
+                ((CityPainting) component).resize(false);
         }
         repaint();
     }
+
+    private void moveComponents() {
+        for (Component component : getComponents()) {
+            if (component.getClass() == CityPainting.class)
+                ((CityPainting) component).move(false);
+        }
+        repaint();
+    }
+
     private void setListeners() {
         addMouseWheelListener(new MouseAdapter() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 super.mouseWheelMoved(e);
                 if (e.getWheelRotation() == -1) {
-                    System.out.println("УВЕЛИЧИВАЮ"); // -1
                     doZoom();
-                }
-                else if (e.getWheelRotation() == 1) {
-                    System.out.println("УМЕНЬШАЮ"); // 1
+                    zoomCounter++;
+                } else if (e.getWheelRotation() == 1) {
                     undoZoom();
+                    zoomCounter--;
                 }
                 System.out.println(zoom);
-                updateComponents();
+                repaintComponents();
             }
         });
         addMouseMotionListener(new MouseAdapter() {
-            int prevX=0;
-            int prevY=0;
+            int prevX = 0;
+            int prevY = 0;
+
             @Override
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
                 if (prevX > e.getX()) { // LEFT
-                    System.out.print("LEFT ");
-                    mapX-=MOTION_COEFFICIENT;
+                    mapX -= MOTION_COEFFICIENT;
+                } else if (prevX < e.getX()) { // RIGHT
+                    mapX += MOTION_COEFFICIENT;
                 }
-                else if (prevX < e.getX()) { // RIGHT
-                    System.out.print("RIGHT ");
-                    mapX+=MOTION_COEFFICIENT;
+                if (prevY > e.getY()) {// UP
+                    mapY -= MOTION_COEFFICIENT;
+                } else if (prevY < e.getY()) { // DOWN
+                    mapY += MOTION_COEFFICIENT;
                 }
-                else
-                    System.out.print("DON'T X MOVE ");
-                if (prevY >e.getY()) {// UP
-                    System.out.println("UP");
-                    mapY-=MOTION_COEFFICIENT;
-                }
-                else if(prevY < e.getY()) { // DOWN
-                    System.out.println("DOWN");
-                    mapY+=MOTION_COEFFICIENT;
-                }
-                else
-                    System.out.println("DON'T Y MOVE");
                 prevX = e.getX();
                 prevY = e.getY();
-                System.out.println("MAP: "+mapX+" "+mapY);
-                updateComponents();
+                moveComponents();
             }
         });
     }
+
     public void doZoom() {
-        zoom+= ZOOM_COEFFICIENT;
+        zoom = 1;
+        zoom += ZOOM_COEFFICIENT;
     }
-    
+
     public void undoZoom() {
-        zoom-= ZOOM_COEFFICIENT;
+        zoom = 1;
+        zoom -= ZOOM_COEFFICIENT;
     }
-    
+
     public float getZoom() {
         return zoom;
     }
@@ -94,5 +150,13 @@ public class GraphicMap extends JPanel {
 
     public int getMapY() {
         return mapY;
+    }
+
+    public int getZoomCounter() {
+        return zoomCounter;
+    }
+
+    public MainWindow getWindow() {
+        return window;
     }
 }

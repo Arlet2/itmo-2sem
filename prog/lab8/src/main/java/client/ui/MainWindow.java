@@ -1,6 +1,7 @@
 package client.ui;
 
 import client.ui.custom_graphics.CityPainting;
+import client.ui.custom_graphics.GraphicMap;
 import connect_utils.CommandInfo;
 import connect_utils.Serializer;
 import data_classes.City;
@@ -34,6 +35,8 @@ public class MainWindow extends AbstractWindow {
     private JTextField climateFilterField;
     private JTextField filterField;
     private JComboBox<String> filterSwitcher;
+    private GraphicMap map;
+    private JTabbedPane tabs;
     private final JTextField idField = new JTextField();
     private final JTextField nameField = new JTextField();
     private final JTextField coordinateXField = new JTextField();
@@ -70,6 +73,7 @@ public class MainWindow extends AbstractWindow {
         int sizeWidth = 5 * screenSize.width / 6;
         int sizeHeight = 5 * screenSize.height / 6;
         mainFrame = new JFrame(getString("window_name"));
+        map = new GraphicMap(this);
         mainFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -82,20 +86,16 @@ public class MainWindow extends AbstractWindow {
         mainFrame.setMinimumSize(new Dimension(sizeWidth, sizeHeight));
         JPanel mainPanel = new JPanel(new BorderLayout());
 
-        JTabbedPane tabs = new JTabbedPane(SwingConstants.TOP, JTabbedPane.WRAP_TAB_LAYOUT);
-
+        tabs = new JTabbedPane(SwingConstants.TOP, JTabbedPane.WRAP_TAB_LAYOUT);
         tabs.addTab(getString("table_tab_name"), createTableTab());
-        tabs.addTab(getString("map_tab_name"), createMapTab());
-        tabs.setSelectedIndex(1);
+        tabs.addTab(getString("map_tab_name"), map);
         mainPanel.add(tabs);
         mainFrame.add(mainPanel);
     }
 
     @Override
     protected void setListeners() {
-        climateFilterField.addActionListener(e -> {
-            updateClimateFilter(climateFilterField.getText());
-        });
+        climateFilterField.addActionListener(e -> updateClimateFilter(climateFilterField.getText()));
         filterField.addActionListener(e -> {
             int column = -1;
             if (filterSwitcher.getSelectedItem() != null) {
@@ -111,27 +111,13 @@ public class MainWindow extends AbstractWindow {
 
             updateFilter(column, filterField.getText());
         });
-        insertButton.addActionListener(e -> {
-            insertAction();
-        });
-        updateButton.addActionListener(e -> {
-            updateAction();
-        });
-        removeKeyButton.addActionListener(e -> {
-            removeKeyAction();
-        });
-        removeLowerKeyButton.addActionListener(e -> {
-            removeLowerKeyAction();
-        });
-        replaceIfGreaterButton.addActionListener(e -> {
-            replaceIfGreaterAction();
-        });
-        clearButton.addActionListener(e -> {
-            clearAction();
-        });
-        historyButton.addActionListener(e -> {
-            historyAction();
-        });
+        insertButton.addActionListener(e -> insertAction());
+        updateButton.addActionListener(e -> updateAction());
+        removeKeyButton.addActionListener(e -> removeKeyAction());
+        removeLowerKeyButton.addActionListener(e -> removeLowerKeyAction());
+        replaceIfGreaterButton.addActionListener(e -> replaceIfGreaterAction());
+        clearButton.addActionListener(e -> clearAction());
+        historyButton.addActionListener(e -> historyAction());
         executeScriptButton.addActionListener(e -> {
             String path = UIController.showInputDialog(getString("execute_script_input"),
                     getString("execute_script_window_name"));
@@ -361,32 +347,8 @@ public class MainWindow extends AbstractWindow {
         return city;
     }
 
-    private JPanel createMapTab() {
-        updateMapData();
-        /*
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setMinimumSize(mainFrame.getMinimumSize());
-        int sh = 0;
-        for (City city : cities) {
-            CityPainting cityPainting = new CityPainting(city);
-            cityPainting.setBounds((int) city.getCoordinates().getX(), city.getCoordinates().getY(),
-                    (int) city.getArea() * 100, (int) city.getArea() * 100);
-            cityPainting.setMaximumSize(new Dimension((int) city.getArea(), (int) city.getArea()));
-            cityPainting.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    System.out.println("LOX " + city.getId());
-                }
-            });
-            mainPanel.add(cityPainting);
-            sh++;
-        }
-         */
-        return null;
-    }
-
-    private void updateMapData() {
-
+    private void updateMapData(ArrayList<Long> cityNeedToInsert) {
+        map.loadCities(cities, cityNeedToInsert);
     }
 
     private JPanel createTableTab() {
@@ -499,10 +461,20 @@ public class MainWindow extends AbstractWindow {
         return panel;
     }
 
-    public void refreshCitiesData(Collection<City> newCities) {
+    public void refreshCitiesData(ArrayList<City> newCities) {
+        ArrayList<Long> cityNeedToInsert = new ArrayList<>();
+        for (City newCity : newCities) {
+            cityNeedToInsert.add(newCity.getId());
+            for (City city : cities) {
+                if (newCity.getId().equals(city.getId())) {
+                    cityNeedToInsert.remove(newCity.getId());
+                    break;
+                }
+            }
+        }
         cities = new ArrayList<>(newCities);
         updateTableData();
-        updateMapData();
+        updateMapData(cityNeedToInsert);
     }
 
     private void updateTableData() {
@@ -644,8 +616,22 @@ public class MainWindow extends AbstractWindow {
 
         return rowSorter;
     }
+    public int getFrameWidth() {
+        return mainFrame.getWidth();
+    }
+    public int getFrameHeight() {
+        return mainFrame.getHeight();
+    }
 
-    enum Headers {
+    public JTabbedPane getTabs() {
+        return tabs;
+    }
+
+    public JTable getTable() {
+        return table;
+    }
+
+    private enum Headers {
         ID("id_column_name"),
         NAME("name_column_name"),
         COORDINATE_X("coordinate_x_column_name"),

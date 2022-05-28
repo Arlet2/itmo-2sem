@@ -12,6 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseWheelEvent;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Locale;
 
 public class Main {
@@ -21,6 +23,7 @@ public class Main {
      * @param args do not use
      */
     public static void main(String[] args) {
+        /*
         int sizeWidth = 900;
         int sizeHeight = 900;
         JFrame jFrame = new JFrame();
@@ -29,30 +32,31 @@ public class Main {
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         GraphicMap map = new GraphicMap(jFrame);
-
+        Collection<City> cities = new ArrayList<>();
         City city = new City();
         city.setId(1L);
-        city.getCoordinates().setX(100);
-        city.getCoordinates().setY(100);
-        city.setArea(50);
-
-        CityPainting painting = new CityPainting(map, city);
-        city.setId(2L);
-        city.getCoordinates().setX(100);
+        city.getCoordinates().setX(200);
         city.getCoordinates().setY(100);
         city.setArea(100);
+        city.setOwner("mama");
 
-        CityPainting painting1 = new CityPainting(map, city);
+        cities.add(city);
+        City city1 = new City();
+        city1.setId(2L);
+        city1.getCoordinates().setX(100);
+        city1.getCoordinates().setY(100);
+        city1.setArea(50);
+        cities.add(city1);
 
-        map.add(painting);
-        map.add(painting1);
+        map.loadCities(cities);
+        //city.getCoordinates().setX(200);
+        //map.loadCities(cities);
 
         jFrame.add(map);
 
         jFrame.setVisible(true);
         jFrame.pack();
-        //*/
-        /*
+        // */
         Locale.setDefault(Locale.ENGLISH);
         try {
             AppController appController = new AppController();

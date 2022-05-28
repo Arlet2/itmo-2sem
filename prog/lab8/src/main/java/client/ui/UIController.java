@@ -4,6 +4,7 @@ import client.AppController;
 import data_classes.City;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ResourceBundle;
 
@@ -48,7 +49,7 @@ public class UIController {
 
     public void updateData(Collection<City> cities) {
         if (mainWindow != null)
-            mainWindow.refreshCitiesData(cities);
+            mainWindow.refreshCitiesData(new ArrayList<>(cities));
     }
 
     public static String getString(String resourceName, String key) {
