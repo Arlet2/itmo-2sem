@@ -56,9 +56,8 @@ public class CityPainting extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                System.out.println(e.getClickCount());
                 Toolkit.getDefaultToolkit().getDesktopProperty("awt.multiClickInterval");
-                if (e.getButton() == MouseEvent.BUTTON1) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
                     rowIndex = findById();
                     StringBuilder stringBuilder = new StringBuilder();
                     String name = (String)map.getWindow().getTable().getModel().getValueAt(rowIndex, 1);
@@ -66,12 +65,25 @@ public class CityPainting extends JPanel {
                     String coordinateY = (String)map.getWindow().getTable().getModel().getValueAt(rowIndex, 3);
                     String area = (String)map.getWindow().getTable().getModel().getValueAt(rowIndex, 5);
                     String population = (String)map.getWindow().getTable().getModel().getValueAt(rowIndex, 6);
-                    //stringBuilder.append()
-                    UIController.showInfoDialog("City "+name, map.getWindow().getString("current_city_window_name"));
+                    stringBuilder.append(map.getWindow().getString("current_city_id")).append(": ")
+                            .append(id).append('\n');
+                    stringBuilder.append(map.getWindow().getString("current_city_name")).append(": ")
+                            .append(name).append('\n');
+                    stringBuilder.append(map.getWindow().getString("current_city_x")).append(": ")
+                            .append(coordinateX).append('\n');
+                    stringBuilder.append(map.getWindow().getString("current_city_y")).append(": ")
+                            .append(coordinateY).append('\n');
+                    stringBuilder.append(map.getWindow().getString("current_city_area")).append(": ")
+                            .append(area).append('\n');
+                    stringBuilder.append(map.getWindow().getString("current_city_population")).append(": ")
+                            .append(population).append('\n');
+                    UIController.showInfoDialog(stringBuilder.toString(),
+                            map.getWindow().getString("current_city_window_name"));
                 }
-                else if (e.getButton() == MouseEvent.BUTTON3) {
+                else if (e.getButton() == MouseEvent.BUTTON1) {
                     rowIndex = findById();
                     map.getWindow().getTable().setRowSelectionInterval(rowIndex, rowIndex);
+                    map.getWindow().selectionAction();
                     map.getWindow().getTabs().setSelectedIndex(0);
                 }
             }

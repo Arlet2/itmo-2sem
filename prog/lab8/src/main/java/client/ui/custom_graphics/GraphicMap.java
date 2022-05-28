@@ -74,7 +74,9 @@ public class GraphicMap extends JPanel {
         }
     }
 
-    private void repaintComponents() {
+    public void repaintComponents(boolean zoomIsUsed) {
+        if (!zoomIsUsed)
+            resetZoom();
         for (Component component : getComponents()) {
             if (component.getClass() == CityPainting.class)
                 ((CityPainting) component).resize(false);
@@ -103,7 +105,7 @@ public class GraphicMap extends JPanel {
                     zoomCounter--;
                 }
                 System.out.println(zoom);
-                repaintComponents();
+                repaintComponents(true);
             }
         });
         addMouseMotionListener(new MouseAdapter() {
@@ -131,12 +133,12 @@ public class GraphicMap extends JPanel {
     }
 
     public void doZoom() {
-        zoom = 1;
+        resetZoom();
         zoom += ZOOM_COEFFICIENT;
     }
 
     public void undoZoom() {
-        zoom = 1;
+        resetZoom();
         zoom -= ZOOM_COEFFICIENT;
     }
 
@@ -150,6 +152,18 @@ public class GraphicMap extends JPanel {
 
     public int getMapY() {
         return mapY;
+    }
+
+    public void setMapX(int mapX) {
+        this.mapX = mapX;
+    }
+
+    public void setMapY(int mapY) {
+        this.mapY = mapY;
+    }
+
+    public void resetZoom() {
+        zoom=1;
     }
 
     public int getZoomCounter() {

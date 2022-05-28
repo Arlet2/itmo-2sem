@@ -87,14 +87,65 @@ public class MainWindow extends AbstractWindow {
         JPanel mainPanel = new JPanel(new BorderLayout());
 
         tabs = new JTabbedPane(SwingConstants.TOP, JTabbedPane.WRAP_TAB_LAYOUT);
+        refreshCitiesData(cities);
         tabs.addTab(getString("table_tab_name"), createTableTab());
         tabs.addTab(getString("map_tab_name"), map);
         mainPanel.add(tabs);
         mainFrame.add(mainPanel);
     }
 
+    public void selectionAction() {
+        int rowIndex = table.getSelectedRow();
+        if (rowIndex == -1)
+            return;
+        idField.setText((String) table.getModel()
+                .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 0));
+        nameField.setText((String) table.getModel()
+                .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 1));
+        coordinateXField.setText((String) table.getModel()
+                .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 2));
+        coordinateYField.setText((String) table.getModel()
+                .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 3));
+        areaField.setText((String) table.getModel()
+                .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 5));
+        populationField.setText((String) table.getModel()
+                .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 6));
+        metersAboveSeaLevelField.setText((String) table.getModel()
+                .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 7));
+        establishmentDateField.setText((String) table.getModel()
+                .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 8));
+        climateField.setText((String) table.getModel()
+                .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 9));
+        governmentField.setText((String) table.getModel()
+                .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 10));
+        governorAgeField.setText((String) table.getModel()
+                .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 11));
+        governorBirthdayField.setText((String) table.getModel()
+                .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 12));
+    }
+
     @Override
     protected void setListeners() {
+        table.getSelectionModel().addListSelectionListener(x -> {
+            if (x.getValueIsAdjusting())
+                selectionAction();
+        });
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (e.getClickCount() == 2) {
+                    int x = Integer.parseInt(
+                            ((String)table.getModel().getValueAt(table.getSelectedRow(), 2)).replaceAll("[,.\\s]",""));
+                    int y = Integer.parseInt(
+                            ((String)table.getModel().getValueAt(table.getSelectedRow(), 3)).replaceAll("[,.\\s]",""));
+                    map.setMapX(x*2);
+                    map.setMapY(y*2);
+                    map.repaintComponents(false);
+                    tabs.setSelectedIndex(1);
+                }
+            }
+        });
         climateFilterField.addActionListener(e -> updateClimateFilter(climateFilterField.getText()));
         filterField.addActionListener(e -> {
             int column = -1;
@@ -523,38 +574,6 @@ public class MainWindow extends AbstractWindow {
         table.setModel(model);
         model.setDataVector(values, headers);
         table.getTableHeader().setReorderingAllowed(false);
-        table.getSelectionModel().addListSelectionListener(x -> {
-            if (x.getValueIsAdjusting()) {
-                int rowIndex = table.getSelectedRow();
-                if (rowIndex == -1)
-                    return;
-                ;
-                idField.setText((String) table.getModel()
-                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 0));
-                nameField.setText((String) table.getModel()
-                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 1));
-                coordinateXField.setText((String) table.getModel()
-                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 2));
-                coordinateYField.setText((String) table.getModel()
-                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 3));
-                areaField.setText((String) table.getModel()
-                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 5));
-                populationField.setText((String) table.getModel()
-                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 6));
-                metersAboveSeaLevelField.setText((String) table.getModel()
-                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 7));
-                establishmentDateField.setText((String) table.getModel()
-                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 8));
-                climateField.setText((String) table.getModel()
-                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 9));
-                governmentField.setText((String) table.getModel()
-                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 10));
-                governorAgeField.setText((String) table.getModel()
-                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 11));
-                governorBirthdayField.setText((String) table.getModel()
-                        .getValueAt(table.getRowSorter().convertRowIndexToModel(rowIndex), 12));
-            }
-        });
         table.setAutoCreateRowSorter(true);
 
         tableSorter = createRowSorter(table.getModel());
