@@ -7,7 +7,6 @@ import exceptions.NullValueException;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
 
 public class City implements Comparable<City>, Serializable {
     /**
@@ -228,6 +227,11 @@ public class City implements Comparable<City>, Serializable {
         this.climate = climate;
     }
 
+    /**
+     * Set climate
+     *
+     * @param climate that transform to enum type
+     */
     public void setClimate(String climate) {
         if (climate == null)
             return;
@@ -266,6 +270,11 @@ public class City implements Comparable<City>, Serializable {
         this.government = government;
     }
 
+    /**
+     * Set government
+     *
+     * @param government that convert to enum type
+     */
     public void setGovernment(String government) {
         if (government == null)
             return;
@@ -302,6 +311,11 @@ public class City implements Comparable<City>, Serializable {
         return governor;
     }
 
+    /**
+     * Transform date to string (human viewable)
+     *
+     * @return string of this date
+     */
     private String creationDateToString() {
         return (creationDate.getDayOfMonth() < 10 ? "0" : "") + creationDate.getDayOfMonth() + "-" +
                 (creationDate.getMonthValue() < 10 ? "0" : "") + creationDate.getMonthValue() +

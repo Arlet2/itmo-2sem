@@ -9,16 +9,41 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
+/**
+ * Class for get and set data to database
+ */
 public class DataBaseController {
+    /**
+     * Current connection with database
+     */
     private final Connection connection;
+
+    /**
+     * Data controller that create this instance
+     */
     private final DataController dataController;
 
+    /**
+     * Create connection with database
+     *
+     * @param dataController that was created this instance
+     * @param dbUrl          where database is deployed
+     * @param dbUser         which use for login to database
+     * @throws SQLException                if connection with database is not created
+     * @throws ConfigFileNotFoundException if configuration file database.config does not exist
+     */
     DataBaseController(DataController dataController, String dbUrl, String dbUser) throws SQLException,
             ConfigFileNotFoundException {
         this.dataController = dataController;
         connection = DriverManager.getConnection(dbUrl, dbUser, FilesController.readDBPassword());
     }
 
+    /**
+     * Get all cities from database
+     *
+     * @return array list with all cities from database
+     * @throws SQLException if something got wrong with database
+     */
     public ArrayList<City> getAllCities() throws SQLException {
         ResultSet results = connection.createStatement().executeQuery("SELECT * FROM cities");
         PreparedStatement psCoords = connection.prepareStatement("SELECT * FROM coordinates WHERE id=?");
@@ -58,6 +83,13 @@ public class DataBaseController {
         return cities;
     }
 
+    /**
+     * Get user hash of password from database
+     *
+     * @param login of user
+     * @return hash of password
+     * @throws SQLException if something got wrong with database
+     */
     public String getUserPassword(String login) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("SELECT password FROM users WHERE login = ?");
         ps.setString(1, login);
@@ -66,14 +98,29 @@ public class DataBaseController {
         return result.getString(1);
     }
 
-    protected void createUser(String login, String password, String salt) throws SQLException {
+    /**
+     * Create new user in database
+     *
+     * @param login that user had
+     * @param hash  of password that user used
+     * @param salt  that add to hash
+     * @throws SQLException if something got wrong with database
+     */
+    protected void createUser(String login, String hash, String salt) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("INSERT INTO users VALUES(?, ?, ?)");
         ps.setString(1, login);
-        ps.setString(2, password);
+        ps.setString(2, hash);
         ps.setString(3, salt);
         ps.execute();
     }
 
+    /**
+     * Get user salt of password
+     *
+     * @param login of user
+     * @return salt from database
+     * @throws SQLException if something got wrong with database
+     */
     public String getUserSalt(String login) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("SELECT salt FROM users WHERE login = ?");
         ps.setString(1, login);
@@ -82,6 +129,14 @@ public class DataBaseController {
         return result.getString(1);
     }
 
+    /**
+     * Check owner for city with id
+     *
+     * @param login of user
+     * @param id    of city
+     * @return true if user is owner of this city else false
+     * @throws SQLException if something got wrong with database
+     */
     public boolean isOwner(String login, long id) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("SELECT owner FROM cities WHERE id=?");
         ps.setLong(1, id);
@@ -90,6 +145,13 @@ public class DataBaseController {
         return login.equals(resultSet.getString(1));
     }
 
+    /**
+     * Create new city in database
+     *
+     * @param city  that need to create
+     * @param login of owner of this city
+     * @throws SQLException if something got wrong with database
+     */
     protected void addCity(City city, String login) throws SQLException {
         PreparedStatement subPs;
         long id;
@@ -114,8 +176,8 @@ public class DataBaseController {
         subPs.setString(3, city.getGovernor().getBirthday().toString());
         subPs.execute();
 
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO cities(id, name, coordinatesid, creationdate, " +
-                "area, population, metersabovesealevel, establishmentdate, climate, government, governor, owner)" +
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO cities(id, name, coordinatesid, creationdate, "
+                + "area, population, metersabovesealevel, establishmentdate, climate, government, governor, owner)" +
                 " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         ps.setLong(1, id);
         ps.setString(2, city.getName());
@@ -133,7 +195,12 @@ public class DataBaseController {
         ps.execute();
     }
 
-
+    /**
+     * Update city in database
+     *
+     * @param city that need to update
+     * @throws SQLException if something got wrong with database
+     */
     protected void updateCity(City city) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("UPDATE cities " +
                 "SET name = ?, " +
@@ -171,6 +238,12 @@ public class DataBaseController {
         ps.execute();
     }
 
+    /**
+     * Delete city from database
+     *
+     * @param id of city
+     * @throws SQLException if something got wrong with database
+     */
     protected void removeCity(long id) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("DELETE FROM cities WHERE id=?");
         ps.setLong(1, id);
@@ -183,6 +256,12 @@ public class DataBaseController {
         subPs.execute();
     }
 
+    /**
+     * Remove all cities which user has got
+     *
+     * @param login of user
+     * @throws SQLException if something got wrong with database
+     */
     protected void clearAll(String login) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("SELECT FROM cities * WHERE owner=?");
         ps.setString(1, login);
@@ -200,6 +279,11 @@ public class DataBaseController {
         }
     }
 
+    /**
+     * Get data controller that create this instance
+     *
+     * @return data controller
+     */
     public DataController getDataController() {
         return dataController;
     }

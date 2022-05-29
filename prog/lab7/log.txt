@@ -2537,3 +2537,37 @@ WARNING: Ошибка подключения к базе данных.
 WARNING: Ошибка подключения к базе данных.
 мая 14, 2022 5:07:57 AM server.Main main
 WARNING: Ошибка подключения к базе данных.
+мая 15, 2022 1:48:14 PM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 15, 2022 1:49:08 PM server.Main main
+WARNING: Ошибка подключения к базе данных.
+мая 15, 2022 1:49:39 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.
+мая 15, 2022 1:49:57 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 15, 2022 1:50:06 PM server.connection_control.ConnectionController connect
+INFO: Принято подключение от клиента /127.0.0.1:7845.
+мая 15, 2022 1:50:10 PM server.commands.ProgramController invoke
+INFO: Получена команда help от клиента 127.0.0.1
+мая 15, 2022 1:50:14 PM server.commands.ProgramController invoke
+INFO: Получена команда login от клиента 127.0.0.1
+мая 15, 2022 1:50:15 PM server.commands.ProgramController invoke
+INFO: Получена команда show от клиента l
+мая 15, 2022 1:50:15 PM server.commands.ProgramController lambda$listenRequests$12
+INFO: Отправлен ответ клиенту l.
+мая 15, 2022 1:50:20 PM server.commands.ProgramController invoke
+INFO: Получена команда show от клиента l
+мая 15, 2022 1:50:20 PM server.commands.ProgramController lambda$listenRequests$12
+INFO: Отправлен ответ клиенту l.
+мая 15, 2022 1:50:28 PM server.commands.ProgramController invoke
+INFO: Получена команда login от клиента 127.0.0.1
+мая 15, 2022 1:50:29 PM server.commands.ProgramController invoke
+INFO: Получена команда show от клиента l
+мая 15, 2022 1:50:29 PM server.commands.ProgramController lambda$listenRequests$12
+INFO: Отправлен ответ клиенту l.
+мая 15, 2022 1:50:33 PM server.Main lambda$main$0
+INFO: Отключение сервера...
+мая 15, 2022 1:50:33 PM server.commands.ProgramController stop
+INFO: Все полученные команды были исполнены.
+мая 20, 2022 11:54:34 PM server.connection_control.ConnectionController start
+INFO: Сервер запущен на порте 7845 и готов принимать клиентов.

@@ -3,7 +3,6 @@ package server.commands;
 import exceptions.IncorrectArgumentException;
 import server.connection_control.User;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 public class ClearCommand extends Command {
@@ -12,15 +11,17 @@ public class ClearCommand extends Command {
     }
 
     /**
-     * Clear collection
-     * <p>Change modification time</p>
+     * Delete all cities that user is owned
      *
-     * @param programController that uses for program
-     * @param args              for command from console input (args[0] is program name)
+     * @param user              that execute this command
+     * @param programController that execute this command
+     * @param args              of command
+     * @return reply
+     * @throws IncorrectArgumentException if database return error
      */
     @Override
     public String execute(User user, ProgramController programController, String[] args)
-            throws IOException, IncorrectArgumentException {
+            throws IncorrectArgumentException {
         try {
             programController.getDataController().clearMap(user.getLogin());
         } catch (SQLException e) {

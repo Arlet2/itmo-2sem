@@ -1,8 +1,8 @@
 package server.commands;
 
-import data_classes.City;
-import data_classes.Coordinates;
 import connect_utils.CommandInfo;
+import data_classes.Coordinates;
+import data_classes.City;
 
 /**
  * abstract class for all commands
@@ -49,7 +49,7 @@ public abstract class Command implements Executable {
      * @param argInfo         of this command (for client)
      * @param isServerCommand if true client can't use it
      */
-    Command(final String name, final String signature, final String description, CommandInfo.SendInfo sendInfo,
+    public Command(final String name, final String signature, final String description, CommandInfo.SendInfo sendInfo,
             CommandInfo.ArgumentInfo[] argInfo, boolean isServerCommand) {
         this.name = name;
         this.signature = signature;

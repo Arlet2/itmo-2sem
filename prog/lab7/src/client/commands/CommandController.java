@@ -1,12 +1,12 @@
 package client.commands;
 
-import client.connection_control.ConnectionController;
-import connect_utils.CommandInfo;
-import connect_utils.Request;
-import data_classes.Climate;
-import data_classes.Government;
 import client.data_control.ConsoleController;
 import client.data_control.FileController;
+import client.connection_control.ConnectionController;
+import connect_utils.CommandInfo;
+import connect_utils.DataTransferObject;
+import data_classes.Climate;
+import data_classes.Government;
 import exceptions.ConfigFileNotFoundException;
 import exceptions.ConnectionException;
 import exceptions.IncorrectArgumentException;
@@ -25,7 +25,7 @@ public class CommandController {
     /**
      * controls user's interaction with console
      */
-    private final ConsoleController consoleController = new ConsoleController(this);
+    private final ConsoleController consoleController = new ConsoleController();
 
     /**
      * controls connection with server
@@ -106,7 +106,7 @@ public class CommandController {
                 command = parseCommand(args[0]);
                 try {
                     connectionController.getRequestController().sendRequest(connectionController.getChannel(),
-                            new Request(Request.RequestCode.COMMAND, input));
+                            new DataTransferObject(DataTransferObject.Code.COMMAND, input));
                 } catch (IOException e) {
                     System.out.println("Не удалось отправить команду на сервер.");
                     break;
@@ -144,13 +144,13 @@ public class CommandController {
     public boolean invoke(CommandInfo command, String[] args) throws IOException, ClassNotFoundException {
         if (command.getSendInfo() == null)
             return true;
-        Request request;
+        DataTransferObject dataTransferObject;
         switch (command.getSendInfo()) {
             // могут слать null!!!
             case CITY:
-                request = connectionController.getRequestController().receiveRequest();
-                if (!request.getRequestCode().equals(Request.RequestCode.OK)) {
-                    processRequest(request);
+                dataTransferObject = connectionController.getRequestController().receiveRequest();
+                if (!dataTransferObject.getCode().equals(DataTransferObject.Code.OK)) {
+                    processRequest(dataTransferObject);
                     return false;
                 }
                 System.out.println("Данные id корректны. Продолжение ввода...");
@@ -158,9 +158,9 @@ public class CommandController {
                         consoleController.createCityByUser(false));
                 break;
             case CITY_UPDATE:
-                request = connectionController.getRequestController().receiveRequest();
-                if (!request.getRequestCode().equals(Request.RequestCode.OK)) {
-                    processRequest(request);
+                dataTransferObject = connectionController.getRequestController().receiveRequest();
+                if (!dataTransferObject.getCode().equals(DataTransferObject.Code.OK)) {
+                    processRequest(dataTransferObject);
                     return false;
                 }
                 connectionController.getRequestController().sendCity(connectionController.getChannel(),
@@ -171,16 +171,16 @@ public class CommandController {
                 break;
             case COMMANDS:
                 try {
-                    Request validRequest = connectionController.getRequestController().receiveRequest();
-                    if (!validRequest.getRequestCode().equals(Request.RequestCode.OK)) {
-                        processRequest(validRequest);
+                    DataTransferObject validDataTransferObject = connectionController.getRequestController().receiveRequest();
+                    if (!validDataTransferObject.getCode().equals(DataTransferObject.Code.OK)) {
+                        processRequest(validDataTransferObject);
                         break;
                     }
                     ArrayList<CommandInfo> commandsInfo = fileController.readScriptFile(args[1]);
                     ArrayList<String> strCommand = fileController.getStrCommand();
                     for (int i = 0; i < commandsInfo.size(); i++) {
                         connectionController.getRequestController().sendRequest(connectionController.getChannel(),
-                                new Request(Request.RequestCode.COMMAND, strCommand.get(i)));
+                                new DataTransferObject(DataTransferObject.Code.COMMAND, strCommand.get(i)));
                         invoke(commandsInfo.get(i), strCommand.get(i).split(" "));
                         processRequest(connectionController.getRequestController().receiveRequest());
                     }
@@ -188,7 +188,7 @@ public class CommandController {
                     System.out.println("Файл скрипта не найден.");
                 } finally {
                     connectionController.getRequestController().sendRequest(connectionController.getChannel(),
-                            new Request(Request.RequestCode.OK, ""));
+                            new DataTransferObject(DataTransferObject.Code.OK, ""));
                 }
                 break;
         }
@@ -211,21 +211,21 @@ public class CommandController {
     /**
      * Print information using request code
      *
-     * @param request from server
+     * @param dataTransferObject from server
      */
-    public void processRequest(Request request) {
-        switch (request.getRequestCode()) {
+    public void processRequest(DataTransferObject dataTransferObject) {
+        switch (dataTransferObject.getCode()) {
             case REPLY:
-                System.out.print(request.getMsg());
+                System.out.print(dataTransferObject.getMsg());
                 break;
             case ERROR:
-                System.out.print("Ошибка запроса: " + request.getMsg());
+                System.out.print("Ошибка запроса: " + dataTransferObject.getMsg());
                 break;
             case OK:
                 break;
             default:
                 System.out.println("Получен неожиданный ответ от сервера: "
-                        + request.getRequestCode() + ": " + request.getMsg());
+                        + dataTransferObject.getCode() + ": " + dataTransferObject.getMsg());
         }
     }
 

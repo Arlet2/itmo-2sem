@@ -1,6 +1,8 @@
 package server.commands;
 
 import data_classes.City;
+import server.commands.Command;
+import server.commands.ProgramController;
 import server.connection_control.User;
 
 public class ShowCommand extends Command {

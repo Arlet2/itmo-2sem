@@ -11,11 +11,15 @@ import java.io.IOException;
  */
 public interface Executable {
     /**
-     * method that execute when command is invoke
+     * Execute this command
      *
-     * @param programController that uses for program
-     * @param args              for command from console input (args[0] is program name)
-     * @throws IncorrectArgumentException if requiring args is incorrect
+     * @param user              that execute this command
+     * @param programController that execute this command
+     * @param args              of command
+     * @return reply that need to send or null
+     * @throws IncorrectArgumentException if args do not correct
+     * @throws IOException                if connection is closed
+     * @throws ClassNotFoundException     if receiving information is not expected
      */
     String execute(User user, ProgramController programController, String[] args) throws IncorrectArgumentException,
             IOException, ClassNotFoundException;

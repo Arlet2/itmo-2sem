@@ -1,20 +1,23 @@
 package server;
 
+import connect_utils.DataTransferObject;
 import exceptions.ConfigFileNotFoundException;
 import exceptions.MissingArgumentException;
 import server.commands.ProgramController;
 
+import java.io.*;
+import java.nio.ByteBuffer;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 
-/*
-   TODO: починить execute_script
-   TODO: проверить все команды
-   TODO: Написать javadoc
- */
-
 public class Main {
+    /**
+     * Start program
+     *
+     * @param args is not using
+     */
     public static void main(String[] args) {
         Logger.createLogger();
         final ProgramController programController;
@@ -44,7 +47,6 @@ public class Main {
                     System.out.println("Незнакомая команда. Попробуйте stop");
             }
         }); // для остановки сервера
-        consoleListener.setDaemon(true);
         consoleListener.start();
         programController.start();
     }

@@ -1,14 +1,21 @@
 package server.connection_control;
 
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import connect_utils.CommandInfo;
-import connect_utils.Request;
+import connect_utils.DataTransferObject;
 import data_classes.City;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * Control all requests between server and clients
+ */
 public class RequestController {
+
     private final ConnectionController connectionController;
 
     RequestController(ConnectionController connectionController) {
@@ -21,7 +28,7 @@ public class RequestController {
      * @throws IOException if server couldn't send this request
      */
     public void sendOK(Socket socket) throws IOException {
-        connectionController.sendRequest(socket, new Request(Request.RequestCode.OK, ""));
+        connectionController.sendObject(socket, new DataTransferObject(DataTransferObject.Code.OK, ""));
     }
 
     /**
@@ -31,9 +38,15 @@ public class RequestController {
      * @throws IOException if server couldn't send this request
      */
     public void sendReply(Socket socket, String msg) throws IOException {
-        connectionController.sendRequest(socket, new Request(Request.RequestCode.REPLY, msg));
+        connectionController.sendObject(socket, new DataTransferObject(DataTransferObject.Code.REPLY, msg));
     }
 
+    /**
+     * Get OK-reply
+     *
+     * @param socket of client
+     * @throws IOException if connection was closed
+     */
     public void receiveOK(Socket socket) throws IOException {
         try {
             receiveRequest(socket);
@@ -49,11 +62,20 @@ public class RequestController {
      * @throws IOException if server couldn't send this request
      */
     public void sendError(Socket socket, String msg) throws IOException {
-        connectionController.sendRequest(socket, new Request(Request.RequestCode.ERROR, msg + "\n"));
+        connectionController.sendObject(socket, new DataTransferObject(DataTransferObject.Code.ERROR, msg + "\n"));
     }
 
+    /**
+     * Send list of command that user can use on server
+     *
+     * @param socket of user that need to send it
+     * @param list   of commands
+     * @throws IOException if connection is closed
+     */
     public void sendCommandList(Socket socket, ArrayList<CommandInfo> list) throws IOException {
-        connectionController.sendObject(socket, list);
+        DataTransferObject dto = new DataTransferObject(DataTransferObject.Code.NOT_REQUEST,
+                connectionController.convertObjectToBytes(list), DataTransferObject.DataType.COMMANDS_ARRAY);
+        connectionController.sendObject(socket, dto);
     }
 
     /**
@@ -63,11 +85,23 @@ public class RequestController {
      * @throws IOException            if server couldn't receive this request
      * @throws ClassNotFoundException if server received not expected class
      */
-    public Request receiveRequest(Socket socket) throws IOException, ClassNotFoundException {
-        return (Request) connectionController.receiveObject(socket);
+    public DataTransferObject receiveRequest(Socket socket) throws IOException, ClassNotFoundException {
+        return connectionController.receiveObject(socket);
     }
 
+    /**
+     * Get city from client
+     *
+     * @param socket of client
+     * @return city that was received
+     * @throws IOException            if connection was closed
+     * @throws ClassNotFoundException if receiving information is not city
+     */
     public City receiveCity(Socket socket) throws IOException, ClassNotFoundException {
-        return (City) connectionController.receiveObject(socket);
+        DataTransferObject dto = connectionController.receiveObject(socket);
+        ByteInputStream byteStream = new ByteInputStream();
+        byteStream.setBuf(dto.getDataBytes());
+        ObjectInputStream objIn = new ObjectInputStream(byteStream);
+        return (City) objIn.readObject();
     }
 }

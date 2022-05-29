@@ -23,24 +23,26 @@ public class ExecuteScriptCommand extends Command {
     }
 
     /**
-     * execute script from file
+     * Execute script file from client
      *
-     * @param programController that uses for program
-     * @param args              file name
-     * @throws IncorrectArgumentException if file_name if empty/file doesn't exist
+     * @param user              that execute this command
+     * @param programController that execute this command
+     * @param args              of command
+     * @return null
+     * @throws IOException            if connection was closed
+     * @throws ClassNotFoundException if server receive something that not expected
      */
     @Override
     public String execute(User user, ProgramController programController, String[] args)
-            throws IncorrectArgumentException,
-            IOException, ClassNotFoundException {
+            throws IOException, ClassNotFoundException {
         programController.getConnectionController().getRequestController().sendOK(user.getSocket());
-        Request request = programController.getConnectionController().getRequestController()
+        DataTransferObject dataTransferObject = programController.getConnectionController().getRequestController()
                 .receiveRequest(user.getSocket());
         Command command;
         String[] cArgs;
         String reply = null;
-        while (!request.getRequestCode().equals(Request.RequestCode.OK)) {
-            cArgs = request.getMsg().split(" ");
+        while (!dataTransferObject.getCode().equals(DataTransferObject.Code.OK)) {
+            cArgs = dataTransferObject.getMsg().split(" ");
             command = programController.searchCommand(cArgs[0]);
             if (command != null) {
                 if (command.getName().equals("execute_script"))
@@ -55,7 +57,7 @@ public class ExecuteScriptCommand extends Command {
                     reply = programController.invoke(user, command, cArgs);
                 } catch (IncorrectArgumentException e) {
                     programController.getConnectionController().getRequestController()
-                            .sendError(user.getSocket(), "получен некорректный аргумент - "+e.getMessage());
+                            .sendError(user.getSocket(), "получен некорректный аргумент - " + e.getMessage());
                 } catch (IOException e) {
                     user.disconnect();
                     return null;
@@ -66,7 +68,7 @@ public class ExecuteScriptCommand extends Command {
                     programController.getConnectionController().getRequestController()
                             .sendReply(user.getSocket(), reply);
             }
-            request = programController.getConnectionController().getRequestController()
+            dataTransferObject = programController.getConnectionController().getRequestController()
                     .receiveRequest(user.getSocket());
         }
         recursionCounter = 0;
