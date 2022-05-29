@@ -7,19 +7,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class GraphicMap extends JPanel {
-    public static final float ZOOM_COEFFICIENT = 0.5f;
     public static final float MOTION_COEFFICIENT = 3f;
-    private float zoom = 1;
     private int mapX = 0;
     private int mapY = 0;
-    private int zoomCounter = 0;
     private final MainWindow window;
     private final HashMap<String, Color> ownersColors;
 
@@ -29,7 +25,6 @@ public class GraphicMap extends JPanel {
         ownersColors = new HashMap<>();
         setBounds(mapX, mapY, window.getFrameWidth(), window.getFrameHeight());
         setListeners();
-        setBorder(BorderFactory.createBevelBorder(1));
     }
 
     public void addColorToCollection(String owner, Color color) {
@@ -49,9 +44,8 @@ public class GraphicMap extends JPanel {
     }
 
     public void loadCities(Collection<City> cities, Collection<Long> cityToAdd) {
-        mapX = 0;
-        mapY = 0;
-        zoomCounter = 0;
+        mapX = getWindow().getFrameWidth() / 2;
+        mapY = getWindow().getFrameHeight() / 2;
         for (Component component : getComponents()) {
             if (component.getClass() == CityPainting.class) {
                 remove(component);
@@ -60,11 +54,21 @@ public class GraphicMap extends JPanel {
         cities = cities.stream().sorted(Comparator.comparingLong(City::getArea))
                 .collect(Collectors.toList());
         boolean isAppend;
+        CityPainting cityPainting;
         for (City city : cities) {
             isAppend = false;
             for (long id : cityToAdd) {
                 if (id == city.getId()) {
-                    add(new CityPainting(this, city, true));
+                    cityPainting = new CityPainting(this, city, true);
+                    add(cityPainting);
+                    for (int i = 0; i < CityPainting.FRAME_COUNTER; i++) {
+                        cityPainting.animation(i);
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException ignored) {
+
+                        }
+                    }
                     isAppend = true;
                     break;
                 }
@@ -74,40 +78,14 @@ public class GraphicMap extends JPanel {
         }
     }
 
-    public void repaintComponents(boolean zoomIsUsed) {
-        if (!zoomIsUsed)
-            resetZoom();
+    public void moveComponents() {
         for (Component component : getComponents()) {
             if (component.getClass() == CityPainting.class)
-                ((CityPainting) component).resize(false);
+                ((CityPainting) component).move();
         }
-        repaint();
-    }
-
-    private void moveComponents() {
-        for (Component component : getComponents()) {
-            if (component.getClass() == CityPainting.class)
-                ((CityPainting) component).move(false);
-        }
-        repaint();
     }
 
     private void setListeners() {
-        addMouseWheelListener(new MouseAdapter() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                super.mouseWheelMoved(e);
-                if (e.getWheelRotation() == -1) {
-                    doZoom();
-                    zoomCounter++;
-                } else if (e.getWheelRotation() == 1) {
-                    undoZoom();
-                    zoomCounter--;
-                }
-                System.out.println(zoom);
-                repaintComponents(true);
-            }
-        });
         addMouseMotionListener(new MouseAdapter() {
             int prevX = 0;
             int prevY = 0;
@@ -132,20 +110,6 @@ public class GraphicMap extends JPanel {
         });
     }
 
-    public void doZoom() {
-        resetZoom();
-        zoom += ZOOM_COEFFICIENT;
-    }
-
-    public void undoZoom() {
-        resetZoom();
-        zoom -= ZOOM_COEFFICIENT;
-    }
-
-    public float getZoom() {
-        return zoom;
-    }
-
     public int getMapX() {
         return mapX;
     }
@@ -160,14 +124,6 @@ public class GraphicMap extends JPanel {
 
     public void setMapY(int mapY) {
         this.mapY = mapY;
-    }
-
-    public void resetZoom() {
-        zoom=1;
-    }
-
-    public int getZoomCounter() {
-        return zoomCounter;
     }
 
     public MainWindow getWindow() {

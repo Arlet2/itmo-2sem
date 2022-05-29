@@ -32,7 +32,6 @@ public class InsertCommand extends Command {
         try {
             programController.getDataController().addCity(city, user.getLogin());
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new IncorrectArgumentException("not_unique_id");
         }
         return "insert_success";

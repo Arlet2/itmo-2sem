@@ -33,8 +33,8 @@ public class RequestController {
     public void sendCommand(CommandInfo command) throws IOException {
         connectionController.getAppController().addCommandToHistory(command);
         connectionController.sendObject(new DataTransferObject(DataTransferObject.Code.COMMAND,
-                        Serializer.convertObjectToBytes(command),
-                        DataTransferObject.DataType.MESSAGE));
+                Serializer.convertObjectToBytes(command),
+                DataTransferObject.DataType.MESSAGE));
     }
 
     public void sendLogin(String login, String password) throws IOException {
@@ -49,23 +49,5 @@ public class RequestController {
 
     public void sendOK() throws IOException {
         connectionController.sendObject(new DataTransferObject(DataTransferObject.Code.OK, ""));
-    }
-
-    /**
-     * Send city object to server
-     *
-     * @param city    that need to send
-     * @throws IOException if City object couldn't send
-     */
-    public void sendCity(City city) throws IOException {
-        DataTransferObject dto = new DataTransferObject(
-                DataTransferObject.Code.COMMAND, Serializer.convertObjectToBytes(city),
-                DataTransferObject.DataType.CITY);
-        connectionController.sendObject(dto);
-    }
-
-    public Collection<City> getCities() throws IOException, ClassNotFoundException {
-        return (Collection<City>) Serializer.convertBytesToObject(connectionController.processConnection()
-                .getDataBytes());
     }
 }

@@ -31,23 +31,22 @@ public class RemoveLowerKeyCommand extends Command {
         boolean isMapModified = false;
         ArrayList<Long> deleteId = new ArrayList<>();
         for (City city : programController.getDataController().getMap().values()) {
-            System.out.println(city.getId()+" "+id+" : "+programController.getDataController().getMap().size());
+            System.out.println(city.getId() + " " + id + " : " + programController.getDataController().getMap().size());
             if (city.getId() < id) {
                 try {
                     if (!programController.getDataController().getDataBaseController()
                             .isOwner(user.getLogin(), city.getId()))
                         continue;
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                } catch (SQLException ignored) {
                 }
                 deleteId.add(city.getId());
             }
         }
-        for (long dId: deleteId) {
+        for (long dId : deleteId) {
             try {
                 programController.getDataController().removeCity(dId);
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException ignored) {
+
             }
             isMapModified = true;
         }

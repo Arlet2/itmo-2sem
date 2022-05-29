@@ -12,6 +12,7 @@ public class AuthWindow extends AbstractWindow {
     private JPasswordField passwordField;
     private JPasswordField repeatPasswordField;
     private JButton authButton;
+
     public AuthWindow(UIController uiController) {
         super("auth", uiController);
     }
@@ -37,7 +38,7 @@ public class AuthWindow extends AbstractWindow {
         switchPanel.add(switchLanguageBox);
 
         switchAuthButton = new JButton(getString((
-                isLoginPanel?"to_register_change_button_name":"to_login_change_button_name")));
+                isLoginPanel ? "to_register_change_button_name" : "to_login_change_button_name")));
         switchPanel.add(switchAuthButton);
 
         JPanel loginPanel = new JPanel(new FlowLayout());
@@ -64,7 +65,7 @@ public class AuthWindow extends AbstractWindow {
         mainPanel.add(repeatPasswordPanel);
 
         repeatPasswordField = new JPasswordField(10);
-        if(!isLoginPanel) {
+        if (!isLoginPanel) {
             JLabel repeatPasswordLabel = new JLabel(getString("repeat_password_label"));
             repeatPasswordPanel.add(repeatPasswordLabel);
             repeatPasswordPanel.add(repeatPasswordField);
@@ -74,11 +75,12 @@ public class AuthWindow extends AbstractWindow {
         mainPanel.add(buttonPanel);
 
         authButton = new JButton(
-                getString(isLoginPanel?"login_button_name":"register_button_name"));
+                getString(isLoginPanel ? "login_button_name" : "register_button_name"));
         buttonPanel.add(authButton);
 
         mainFrame.add(mainPanel);
     }
+
     @Override
     protected void setListeners() {
         switchAuthButton.addActionListener(e -> {
@@ -87,7 +89,7 @@ public class AuthWindow extends AbstractWindow {
         });
         authButton.addActionListener(e -> {
             String password = new String(passwordField.getPassword());
-            if(!isLoginPanel) {
+            if (!isLoginPanel) {
                 String repeatedPassword = new String(repeatPasswordField.getPassword());
                 if (!password.equals(repeatedPassword)) {
                     UIController.showErrorDialog("passwords_not_equal");
@@ -103,7 +105,6 @@ public class AuthWindow extends AbstractWindow {
                         uiController.createMainWindow(login);
                     }
                 } catch (ConnectionException ex) {
-                    ex.printStackTrace();
                     UIController.showErrorDialog(ex.getMessage());
                 }
             });

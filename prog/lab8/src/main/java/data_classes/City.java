@@ -81,23 +81,6 @@ public class City implements Comparable<City>, Serializable {
     public City() {
 
     }
-    /**
-     * Validate id as argument in command
-     *
-     * @param arg of command that user typed
-     * @throws IncorrectArgumentException if id is incorrect in args
-     * @throws MissingArgumentException   if id is missing in args
-     */
-    public static void idValidator(String arg) throws IncorrectArgumentException, MissingArgumentException {
-        long id;
-        try {
-            id = Long.parseLong(arg);
-        } catch (NumberFormatException e) {
-            throw new IncorrectArgumentException("id - целое число");
-        }
-        if (id <= 0)
-            throw new IncorrectArgumentException("id - число больше 0");
-    }
 
     // подаётся уже уникальный ID!
 
@@ -368,8 +351,8 @@ public class City implements Comparable<City>, Serializable {
                 "establishmentDate: " + establishmentDate + "\n" +
                 "climate: " + (climate != null ? climate : "-") + "\n" +
                 "government: " + (government != null ? government : "-") + "\n" +
-                "governor:\n" + governor + "\n"+
-                "owner: "+owner+"\n";
+                "governor:\n" + governor + "\n" +
+                "owner: " + owner + "\n";
     }
 
     @Override

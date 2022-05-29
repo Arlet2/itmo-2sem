@@ -17,6 +17,7 @@ public abstract class Command implements Serializable, Executable {
         EXIT,
         SCRIPT
     }
+
     /**
      * Types of argument for command
      */
@@ -41,6 +42,7 @@ public abstract class Command implements Serializable, Executable {
         CITY_UPDATE,
         COMMANDS
     }
+
     /**
      * Information that client need to send to server when command is executing
      */
@@ -62,15 +64,16 @@ public abstract class Command implements Serializable, Executable {
         this.name = name;
         this.type = type;
     }
+
     /**
      * Create new command that can execute on server
      *
-     * @param name            of this command
-     * @param sendInfo        of this command (for client)
-     * @param argInfo         of this command (for client)
+     * @param name     of this command
+     * @param sendInfo of this command (for client)
+     * @param argInfo  of this command (for client)
      */
     protected Command(final String name, SendInfo sendInfo,
-                                 ArgumentInfo[] argInfo, CommandType type) {
+                      ArgumentInfo[] argInfo, CommandType type) {
         this(name, type);
         this.sendInfo = sendInfo;
         this.argInfo = argInfo;
@@ -110,17 +113,5 @@ public abstract class Command implements Serializable, Executable {
 
     public String getName() {
         return name;
-    }
-
-    public CommandType getType() {
-        return type;
-    }
-
-    public SendInfo getSendInfo() {
-        return sendInfo;
-    }
-
-    public ArgumentInfo[] getArgInfo() {
-        return argInfo;
     }
 }

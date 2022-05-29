@@ -39,10 +39,8 @@ public class ReplaceIfGreaterCommand extends Command {
             city.setOwner(user.getLogin());
             programController.getDataController().updateCity(city);
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new IncorrectArgumentException("update_failed");
         }
-        System.out.println("123");
         return "collection_modified";
 
     }

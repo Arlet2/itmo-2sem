@@ -1,8 +1,5 @@
 package client.data_control;
 
-import client.AppController;
-import connect_utils.CommandInfo;
-import server.commands.Command;
 import exceptions.ConfigFileNotFoundException;
 import exceptions.MissingArgumentException;
 
@@ -17,19 +14,6 @@ import java.util.regex.Pattern;
  * Control data reading from file
  */
 public class FileController {
-    /**
-     * Current program controller
-     */
-    private final AppController appController;
-
-    /**
-     * LAST from reading script file commands with args as string
-     */
-    private ArrayList<String> strCommand;
-
-    public FileController(AppController appController) {
-        this.appController = appController;
-    }
 
     /**
      * Read script file with commands on new lines
@@ -39,7 +23,6 @@ public class FileController {
      * @throws FileNotFoundException if script file not found
      */
     public ArrayList<String> readScriptFile(String path) throws FileNotFoundException {
-        strCommand = new ArrayList<>();
         ArrayList<String> commandsInfo = new ArrayList<>();
         BufferedReader buffIn = new BufferedReader(new InputStreamReader(new FileInputStream(path)));
         buffIn.lines().forEach(string -> {
@@ -83,7 +66,4 @@ public class FileController {
         return new InetSocketAddress(address, port);
     }
 
-    public ArrayList<String> getStrCommand() {
-        return strCommand;
-    }
 }

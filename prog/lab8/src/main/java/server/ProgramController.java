@@ -1,7 +1,6 @@
 package server;
 
 import exceptions.ConfigFileNotFoundException;
-import server.Logger;
 import server.commands.*;
 import server.connection_control.ConnectionController;
 import connect_utils.*;
@@ -95,13 +94,12 @@ public class ProgramController {
                     try {
                         connectionController.getRequestController().sendReply(user, reply);
                     } catch (IOException e) {
-                        e.printStackTrace();
                         user.disconnect();
                     }
                 });
                 user.setLogin(args[1]);
             } catch (IncorrectArgumentException e) {
-                senders.execute(()-> {
+                senders.execute(() -> {
                     try {
                         connectionController.getRequestController().sendError(user, e.getMessage());
                     } catch (IOException ex) {
@@ -126,7 +124,6 @@ public class ProgramController {
             connectionController.getRequestController().sendCollection(user,
                     dataController.getMap());
         } catch (IOException e) {
-            e.printStackTrace();
             user.disconnect();
             return;
         }
@@ -164,7 +161,6 @@ public class ProgramController {
                 listeners.execute(() -> listenRequests(user));
             }
         } catch (IOException e) {
-            e.printStackTrace();
             Logger.getLogger().log(Level.WARNING, "Ошибка получения запроса");
             user.disconnect();
             return;
@@ -174,7 +170,7 @@ public class ProgramController {
             return;
         }
         try {
-            commandInfo = (CommandInfo)Serializer.convertBytesToObject(dataTransferObject.getDataBytes());
+            commandInfo = (CommandInfo) Serializer.convertBytesToObject(dataTransferObject.getDataBytes());
             command = searchCommand(commandInfo.getName());
         } catch (IOException | ClassNotFoundException e) {
             user.disconnect();
@@ -192,7 +188,6 @@ public class ProgramController {
                             connectionController.getRequestController()
                                     .sendError(user, e.getMessage());
                         } catch (IOException ex) {
-                            ex.printStackTrace();
                             user.disconnect();
                         }
                     });
@@ -204,7 +199,6 @@ public class ProgramController {
                             connectionController.getRequestController()
                                     .sendError(user, "получена неизвестная серверу команда");
                         } catch (IOException ex) {
-                            ex.printStackTrace();
                             user.disconnect();
                         }
                     });
@@ -216,14 +210,12 @@ public class ProgramController {
                             connectionController.getRequestController()
                                     .sendError(user, "получены неопознанные данные от клиента");
                         } catch (IOException ex) {
-                            ex.printStackTrace();
                             user.disconnect();
                         }
                     });
 
                 }
             } catch (IOException e) {
-                e.printStackTrace();
                 user.disconnect();
             }
             return null;
@@ -241,7 +233,6 @@ public class ProgramController {
                     connectionController.getRequestController().sendReply(user, reply);
                     Logger.getLogger().log(Level.INFO, "Отправлен ответ клиенту " + user.getLogin() + ".");
                 } catch (IOException e) {
-                    e.printStackTrace();
                     user.disconnect();
                 }
             }
@@ -255,9 +246,8 @@ public class ProgramController {
             try {
                 connectionController.getRequestController().sendCollection(user,
                         dataController.getMap());
-                Logger.getLogger().log(Level.INFO, "Отправлено обновление "+user.getLogin());
+                Logger.getLogger().log(Level.INFO, "Отправлено обновление " + user.getLogin());
             } catch (IOException e) {
-                e.printStackTrace();
                 user.disconnect();
             }
         }
@@ -310,10 +300,6 @@ public class ProgramController {
 
     public DataController getDataController() {
         return dataController;
-    }
-
-    public ConnectionController getConnectionController() {
-        return connectionController;
     }
 
 }

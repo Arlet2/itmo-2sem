@@ -30,6 +30,7 @@ public class UIController {
         JOptionPane.showMessageDialog(null, getString("errors", messageKey),
                 getString("errors", "error_name_dialog"), JOptionPane.ERROR_MESSAGE);
     }
+
     public static void showCustomErrorDialog(String msg) {
         JOptionPane.showMessageDialog(null, msg,
                 getString("errors", "error_name_dialog"), JOptionPane.ERROR_MESSAGE);
@@ -39,9 +40,11 @@ public class UIController {
         JOptionPane.showMessageDialog(null, getString("servers_replies", messageKey),
                 getString("servers_replies", "reply_name_dialog"), JOptionPane.INFORMATION_MESSAGE);
     }
+
     public static void showInfoDialog(String message, String windowName) {
         JOptionPane.showMessageDialog(null, message, windowName, JOptionPane.INFORMATION_MESSAGE);
     }
+
     public static String showInputDialog(String message, String windowName) {
         return JOptionPane.showInputDialog(null, message, windowName, JOptionPane.QUESTION_MESSAGE);
     }

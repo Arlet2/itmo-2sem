@@ -2,10 +2,8 @@ package server.connection_control;
 
 import connect_utils.DataTransferObject;
 import server.Logger;
-import server.commands.Command;
 
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -89,7 +87,7 @@ public class User {
     }
 
     public DataTransferObject searchAndDeleteRequestByCode(DataTransferObject.Code code) {
-        for (DataTransferObject dto: requests) {
+        for (DataTransferObject dto : requests) {
             if (dto.getCode() == code) {
                 requests.remove(dto);
                 return dto;

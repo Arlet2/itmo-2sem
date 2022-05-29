@@ -25,7 +25,6 @@ public class RegisterCommand extends Command {
             password = PasswordManager.createHash(strArgs[2] + salt);
             programController.getDataController().createUser(strArgs[1], password, salt);
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new IncorrectArgumentException("login_exist");
         }
         return "auth_success";

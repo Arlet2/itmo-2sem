@@ -26,7 +26,7 @@ public class DataTransferObject implements Serializable {
      * Create data object for sending
      *
      * @param code of this request
-     * @param msg         of this request
+     * @param msg  of this request
      */
     public DataTransferObject(final Code code, final String msg) {
         this.code = code;
@@ -44,8 +44,8 @@ public class DataTransferObject implements Serializable {
     /**
      * Create data object for sending
      *
-     * @param code of this request
-     * @param bytes       of message for this request
+     * @param code  of this request
+     * @param bytes of message for this request
      */
     public DataTransferObject(final Code code, final byte[] bytes, DataType dataType) {
         this.code = code;

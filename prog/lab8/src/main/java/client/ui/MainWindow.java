@@ -1,6 +1,5 @@
 package client.ui;
 
-import client.ui.custom_graphics.CityPainting;
 import client.ui.custom_graphics.GraphicMap;
 import connect_utils.CommandInfo;
 import connect_utils.Serializer;
@@ -136,12 +135,14 @@ public class MainWindow extends AbstractWindow {
                 super.mouseClicked(e);
                 if (e.getClickCount() == 2) {
                     int x = Integer.parseInt(
-                            ((String)table.getModel().getValueAt(table.getSelectedRow(), 2)).replaceAll("[,.\\s]",""));
+                            ((String) table.getModel().getValueAt(table.getSelectedRow(), 2)).replaceAll("[,.\\s]", ""));
                     int y = Integer.parseInt(
-                            ((String)table.getModel().getValueAt(table.getSelectedRow(), 3)).replaceAll("[,.\\s]",""));
-                    map.setMapX(x*2);
-                    map.setMapY(y*2);
-                    map.repaintComponents(false);
+                            ((String) table.getModel().getValueAt(table.getSelectedRow(), 3)).replaceAll("[,.\\s]", ""));
+                    int area = Integer.parseInt(
+                            ((String) table.getModel().getValueAt(table.getSelectedRow(), 5)).replaceAll("[,.\\s]", ""));
+                    map.setMapX(mainFrame.getWidth() / 2 - x - area / 2);
+                    map.setMapY(mainFrame.getHeight() / 2 - y - area / 2);
+                    map.moveComponents();
                     tabs.setSelectedIndex(1);
                 }
             }
@@ -242,10 +243,8 @@ public class MainWindow extends AbstractWindow {
             uiController.getAppController().getConnectionController().getRequestController()
                     .sendCommand(new CommandInfo("insert", Serializer.convertObjectToBytes(cityCreator())));
         } catch (IOException | NotYetConnectedException ex) {
-            ex.printStackTrace();
             UIController.showErrorDialog("server_is_unavailable");
         } catch (IncorrectValueException | NullValueException | DateTimeParseException | EmptyValueException ex) {
-            ex.printStackTrace();
             UIController.showErrorDialog(ex.getMessage());
         }
     }
@@ -255,57 +254,51 @@ public class MainWindow extends AbstractWindow {
             uiController.getAppController().getConnectionController().getRequestController()
                     .sendCommand(new CommandInfo("update", Serializer.convertObjectToBytes(cityCreator())));
         } catch (IOException | NotYetConnectedException ex) {
-            ex.printStackTrace();
             UIController.showErrorDialog("server_is_unavailable");
         } catch (IncorrectValueException | NullValueException | DateTimeParseException | EmptyValueException ex) {
-            ex.printStackTrace();
             UIController.showErrorDialog(ex.getMessage());
         }
     }
 
     private void removeKeyAction() {
         try {
-            long id;
-            try {
-                id = Long.parseLong(idField.getText().replaceAll("[,.\\s]", ""));
-                if (id <= 0) {
-                    UIController.showErrorDialog("id_is_greater_zero");
-                    return;
-                }
-            } catch (NumberFormatException ex) {
-                UIController.showErrorDialog("id_is_integer");
+            long id = parseId();
+            if (id == 0)
                 return;
-            }
-
             uiController.getAppController().getConnectionController().getRequestController()
                     .sendCommand(new CommandInfo("remove_key", Serializer.convertObjectToBytes(
                             new String[]{"", id + ""}
                     )));
         } catch (IOException | NotYetConnectedException ex) {
-            ex.printStackTrace();
             UIController.showErrorDialog("server_is_unavailable");
         }
     }
 
+    private long parseId() {
+        long id;
+        try {
+            id = Long.parseLong(idField.getText().replaceAll("[,.\\s]", ""));
+            if (id <= 0) {
+                UIController.showErrorDialog("id_is_greater_zero");
+                return 0;
+            }
+        } catch (NumberFormatException ex) {
+            UIController.showErrorDialog("id_is_integer");
+            return 0;
+        }
+        return id;
+    }
+
     private void removeLowerKeyAction() {
         try {
-            long id;
-            try {
-                id = Long.parseLong(idField.getText().replaceAll("[,.\\s]", ""));
-                if (id <= 0) {
-                    UIController.showErrorDialog("id_is_greater_zero");
-                    return;
-                }
-            } catch (NumberFormatException ex) {
-                UIController.showErrorDialog("id_is_integer");
+            long id = parseId();
+            if (id == 0)
                 return;
-            }
             uiController.getAppController().getConnectionController().getRequestController()
                     .sendCommand(new CommandInfo("remove_lower_key", Serializer.convertObjectToBytes(
                             new String[]{"", id + ""}
                     )));
         } catch (IOException | NotYetConnectedException ex) {
-            ex.printStackTrace();
             UIController.showErrorDialog("server_is_unavailable");
         }
     }
@@ -315,10 +308,8 @@ public class MainWindow extends AbstractWindow {
             uiController.getAppController().getConnectionController().getRequestController()
                     .sendCommand(new CommandInfo("replace_if_greater", Serializer.convertObjectToBytes(cityCreator())));
         } catch (IOException | NotYetConnectedException ex) {
-            ex.printStackTrace();
             UIController.showErrorDialog("server_is_unavailable");
         } catch (IncorrectValueException | NullValueException | DateTimeParseException | EmptyValueException ex) {
-            ex.printStackTrace();
             UIController.showErrorDialog(ex.getMessage());
         }
     }
@@ -328,7 +319,6 @@ public class MainWindow extends AbstractWindow {
             uiController.getAppController().getConnectionController().getRequestController()
                     .sendCommand(new CommandInfo("clear", Serializer.convertObjectToBytes("")));
         } catch (IOException | NotYetConnectedException ex) {
-            ex.printStackTrace();
             UIController.showErrorDialog("server_is_unavailable");
         }
     }
@@ -377,7 +367,6 @@ public class MainWindow extends AbstractWindow {
                     DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
                             .withLocale(Locale.getDefault())));
         } catch (DateTimeParseException e) {
-            e.printStackTrace();
             throw new IncorrectValueException("incorrect_establishment_date");
         }
         city.setClimate(climateField.getText().toUpperCase());
@@ -489,12 +478,12 @@ public class MainWindow extends AbstractWindow {
         replaceIfGreaterButton = new JButton(getString("replace_if_greater_button_name"));
         clearButton = new JButton(getString("clear_button_name"));
 
-        leftPanel.add(insertButton);
-        leftPanel.add(updateButton);
-        leftPanel.add(removeKeyButton);
-        leftPanel.add(removeLowerKeyButton);
-        leftPanel.add(replaceIfGreaterButton);
-        leftPanel.add(clearButton);
+        buttonsPanel.add(insertButton);
+        buttonsPanel.add(updateButton);
+        buttonsPanel.add(removeKeyButton);
+        buttonsPanel.add(removeLowerKeyButton);
+        buttonsPanel.add(replaceIfGreaterButton);
+        buttonsPanel.add(clearButton);
 
         return mainPanel;
     }
@@ -635,9 +624,11 @@ public class MainWindow extends AbstractWindow {
 
         return rowSorter;
     }
+
     public int getFrameWidth() {
         return mainFrame.getWidth();
     }
+
     public int getFrameHeight() {
         return mainFrame.getHeight();
     }

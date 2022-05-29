@@ -1,8 +1,7 @@
 package client;
 
-import client.data_control.DataController;
-import client.data_control.FileController;
 import client.connection_control.ConnectionController;
+import client.data_control.FileController;
 import client.ui.UIController;
 import connect_utils.CommandInfo;
 import data_classes.City;
@@ -32,20 +31,13 @@ public class AppController {
      */
     private final ConnectionController connectionController;
 
-    /**
-     * controls reading from file
-     */
-    private final FileController fileController = new FileController(this);
-
-    private final DataController dataController = new DataController(this);
-
     private final UIController uiController = new UIController(this);
 
     private ArrayList<CommandInfo> history = new ArrayList<>();
 
-    private volatile boolean isConnected;
+    private FileController fileController = new FileController();
 
-    private ExecutorService listeners = Executors.newFixedThreadPool(3);
+    private final ExecutorService listeners = Executors.newFixedThreadPool(3);
 
     /**
      * Create scanner and read configuration for connection
@@ -82,12 +74,10 @@ public class AppController {
                         dataTransferObject.getDataBytes()));
             connectionController.getRequestController().sendOK();
         } catch (IOException e) {
-            e.printStackTrace();
             throw new ConnectionException("configuration_data_loading_failed");
         } catch (ClassNotFoundException e) {
             throw new ConnectionException("strange_request");
         }
-        isConnected = true;
         listeners.execute(this::listenerAction);
         return true;
     }
@@ -96,12 +86,9 @@ public class AppController {
         try {
             listenRequests();
         } catch (IOException e) {
-            e.printStackTrace();
             UIController.showErrorDialog("connection_is_closed");
-            isConnected = false;
         } catch (ClassNotFoundException e) {
             UIController.showErrorDialog("strange_request");
-            e.printStackTrace();
         }
     }
 
@@ -118,7 +105,7 @@ public class AppController {
                 UIController.showInfoDialog(reply);
                 break;
             case COMMAND:
-                dataController.updateMap((Collection<City>) Serializer.convertBytesToObject(dto.getDataBytes()));
+                uiController.updateData((Collection<City>) Serializer.convertBytesToObject(dto.getDataBytes()));
                 break;
             default:
                 break;
@@ -138,7 +125,6 @@ public class AppController {
      * End program execution
      */
     public void exit() {
-        System.out.println("Завершение выполнения программы...");
         try {
             getConnectionController().disconnect();
         } catch (IOException ignored) {
@@ -157,13 +143,5 @@ public class AppController {
 
     public FileController getFileController() {
         return fileController;
-    }
-
-    public DataController getDataController() {
-        return dataController;
-    }
-
-    public UIController getUiController() {
-        return uiController;
     }
 }

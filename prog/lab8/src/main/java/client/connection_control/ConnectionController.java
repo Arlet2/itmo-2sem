@@ -21,7 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class ConnectionController {
 
-    private AppController appController;
+    private final AppController appController;
 
     /**
      * Current channel with server
@@ -96,7 +96,7 @@ public class ConnectionController {
     /**
      * Send object to server
      *
-     * @param object  that need to send
+     * @param object that need to send
      * @throws IOException if object couldn't send
      */
     protected void sendObject(DataTransferObject object) throws IOException {
@@ -119,15 +119,15 @@ public class ConnectionController {
     private DataTransferObject receiveObject() throws IOException, ClassNotFoundException {
         connectionLock.lock();
         final int byteSize = 4096;
-        ByteBuffer buffer = ByteBuffer.allocate(byteSize*2);
+        ByteBuffer buffer = ByteBuffer.allocate(byteSize * 2);
         channel.read(buffer);
         DataTransferObject mainObject = createObjectFromBytes(buffer.array());
         if (mainObject.getCode() == DataTransferObject.Code.PART_OF_DATE) {
-            ByteBuffer dataBuffer = ByteBuffer.allocate(byteSize*2);
+            ByteBuffer dataBuffer = ByteBuffer.allocate(byteSize * 2);
             DataTransferObject dto = mainObject;
             do {
-                if (dataBuffer.position()+dto.getDataBytes().length > dataBuffer.limit())
-                    dataBuffer = ByteBuffer.allocate(dataBuffer.limit()*2).put(dataBuffer.array());
+                if (dataBuffer.position() + dto.getDataBytes().length > dataBuffer.limit())
+                    dataBuffer = ByteBuffer.allocate(dataBuffer.limit() * 2).put(dataBuffer.array());
                 dataBuffer.put(dto.getDataBytes());
                 channel.write(ByteBuffer.wrap(Serializer.convertObjectToBytes(
                         new DataTransferObject(DataTransferObject.Code.OK, "")
@@ -140,8 +140,7 @@ public class ConnectionController {
             connectionLock.unlock();
             return new DataTransferObject(dto.getCode(), Arrays.copyOfRange(dataBuffer.array(), 0,
                     dataBuffer.position()), dto.getDataType());
-        }
-        else {
+        } else {
             connectionLock.unlock();
             return mainObject;
         }
@@ -170,10 +169,6 @@ public class ConnectionController {
     public void disconnect() throws IOException {
         if (channel != null)
             channel.close();
-    }
-
-    public InetSocketAddress getAddress() {
-        return address;
     }
 
     public RequestController getRequestController() {

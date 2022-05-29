@@ -11,7 +11,6 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
 /**
@@ -87,16 +86,16 @@ public class ConnectionController {
                 return sDto;
             dto = (DataTransferObject) new ObjectInputStream(user.getSocket().getInputStream()).readObject();
         }
-            if (dto.getCode() == expectedCode)
-                return dto;
-            else {
-                user.addDataTransferObject(dto);
-                sDto = user.searchAndDeleteRequestByCode(expectedCode);
-                if (sDto != null)
-                    return sDto;
-                else
-                    return receiveObject(user, expectedCode);
-            }
+        if (dto.getCode() == expectedCode)
+            return dto;
+        else {
+            user.addDataTransferObject(dto);
+            sDto = user.searchAndDeleteRequestByCode(expectedCode);
+            if (sDto != null)
+                return sDto;
+            else
+                return receiveObject(user, expectedCode);
+        }
     }
 
     /**

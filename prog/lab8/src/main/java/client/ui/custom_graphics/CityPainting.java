@@ -1,27 +1,22 @@
 package client.ui.custom_graphics;
 
-import client.ui.AbstractWindow;
 import client.ui.UIController;
 import data_classes.City;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.Field;
-import java.time.LocalTime;
 import java.util.Random;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class CityPainting extends JPanel {
+    public static final int FRAME_COUNTER = 50;
     private final int x;
     private final int y;
     private final long id;
     private final Color color;
-    private int currentSize;
     private final int size;
+    private int currentSize;
     private final GraphicMap map;
 
     public CityPainting(GraphicMap map, City city, boolean isNew) {
@@ -33,9 +28,12 @@ public class CityPainting extends JPanel {
         color = chooseColor(city.getOwner());
         map.addColorToCollection(city.getOwner(), color);
         size = (int) city.getArea();
-        currentSize = (int) city.getArea();
         setListeners();
-        resize(isNew);
+        if (!isNew) {
+            currentSize = size;
+            setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            move();
+        }
     }
 
     private Color chooseColor(String owner) {
@@ -53,6 +51,7 @@ public class CityPainting extends JPanel {
     public void setListeners() {
         addMouseListener(new MouseAdapter() {
             int rowIndex = 0;
+
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
@@ -60,11 +59,11 @@ public class CityPainting extends JPanel {
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     rowIndex = findById();
                     StringBuilder stringBuilder = new StringBuilder();
-                    String name = (String)map.getWindow().getTable().getModel().getValueAt(rowIndex, 1);
-                    String coordinateX = (String)map.getWindow().getTable().getModel().getValueAt(rowIndex, 2);
-                    String coordinateY = (String)map.getWindow().getTable().getModel().getValueAt(rowIndex, 3);
-                    String area = (String)map.getWindow().getTable().getModel().getValueAt(rowIndex, 5);
-                    String population = (String)map.getWindow().getTable().getModel().getValueAt(rowIndex, 6);
+                    String name = (String) map.getWindow().getTable().getModel().getValueAt(rowIndex, 1);
+                    String coordinateX = (String) map.getWindow().getTable().getModel().getValueAt(rowIndex, 2);
+                    String coordinateY = (String) map.getWindow().getTable().getModel().getValueAt(rowIndex, 3);
+                    String area = (String) map.getWindow().getTable().getModel().getValueAt(rowIndex, 5);
+                    String population = (String) map.getWindow().getTable().getModel().getValueAt(rowIndex, 6);
                     stringBuilder.append(map.getWindow().getString("current_city_id")).append(": ")
                             .append(id).append('\n');
                     stringBuilder.append(map.getWindow().getString("current_city_name")).append(": ")
@@ -79,14 +78,14 @@ public class CityPainting extends JPanel {
                             .append(population).append('\n');
                     UIController.showInfoDialog(stringBuilder.toString(),
                             map.getWindow().getString("current_city_window_name"));
-                }
-                else if (e.getButton() == MouseEvent.BUTTON1) {
+                } else if (e.getButton() == MouseEvent.BUTTON1) {
                     rowIndex = findById();
                     map.getWindow().getTable().setRowSelectionInterval(rowIndex, rowIndex);
                     map.getWindow().selectionAction();
                     map.getWindow().getTabs().setSelectedIndex(0);
                 }
             }
+
             private int findById() {
                 for (int i = 0; i < map.getWindow().getTable().getModel().getRowCount(); i++) {
                     if (Long.parseLong(((String) map.getWindow().getTable().getModel().getValueAt(i, 0))
@@ -99,69 +98,37 @@ public class CityPainting extends JPanel {
         });
     }
 
-    public void resize(boolean isNew) {
-        if (isNew) {
-            /*
-            new Timer(100, new ActionListener() {
-                final int frames = 100;
-                int currentFrame = 0;
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    System.out.println("КАДР КАДР КАДР!");
-                    if (currentFrame == frames) {
-                        CityPainting.this.notify();
-                        ((Timer) e.getSource()).stop();
-                    }
-                    currentFrame++;
-                    setBounds(x + map.getMapX() - currentSize / 2, y + map.getMapY() - currentSize / 2,
-                            currentSize * currentFrame / 98, currentSize * currentFrame / 98);
-                    setSize();
-                    repaint();
-                }
-            }).start();
-            try {
-                wait();
-            } catch (InterruptedException ignored) {
-
-            }
-            */
-        }
-        if ((int) (currentSize * map.getZoom()) > 1) {
-            currentSize = (int) (currentSize * map.getZoom());
-        }
-        if (map.getZoomCounter() == 0)
+    public void animation(int frameCount) {
+        if (FRAME_COUNTER - 1 == frameCount) {
             currentSize = size;
-        move(true);
+            setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        } else
+            currentSize = size / (FRAME_COUNTER - frameCount + 1);
+        move(currentSize);
+        map.repaint();
     }
 
-    public void move(boolean isUsedZoom) {
-        if (!isUsedZoom) {
-            setBounds(x + map.getMapX() - currentSize / 2, y + map.getMapY() - currentSize / 2,
-                    currentSize, currentSize);
-            if (map.getZoomCounter() == 0) {
-                setBounds(x + map.getMapX() - currentSize / 2,
-                        y + map.getMapY() - currentSize / 2,
-                        currentSize, currentSize);
-            }
-        } else {
-            setBounds(x + map.getMapX() - currentSize / 2,
-                    y + map.getMapY() - currentSize / 2,
-                    currentSize, currentSize);
-            if (map.getZoomCounter() == 0) {
-                setBounds(x + map.getMapX() - currentSize / 2,
-                        y + map.getMapY() - currentSize / 2,
-                        currentSize, currentSize);
-            }
-        }
-        setSize();
+    public void move() {
+        setBounds(x + map.getMapX(), y + map.getMapY(), currentSize, currentSize);
+        setSizes();
         repaint();
     }
 
-    private void setSize() {
-        setMinimumSize(new Dimension(currentSize, currentSize));
-        setSize(new Dimension(currentSize, currentSize));
-        setPreferredSize(new Dimension(currentSize, currentSize));
-        setMaximumSize(new Dimension(currentSize, currentSize));
+    public void move(int size) {
+        setBounds(x + map.getMapX(), y + map.getMapY(), size, size);
+        setSizes();
+        repaint();
+    }
+
+    private void setSizes() {
+        setSizes(size);
+    }
+
+    private void setSizes(int size) {
+        setMinimumSize(new Dimension(size, size));
+        setSize(new Dimension(size, size));
+        setPreferredSize(new Dimension(size, size));
+        setMaximumSize(new Dimension(size, size));
     }
 
     @Override

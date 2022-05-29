@@ -4,7 +4,6 @@ import exceptions.ConfigFileNotFoundException;
 import data_classes.City;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -144,16 +143,6 @@ public class DataController {
     public boolean isUniqueId(Long id) {
         return !map.containsKey(id);
     }
-
-    /**
-     * Check that collection is empty
-     *
-     * @return true is collection is empty else false
-     */
-    public boolean isMapEmpty() {
-        return map.isEmpty();
-    }
-
 
     /**
      * Get database controller

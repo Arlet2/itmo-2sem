@@ -32,7 +32,6 @@ public class RemoveKeyCommand extends Command {
                 throw new IncorrectArgumentException("not_owner");
             programController.getDataController().removeCity(id);
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new IncorrectArgumentException("remove_data_failed");
         }
         return "remove_success";

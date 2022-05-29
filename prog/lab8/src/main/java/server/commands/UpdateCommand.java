@@ -38,7 +38,6 @@ public class UpdateCommand extends Command {
             programController.getDataController().updateCity(city);
             return "collection_modified";
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new IncorrectArgumentException("update_failed");
         }
     }

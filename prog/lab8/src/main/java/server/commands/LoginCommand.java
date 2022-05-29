@@ -27,7 +27,6 @@ public class LoginCommand extends Command {
                     programController.getDataController().getDataBaseController().getUserPassword(strArgs[1])))
                 throw new IncorrectArgumentException("wrong_password");
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new IncorrectArgumentException("login_not_exist");
         }
         return "auth_success";

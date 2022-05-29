@@ -26,7 +26,6 @@ public class ClearCommand extends Command {
         try {
             programController.getDataController().clearMap(user.getLogin());
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new IncorrectArgumentException("clearing_data_failed");
         }
         return "clear_success";
